@@ -29,10 +29,6 @@ jobs:
         run: ./gradlew build
         shell: bash
 
-      - name: Make zip file
-          run: zip -qq -r ./$GITHUB_SHA.zip
-          shell: bash
-
       - name: Configure AWS credentials
           uses: aws-actions/configure-aws-credentials@v1
           with:
@@ -40,8 +36,13 @@ jobs:
             aws-secret-access-key: ${{ secrets.ACCESS_KEY_SECRET }}
             aws-region: ap-northeast-2
 
-      - name: Upload to S3
-          run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://devcourse-pearls-bucket/$GITHUB_SHA.zip
+      - name: Upload to AWS S3
+        run: |
+          aws deploy push \
+            --application-name pearls-code-deploy \
+            --ignore-hidden-files \
+            --s3-location s3://devcourse-pearls-bucket/$GITHUB_SHA.zip \
+            --source .
 
       - name: Code Deploy
           run: aws deploy create-deployment --application-name pearls-code-deploy
