@@ -68,12 +68,6 @@ tasks.named('asciidoctor') {
 	dependsOn test
 }
 
-bootJar{
-	archivesBaseName = 'pearls-1.0'
-	archiveFileName = 'pearls-1.0.jar'
-	archiveVersion = "0.0.0"
-}
-
 jacocoTestReport {
 	reports {
 		html.enabled(true)
@@ -100,4 +94,10 @@ jacocoTestCoverageVerification {
 			}
 		}
 	}
+}
+
+bootJar{
+	archivesBaseName = 'pearls-1.0'
+	archiveFileName = 'pearls-1.0.jar'
+	archiveVersion = "0.0.0"
 }
