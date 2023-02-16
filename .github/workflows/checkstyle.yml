@@ -11,6 +11,5 @@ jobs:
         uses: gradle/gradle-build-action@v2
       - name: setup Gradle permission
         run: chmod +x gradlew
-
       - name: Run Checkstyle
-        run: gradlew checkstyleMain
+        run: ./gradlew checkstyleMain

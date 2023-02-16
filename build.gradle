@@ -5,7 +5,7 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version '3.2.0'
     id 'org.ec4j.editorconfig' version '0.0.3'
     id 'checkstyle'
-	id 'jacoco'
+    id 'jacoco'
 }
 
 
@@ -72,41 +72,41 @@ dependencyManagement {
 }
 
 tasks.named('test') {
-	outputs.dir snippetsDir
-	useJUnitPlatform()
+    outputs.dir snippetsDir
+    useJUnitPlatform()
 
-	finalizedBy('jacocoTestReport')
+    finalizedBy('jacocoTestReport')
 }
 
 tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+    inputs.dir snippetsDir
+    dependsOn test
 }
 
 jacocoTestReport {
-	reports {
-		html.enabled(true)
-	}
+    reports {
+        html.enabled(true)
+    }
 
-	finalizedBy('jacocoTestCoverageVerification')
+    finalizedBy('jacocoTestCoverageVerification')
 }
 
 jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			enabled = false
-			element = 'CLASS'
+    violationRules {
+        rule {
+            enabled = false
+            element = 'CLASS'
 
-			limit {
-				counter = 'BRANCH'
-				value = 'COVEREDRATIO'
-				minimum = 0.5
-			}
-			limit {
-				counter = 'LINE'
-				value = 'COVEREDRATIO'
-				minimum = 0.5
-			}
-		}
-	}
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.5
+            }
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.5
+            }
+        }
+    }
 }
