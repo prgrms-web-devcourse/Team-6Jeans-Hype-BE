@@ -45,7 +45,7 @@ jobs:
             --source .
 
       - name: Code Deploy
-          run: aws deploy create-deployment --application-name pearls-code-deploy
-            --deployment-config-name CodeDeployDefault.AllAtOnce
-            --deployment-group-name pearls-deploy-group
-            --s3-location bucket=devcourse-pearls-bucket,bundleType=zip,key=$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name pearls-code-deploy
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name pearls-deploy-group
+          --s3-location bucket=devcourse-pearls-bucket,bundleType=zip,key=$GITHUB_SHA.zip
