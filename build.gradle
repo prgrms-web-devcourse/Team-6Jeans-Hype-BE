@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.8'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'org.asciidoctor.jvm.convert' version '3.2.0'
+	id 'jacoco'
 }
 
 group = 'com.prgrms'
@@ -58,6 +59,8 @@ dependencyManagement {
 tasks.named('test') {
 	outputs.dir snippetsDir
 	useJUnitPlatform()
+
+	finalizedBy('jacocoTestReport')
 }
 
 tasks.named('asciidoctor') {
@@ -71,3 +74,30 @@ bootJar{
 	archiveVersion = "0.0.0"
 }
 
+jacocoTestReport {
+	reports {
+		html.enabled(true)
+	}
+
+	finalizedBy('jacocoTestCoverageVerification')
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = false
+			element = 'CLASS'
+
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.5
+			}
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.5
+			}
+		}
+	}
+}
