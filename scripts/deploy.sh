@@ -17,4 +17,4 @@ else
 fi
 
 echo "> $JAR_PATH 배포"
-nohup java -jar /home/ubuntu/build/build/libs/pearls-1.0.jar
+nohup java -jar /home/ubuntu/build/build/libs/pearls-1.0.jar > /dev/null 2> /dev/null < /dev/null &
