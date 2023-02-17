@@ -28,3 +28,8 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         shell: bash
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./build/reports/jacoco/test/jacocoTestReport.xml
