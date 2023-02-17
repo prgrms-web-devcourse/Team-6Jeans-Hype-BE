@@ -6,6 +6,10 @@ plugins {
 	id 'jacoco'
 }
 
+jacoco {
+	toolVersion = '0.8.8'
+}
+
 group = 'com.prgrms'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
@@ -71,6 +75,7 @@ tasks.named('asciidoctor') {
 jacocoTestReport {
 	reports {
 		html.enabled(true)
+		xml.enabled(true)
 	}
 
 	finalizedBy('jacocoTestCoverageVerification')
@@ -79,7 +84,7 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
 	violationRules {
 		rule {
-			enabled = false
+			enabled = true
 			element = 'CLASS'
 
 			limit {
@@ -92,6 +97,10 @@ jacocoTestCoverageVerification {
 				value = 'COVEREDRATIO'
 				minimum = 0.5
 			}
+
+			excludes = [
+			        'com.example.demo.Application'
+			]
 		}
 	}
 }
