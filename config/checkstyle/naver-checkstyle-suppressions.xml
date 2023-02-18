@@ -6,5 +6,5 @@
 <suppressions>
     <suppress
             files="src/test/.*\.java"
-            checks="method-lower-camelcase"/>
+            checks="MethodName"/>
 </suppressions>
