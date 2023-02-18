@@ -1,16 +1,17 @@
 package com.example.demo.controller;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -18,9 +19,12 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@AutoConfigureMockMvc
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
+
+@AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(RestDocumentationExtension.class)
-@WebMvcTest(HealthController.class)
+@AutoConfigureRestDocs
+@WebMvcTest(controllers = HealthController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 class HealthControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
@@ -30,18 +34,23 @@ class HealthControllerTest {
 		//given
 		String name = "test";
 		//when
-		ResultActions healthRequest = mockMvc.perform(get("/hello?name={name}", name)
+		ResultActions healthRequest = mockMvc.perform(get("/health?name={name}", name)
 			.accept(MediaType.TEXT_PLAIN));
 		//then
 		healthRequest.andExpect(status().is2xxSuccessful())
+			.andExpect(content().string(name + "health"))
 			.andDo(
-				document("heath-controller",
+				document("heath-get",
 					preprocessRequest(prettyPrint()),
 					preprocessResponse(prettyPrint()),
-					requestParameters(
-						parameterWithName("name").description("이름을 담습니다. default : test")
-					),
-					responseBody()
+					resource(
+						ResourceSnippetParameters.builder()
+							.description("헬스체크 api 입니다.")
+							.requestParameters(
+								parameterWithName("name").description("이름을 담습니다. default : test")
+							)
+							.build()
+					)
 				)
 			).andDo(print());
 	}
