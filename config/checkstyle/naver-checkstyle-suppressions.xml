@@ -4,4 +4,7 @@
         "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
+    <suppress
+            files="src/test/.*\.java"
+            checks="method-lower-camelcase"/>
 </suppressions>
