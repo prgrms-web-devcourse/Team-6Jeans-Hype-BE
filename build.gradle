@@ -5,11 +5,13 @@ plugins {
     id 'org.ec4j.editorconfig' version '0.0.3'
     id 'checkstyle'
     id 'jacoco'
-//    id 'org.asciidoctor.jvm.convert' version '3.2.0'
     id 'com.epages.restdocs-api-spec' version '0.16.4'
     id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
+jacoco {
+	toolVersion = '0.8.8'
+}
 
 group = 'com.prgrms'
 version = '0.0.1-SNAPSHOT'
@@ -121,29 +123,34 @@ bootJar{
 }
 
 jacocoTestReport {
-    reports {
-        html.enabled(true)
-    }
+	reports {
+		html.enabled(true)
+		xml.enabled(true)
+	}
 
     finalizedBy('jacocoTestCoverageVerification')
 }
 
 jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            enabled = false
-            element = 'CLASS'
+	violationRules {
+		rule {
+			enabled = true
+			element = 'CLASS'
 
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.5
-            }
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.5
-            }
-        }
-    }
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.5
+			}
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.5
+			}
+
+			excludes = [
+			        'com.example.demo.Application'
+			]
+		}
+	}
 }
