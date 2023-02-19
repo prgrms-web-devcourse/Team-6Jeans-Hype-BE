@@ -38,7 +38,7 @@ class HealthControllerTest {
 			.accept(MediaType.TEXT_PLAIN));
 		//then
 		healthRequest.andExpect(status().is2xxSuccessful())
-			.andExpect(content().string(name + "health"))
+			.andExpect(content().string(name + " health"))
 			.andDo(
 				document("heath-get",
 					preprocessRequest(prettyPrint()),
