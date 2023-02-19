@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthController {
 	@GetMapping("/health")
 	public ResponseEntity<Object> healthCheck(
-		@RequestParam(value = "name", required = false, defaultValue = "CICD 기능 분리 테스트") String name) {
-		return ResponseEntity.ok(name + "health");
+		@RequestParam(value = "name", required = false, defaultValue = "테스트") String name) {
+		return ResponseEntity.ok(name + " health");
 	}
 }
