@@ -8,6 +8,6 @@ import lombok.Getter;
 @Embeddable
 public class MemberScore {
 	private int ranking;
-	private int vitoryPoint;
-	private int vitoryCount;
+	private int victoryPoint;
+	private int victoryCount;
 }
