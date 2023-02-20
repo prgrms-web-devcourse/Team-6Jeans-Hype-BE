@@ -15,6 +15,9 @@ public class Music {
 	private Long id;
 
 	@NotNull
+	String albumCoverUrl;
+
+	@NotNull
 	private String singer;
 
 	@NotNull
