@@ -5,8 +5,8 @@ import lombok.NonNull;
 
 @Builder
 public record ApiResponse(
-	@NonNull int status,
-	@NonNull boolean success,
+	int status,
+	boolean success,
 	@NonNull String message,
 	Object data
 ) {
