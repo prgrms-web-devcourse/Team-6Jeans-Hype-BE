@@ -13,8 +13,8 @@ import com.example.demo.common.ApiResponse;
 public class GlobalControllerAdvice {
 
 	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException e) {
-		ApiResponse apiResponse = ApiResponse.fail(HttpStatus.NOT_FOUND.value(), e.getMessage());
+	public ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException exception) {
+		ApiResponse apiResponse = ApiResponse.fail(HttpStatus.NOT_FOUND.value(), exception.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
 	}
 }
