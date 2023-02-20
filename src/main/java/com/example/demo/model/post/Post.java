@@ -44,15 +44,15 @@ public class Post extends BaseEntity {
 	private int likeCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "member_id")
 	private Member member;
 
 	@OneToMany(mappedBy = "post")
 	private List<Like> likes;
 
 	@OneToMany(mappedBy = "challengedPost")
-	private List<Battle> chanllengedBattles = new ArrayList<>();
+	private List<Battle> challengedBattles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "challengingPost")
-	private List<Battle> chanllengingBattles = new ArrayList<>();
+	private List<Battle> challengingBattles = new ArrayList<>();
 }
