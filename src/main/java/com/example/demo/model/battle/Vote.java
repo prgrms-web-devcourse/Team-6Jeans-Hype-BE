@@ -25,14 +25,14 @@ public class Vote extends BaseEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "battle_id")
 	private Battle battle;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	private Post post;
+	@JoinColumn(name = "post_id")
+	private Post selectedPost;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	private Member member;
+	@JoinColumn(name = "member_id")
+	private Member voter;
 }
