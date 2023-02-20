@@ -10,7 +10,7 @@ plugins {
 }
 
 jacoco {
-	toolVersion = '0.8.8'
+    toolVersion = '0.8.8'
 }
 
 group = 'com.prgrms'
@@ -116,41 +116,41 @@ tasks.named("bootJar") {
 }
 
 
-bootJar{
-	archivesBaseName = 'pearls-1.0'
-	archiveFileName = 'pearls-1.0.jar'
-	archiveVersion = "0.0.0"
+bootJar {
+    archivesBaseName = 'pearls-1.0'
+    archiveFileName = 'pearls-1.0.jar'
+    archiveVersion = "0.0.0"
 }
 
 jacocoTestReport {
-	reports {
-		html.enabled(true)
-		xml.enabled(true)
-	}
+    reports {
+        html.required = true
+        xml.required = true
+    }
 
     finalizedBy('jacocoTestCoverageVerification')
 }
 
 jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			enabled = true
-			element = 'CLASS'
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
 
-			limit {
-				counter = 'BRANCH'
-				value = 'COVEREDRATIO'
-				minimum = 0.5
-			}
-			limit {
-				counter = 'LINE'
-				value = 'COVEREDRATIO'
-				minimum = 0.5
-			}
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.5
+            }
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.5
+            }
 
-			excludes = [
-			        'com.example.demo.Application'
-			]
-		}
-	}
+            excludes = [
+                    'com.example.demo.Application'
+            ]
+        }
+    }
 }

@@ -24,7 +24,7 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew build --warning-mode=all
+        run: ./gradlew build
         shell: bash
 
       - name: Upload coverage reports to Codecov
