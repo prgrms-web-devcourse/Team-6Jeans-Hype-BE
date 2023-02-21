@@ -86,9 +86,7 @@ public class Member extends BaseEntity {
 		this.profileImageUrl = profileImageUrl;
 		this.nickname = nickname;
 		this.countOfChallengeTicket = countOfChallengeTicket;
-		memberScore.setRanking(ranking);
-		memberScore.setVictoryPoint(victoryPoint);
-		memberScore.setVictoryCount(victoryCount);
+		memberScore.update(ranking, victoryPoint, victoryCount);
 		this.refreshToken = refreshToken;
 		this.socialInfo = new SocialInfo(socialString, socialId);
 	}

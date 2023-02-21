@@ -23,18 +23,13 @@ class MemberScore {
 	@Min(value = 0)
 	private int victoryCount;
 
-	protected void setRanking(int ranking) {
+	protected void update(int ranking, int victoryPoint, int victoryCount) {
 		checkArgument(ranking >= 0, "랭킹이 음수일 수 없습니다.", ranking);
-		this.ranking = ranking;
-	}
-
-	protected void setVictoryPoint(int victoryPoint) {
 		checkArgument(victoryPoint >= 0, "승리 포인트가 음수일 수 없습니다.", victoryPoint);
-		this.victoryPoint = victoryCount;
-	}
-
-	protected void setVictoryCount(int victoryCount) {
 		checkArgument(victoryCount >= 0, "승리 횟수가 음수일 수 없습니다.", victoryCount);
+
+		this.ranking = ranking;
+		this.victoryPoint = victoryCount;
 		this.victoryCount = victoryCount;
 	}
 }
