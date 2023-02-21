@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Music {
 
 	@NotBlank
-	private String id;
+	private String musicId;
 
 	@NotBlank
 	@Length(max = 2000)
@@ -42,9 +42,9 @@ public class Music {
 	@Length(max = 2000)
 	private String musicUrl;
 
-	protected Music(String id, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl) {
-		checkArgument(Objects.nonNull(id), "음악 고유 번호는 Null일 수 없습니다.", id);
-		checkArgument(!id.isBlank(), "음악 고유 번호는 공백일 수 없습니다.", id);
+	protected Music(String musicId, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl) {
+		checkArgument(Objects.nonNull(musicId), "음악 고유 번호는 Null일 수 없습니다.", musicId);
+		checkArgument(!musicId.isBlank(), "음악 고유 번호는 공백일 수 없습니다.", musicId);
 
 		checkArgument(Objects.nonNull(albumCoverUrl), "앨범 커버 이미지 URL은 Null일 수 없습니다.", albumCoverUrl);
 		checkArgument(!albumCoverUrl.isBlank(), "앨범 커버 이미지 URL은 공백일 수 없습니다.", albumCoverUrl);
@@ -60,7 +60,7 @@ public class Music {
 		checkArgument(!musicUrl.isBlank(), "음악 URL은 공백일 수 없습니다.", musicUrl);
 		checkArgument(musicUrl.length() <= 2000, "음악 URL은 2000자보다 더 길 수 없습니다.", musicUrl);
 
-		this.id = id;
+		this.musicId = musicId;
 		this.albumCoverUrl = albumCoverUrl;
 		this.singer = singer;
 		this.title = title;
