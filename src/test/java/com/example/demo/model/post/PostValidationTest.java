@@ -71,7 +71,7 @@ public class PostValidationTest {
 	@Test
 	public void 실패_앨범_커버_URL_길이가_2000자가_넘으면_Post를_생성할_수_없다() {
 		assertThatThrownBy(() -> {
-			new Post(musicId, TestConstant.OVER_LENGTH_2000, singer, title, genre, musicUrl, content, likeCount);
+			new Post(musicId, createOverLengthStr(), singer, title, genre, musicUrl, content, likeCount);
 		})
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
@@ -129,8 +129,16 @@ public class PostValidationTest {
 	@Test
 	public void 실패_음악_URL_길이가_2000자가_넘으면_Post를_생성할_수_없다() {
 		assertThatThrownBy(() -> {
-			new Post(musicId, albumCoverUrl, singer, title, genre, TestConstant.OVER_LENGTH_2000, content, likeCount);
+			new Post(musicId, albumCoverUrl, singer, title, genre, createOverLengthStr(), content, likeCount);
 		})
 			.isExactlyInstanceOf(IllegalArgumentException.class);
+	}
+
+	private String createOverLengthStr() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i <= 2000; i++) {
+			sb.append("+");
+		}
+		return sb.toString();
 	}
 }
