@@ -44,14 +44,14 @@ class BattleTest {
 		log.info(e1.getMessage());
 	}
 
-	@Test
-	public void 성공_havePost_Battle이_특정Post를_가진다면_true를_반환한다() {
-
-	}
-
-	@Test
-	public void 실패_havePost_Battle이_특정Post를_가지않는다면_false를_반환한다() {
-	}
+	// @Test
+	// public void 성공_havePost_Battle이_특정Post를_가진다면_true를_반환한다() {
+	//
+	// }
+	//
+	// @Test
+	// public void 실패_havePost_Battle이_특정Post를_가지않는다면_false를_반환한다() {
+	// }
 
 	private Battle createBattle(Post challengingPost, Post challengedPost) {
 		return Battle.builder().challengedPost(challengedPost).challengingPost(challengingPost).build();
