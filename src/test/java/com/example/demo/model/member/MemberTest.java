@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class MemberTest {
 
 	@Test
-	void 랭킹은_음수일수_없다() {
+	void 실패_랭킹은_음수일수_없다() {
 		// given
 		int minusRanking = -1;
 
@@ -25,7 +25,7 @@ class MemberTest {
 	}
 
 	@Test
-	void 승리포인트는_음수일수_없다() {
+	void 실패_승리포인트는_음수일수_없다() {
 		// given
 		int minusPoint = -1000;
 
@@ -38,7 +38,7 @@ class MemberTest {
 	}
 
 	@Test
-	void 승리횟수는_음수일수_없다() {
+	void 실패_승리횟수는_음수일수_없다() {
 		// given
 		int minusCount = -10;
 
@@ -51,7 +51,7 @@ class MemberTest {
 	}
 
 	@Test
-	void Member_에서_MemberScore_를_업데이트할수있다() {
+	void 성공_Member_에서_MemberScore_를_업데이트할수있다() {
 		// given
 		int ranking = 1;
 		int victoryPoint = 1000;
@@ -68,7 +68,7 @@ class MemberTest {
 	}
 
 	@Test
-	void socialType_은_null_일수없다() {
+	void 실패_socialType_은_null_일수없다() {
 		// given
 		Social socialType = null;
 
@@ -80,7 +80,7 @@ class MemberTest {
 	}
 
 	@Test
-	void socialId_는_null_일수없다() {
+	void 실패_socialId_는_null_일수없다() {
 		// given
 		String socialId = null;
 
@@ -92,7 +92,7 @@ class MemberTest {
 	}
 
 	@Test
-	void socialId_는_공백_일수없다() {
+	void 실패_socialId_는_공백_일수없다() {
 		// given
 		String socialId = "";
 
@@ -104,7 +104,7 @@ class MemberTest {
 	}
 
 	@Test
-	void profileImageUrl_은_null_일수없다() {
+	void 실패_profileImageUrl_은_null_일수없다() {
 		// given
 		String profileImageUrl = null;
 
@@ -116,7 +116,7 @@ class MemberTest {
 	}
 
 	@Test
-	void profileImageUrl_은_공백_일수없다() {
+	void 실패_profileImageUrl_은_공백_일수없다() {
 		// given
 		String profileImageUrl = "";
 
@@ -128,7 +128,7 @@ class MemberTest {
 	}
 
 	@Test
-	void profileImageUrl_의_길이는2000자보다_클수없다() {
+	void 실패_profileImageUrl_의_길이는2000자보다_클수없다() {
 		// given
 		StringBuilder profileImageUrl = new StringBuilder();
 		while (profileImageUrl.length() <= 2000) {
@@ -143,7 +143,7 @@ class MemberTest {
 	}
 
 	@Test
-	void nickname_이_null_일수없다() {
+	void 실패_nickname_이_null_일수없다() {
 		// given
 		String nickname = null;
 
@@ -155,7 +155,7 @@ class MemberTest {
 	}
 
 	@Test
-	void nickname_이_공백_일수없다() {
+	void 실패_nickname_이_공백_일수없다() {
 		// given
 		String nickname = "";
 
@@ -167,7 +167,7 @@ class MemberTest {
 	}
 
 	@Test
-	void nickname_길이가_24자보다_클수없다() {
+	void 실패_nickname_길이가_24자보다_클수없다() {
 		// given
 		StringBuilder nickname = new StringBuilder();
 		while (nickname.length() <= 24) {
@@ -182,7 +182,7 @@ class MemberTest {
 	}
 
 	@Test
-	void refreshToken_이_null_일수없다() {
+	void 실패_refreshToken_이_null_일수없다() {
 		// given
 		String refreshToken = null;
 
@@ -194,7 +194,7 @@ class MemberTest {
 	}
 
 	@Test
-	void refreshToken_이_공백_일수없다() {
+	void 실패_refreshToken_이_공백_일수없다() {
 		// given
 		String refreshToken = "";
 
