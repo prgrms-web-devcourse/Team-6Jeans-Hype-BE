@@ -58,12 +58,11 @@ public class Post extends BaseEntity {
 	@OneToMany(mappedBy = "challengingPost")
 	private List<Battle> challengingBattles = new ArrayList<>();
 
-	public Post(String id, String albumCoverUrl, String singer, String title, String genreString, String musicUrl,
+	public Post(String id, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl,
 		String content, int likeCount) {
-
 		checkArgument(likeCount >= 0, "좋아요 개수가 음수일 수 없습니다.", likeCount);
 
-		this.music = new Music(id, albumCoverUrl, singer, title, genreString, musicUrl);
+		this.music = new Music(id, albumCoverUrl, singer, title, genre, musicUrl);
 		this.content = content;
 		this.likeCount = likeCount;
 	}

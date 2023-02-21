@@ -70,7 +70,7 @@ public class Member extends BaseEntity {
 	@Builder
 	public Member(String profileImageUrl, String nickname, int countOfChallengeTicket, int ranking, int victoryPoint,
 		int victoryCount,
-		String refreshToken, String socialString, String socialId) {
+		String refreshToken, Social socialType, String socialId) {
 
 		checkArgument(Objects.nonNull(profileImageUrl), "프로필 이미지 URL이 Null일 수 없습니다.", profileImageUrl);
 		checkArgument(!profileImageUrl.isBlank(), "프로필 이미지 URL이 공백일 수 없습니다.", profileImageUrl);
@@ -88,6 +88,6 @@ public class Member extends BaseEntity {
 		this.countOfChallengeTicket = countOfChallengeTicket;
 		memberScore.update(ranking, victoryPoint, victoryCount);
 		this.refreshToken = refreshToken;
-		this.socialInfo = new SocialInfo(socialString, socialId);
+		this.socialInfo = new SocialInfo(socialType, socialId);
 	}
 }
