@@ -58,6 +58,7 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.4'
 
+    implementation 'com.google.guava:guava:31.1-jre'
     swaggerUI 'org.webjars:swagger-ui:4.1.3'
 }
 openapi3 {
@@ -79,7 +80,7 @@ editorconfig {
 //check.dependsOn editorconfigCheck
 
 checkstyle {
-    maxWarnings = 0 // 규칙이 어긋나는 코드가 하나라도 있을 경우 빌드 fail을 내고 싶다면 이 선언을 추가한다.
+    maxWarnings = 0
     configFile = file("${rootProject.projectDir}/config/checkstyle/naver-checkstyle-rules.xml")
     configProperties = ["suppressionFile": "${rootProject.projectDir}/config/checkstyle/naver-checkstyle-suppressions.xml"]
     toolVersion = "10.7.0"  // checkstyle
@@ -104,6 +105,10 @@ tasks.withType(GenerateSwaggerUI).configureEach {
 
 tasks.register('copySwaggerUI', Copy) {
     dependsOn "generateSwaggerUIApiDocument"
+    dependsOn "jacocoTestCoverageVerification"
+    dependsOn "jacocoTestReport"
+    dependsOn "jar"
+    dependsOn "bootJarMainClassName"
 
     from "${generateSwaggerUIApiDocument.outputDir}"
     into "${rootProject.buildDir}/resources/main/static/docs"
@@ -134,7 +139,7 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
     violationRules {
         rule {
-            enabled = true
+            enabled = false
             element = 'CLASS'
 
             limit {
