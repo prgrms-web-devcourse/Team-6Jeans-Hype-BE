@@ -1,5 +1,7 @@
 package com.example.demo.model.post;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,18 +15,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
 
 import com.example.demo.model.BaseEntity;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.member.Member;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseEntity {
 
 	@Id
@@ -37,10 +40,9 @@ public class Post extends BaseEntity {
 	@Lob
 	String content;
 
-	@NotNull
 	private boolean isPossibleBattle;
 
-	@NotNull
+	@Min(value = 0)
 	private int likeCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -55,4 +57,15 @@ public class Post extends BaseEntity {
 
 	@OneToMany(mappedBy = "challengingPost")
 	private List<Battle> challengingBattles = new ArrayList<>();
+
+	public Post(String id, String albumCoverUrl, String singer, String title, String genreString, String musicUrl,
+		String content, int likeCount) {
+
+		checkArgument(likeCount >= 0, "좋아요 개수가 음수일 수 없습니다.", likeCount);
+
+		this.music = new Music(id, albumCoverUrl, singer, title, genreString, musicUrl);
+		this.content = content;
+		this.likeCount = likeCount;
+	}
+
 }
