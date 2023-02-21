@@ -50,4 +50,8 @@ public class Battle extends BaseEntity {
 		this.challengedPost = new BattleInfo(challengedPost);
 		this.challengingPost = new BattleInfo(challengingPost);
 	}
+
+	// public boolean havePost(Post post) { - vouter에서 얘기해본 거에 대한 사안
+	// 	return challengedPost.getPost().equals(post) || challengingPost.getPost().equals(post);
+	// }
 }
