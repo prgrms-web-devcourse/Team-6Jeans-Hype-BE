@@ -5,24 +5,21 @@ import lombok.NonNull;
 
 @Builder
 public record ApiResponse(
-	int status,
 	boolean success,
 	@NonNull String message,
 	Object data
 ) {
 
-	public static ApiResponse success(int status, String message, Object data) {
+	public static ApiResponse success(String message, Object data) {
 		return ApiResponse.builder()
-			.status(status)
 			.success(true)
 			.message(message)
 			.data(data)
 			.build();
 	}
 
-	public static ApiResponse fail(int status, String message) {
+	public static ApiResponse fail(String message) {
 		return ApiResponse.builder()
-			.status(status)
 			.success(false)
 			.message(message)
 			.build();

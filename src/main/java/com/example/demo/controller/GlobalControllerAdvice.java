@@ -14,7 +14,7 @@ public class GlobalControllerAdvice {
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException exception) {
-		ApiResponse apiResponse = ApiResponse.fail(HttpStatus.NOT_FOUND.value(), exception.getMessage());
+		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
 	}
 }
