@@ -52,10 +52,10 @@ public class Post extends BaseEntity {
 	@OneToMany(mappedBy = "post")
 	private List<Like> likes;
 
-	@OneToMany(mappedBy = "challengedPost")
+	@OneToMany(mappedBy = "challengedPost.post")
 	private List<Battle> challengedBattles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "challengingPost")
+	@OneToMany(mappedBy = "challengingPost.post")
 	private List<Battle> challengingBattles = new ArrayList<>();
 
 	public Post(String id, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl,

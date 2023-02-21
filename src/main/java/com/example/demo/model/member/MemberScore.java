@@ -23,7 +23,7 @@ class MemberScore {
 	@Min(value = 0)
 	private int victoryCount;
 
-	protected void update(int ranking, int victoryPoint, int victoryCount) {
+	void update(int ranking, int victoryPoint, int victoryCount) {
 		checkArgument(ranking >= 0, "랭킹이 음수일 수 없습니다.", ranking);
 		checkArgument(victoryPoint >= 0, "승리 포인트가 음수일 수 없습니다.", victoryPoint);
 		checkArgument(victoryCount >= 0, "승리 횟수가 음수일 수 없습니다.", victoryCount);
