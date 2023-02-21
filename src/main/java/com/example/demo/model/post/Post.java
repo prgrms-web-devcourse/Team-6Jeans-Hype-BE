@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
@@ -37,7 +36,6 @@ public class Post extends BaseEntity {
 	@Embedded
 	private Music music;
 
-	@Lob
 	String content;
 
 	private boolean isPossibleBattle;
@@ -58,11 +56,11 @@ public class Post extends BaseEntity {
 	@OneToMany(mappedBy = "challengingPost.post")
 	private List<Battle> challengingBattles = new ArrayList<>();
 
-	public Post(String id, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl,
+	public Post(String musicId, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl,
 		String content, int likeCount) {
 		checkArgument(likeCount >= 0, "좋아요 개수가 음수일 수 없습니다.", likeCount);
 
-		this.music = new Music(id, albumCoverUrl, singer, title, genre, musicUrl);
+		this.music = new Music(musicId, albumCoverUrl, singer, title, genre, musicUrl);
 		this.content = content;
 		this.likeCount = likeCount;
 	}
