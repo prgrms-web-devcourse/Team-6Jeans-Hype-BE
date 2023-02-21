@@ -70,7 +70,7 @@ public class Member extends BaseEntity {
 	@Builder
 	public Member(String profileImageUrl, String nickname, int countOfChallengeTicket, int ranking, int victoryPoint,
 		int victoryCount,
-		String refreshToken, String socialString, String socialId) {
+		String refreshToken, Social socialType, String socialId) {
 
 		checkArgument(Objects.nonNull(profileImageUrl), "프로필 이미지 URL이 Null일 수 없습니다.", profileImageUrl);
 		checkArgument(!profileImageUrl.isBlank(), "프로필 이미지 URL이 공백일 수 없습니다.", profileImageUrl);
@@ -78,7 +78,7 @@ public class Member extends BaseEntity {
 
 		checkArgument(Objects.nonNull(nickname), "닉네임이 Null일 수 없습니다.", nickname);
 		checkArgument(!nickname.isBlank(), "닉네임이 공백일 수 없습니다.", nickname);
-		checkArgument(1 <= nickname.length() && nickname.length() <= 24, "닉네임의 길이는 1보다 짧거나 24보다 더 길 수 없습니다.", nickname);
+		checkArgument(nickname.length() <= 24, "닉네임의 길이는 24보다 더 길 수 없습니다.", nickname);
 
 		checkArgument(Objects.nonNull(refreshToken), "refresh token이 Null일 수 없습니다.", refreshToken);
 		checkArgument(!refreshToken.isBlank(), "refresh token이 공백일 수 없습니다.", refreshToken);
@@ -86,10 +86,8 @@ public class Member extends BaseEntity {
 		this.profileImageUrl = profileImageUrl;
 		this.nickname = nickname;
 		this.countOfChallengeTicket = countOfChallengeTicket;
-		memberScore.setRanking(ranking);
-		memberScore.setVictoryPoint(victoryPoint);
-		memberScore.setVictoryCount(victoryCount);
+		memberScore.update(ranking, victoryPoint, victoryCount);
 		this.refreshToken = refreshToken;
-		this.socialInfo = new SocialInfo(socialString, socialId);
+		this.socialInfo = new SocialInfo(socialType, socialId);
 	}
 }

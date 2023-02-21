@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BattleInfo {
+class BattleInfo {
 
 	@Min(value = 0)
 	private int voteCount;
@@ -26,7 +26,7 @@ public class BattleInfo {
 	@JoinColumn(name = "id")
 	private Post post;
 
-	protected BattleInfo(int voteCount) {
+	BattleInfo(int voteCount) {
 		checkArgument(voteCount >= 0, "득표수가 음수일 수 없습니다.", voteCount);
 		this.voteCount = voteCount;
 	}
