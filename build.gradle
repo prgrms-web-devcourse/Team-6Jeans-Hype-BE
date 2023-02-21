@@ -105,6 +105,10 @@ tasks.withType(GenerateSwaggerUI).configureEach {
 
 tasks.register('copySwaggerUI', Copy) {
     dependsOn "generateSwaggerUIApiDocument"
+    dependsOn "jacocoTestCoverageVerification"
+    dependsOn "jacocoTestReport"
+    dependsOn "jar"
+    dependsOn "bootJarMainClassName"
 
     from "${generateSwaggerUIApiDocument.outputDir}"
     into "${rootProject.buildDir}/resources/main/static/docs"
