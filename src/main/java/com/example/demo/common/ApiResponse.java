@@ -2,12 +2,11 @@ package com.example.demo.common;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.NonNull;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record ApiResponse(
 	boolean success,
-	@NonNull String message,
+	String message,
 	Object data
 ) {
 
