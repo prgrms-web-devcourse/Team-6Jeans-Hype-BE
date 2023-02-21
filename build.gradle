@@ -80,10 +80,10 @@ editorconfig {
 //check.dependsOn editorconfigCheck
 
 checkstyle {
-    maxWarnings = 0 // 규칙이 어긋나는 코드가 하나라도 있을 경우 빌드 fail을 내고 싶다면 이 선언을 추가한다.
+    maxWarnings = 0
     configFile = file("${rootProject.projectDir}/config/checkstyle/naver-checkstyle-rules.xml")
     configProperties = ["suppressionFile": "${rootProject.projectDir}/config/checkstyle/naver-checkstyle-suppressions.xml"]
-    toolVersion = "8.24"  // checkstyle 버전 8.24 이상 선언
+    toolVersion = "10.7.0"  // checkstyle
 }
 
 dependencyManagement {
