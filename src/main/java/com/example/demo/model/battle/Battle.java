@@ -33,4 +33,9 @@ public class Battle extends BaseEntity {
 	@AttributeOverride(name = "voteCount", column = @Column(name = "challenging_vote_count"))
 	@AssociationOverride(name = "post", joinColumns = @JoinColumn(name = "challenging_post_id"))
 	private BattleInfo challengingPost;
+
+	public Battle(int challengedVoteCount, int challengingVoteCount) {
+		this.challengedPost = new BattleInfo(challengedVoteCount);
+		this.challengingPost = new BattleInfo(challengingVoteCount);
+	}
 }
