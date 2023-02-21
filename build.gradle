@@ -135,18 +135,18 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
     violationRules {
         rule {
-            enabled = false
+            enabled = true
             element = 'CLASS'
 
             limit {
                 counter = 'BRANCH'
                 value = 'COVEREDRATIO'
-                minimum = 0.5
+                minimum = 0.0
             }
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.5
+                minimum = 0.0
             }
 
             excludes = [
