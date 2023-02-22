@@ -67,4 +67,5 @@ public class Post extends BaseEntity {
 		this.likeCount = likeCount;
 	}
 
+	// TODO: 2023-02-23 포스트가 특정 battle을 가지고 있는지 검증하는 메소드
 }

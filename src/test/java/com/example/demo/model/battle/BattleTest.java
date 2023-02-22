@@ -34,7 +34,7 @@ class BattleTest {
 		assertThat(battle.getChallengingPost().getVoteCount()).isEqualTo(0);
 
 	}
-	
+
 	@ParameterizedTest
 	@MethodSource("testFailDataProviderForCreateBattle")
 	public void 실패_Battle생성_Post가Null이면_IllegalArgumentException이_발생한다(Post challengingPost, Post challengedPost) {
@@ -42,8 +42,6 @@ class BattleTest {
 		IllegalArgumentException e1 = Assert.assertThrows(IllegalArgumentException.class, () ->
 			createBattle(challengingPost, challengedPost)
 		);
-
-		log.info(e1.getMessage());
 	}
 
 	static Stream<Arguments> testFailDataProviderForCreateBattle() {
@@ -55,15 +53,6 @@ class BattleTest {
 			Arguments.arguments(null, null)
 		);
 	}
-
-	// @Test
-	// public void 성공_havePost_Battle이_특정Post를_가진다면_true를_반환한다() {
-	//
-	// }
-	//
-	// @Test
-	// public void 실패_havePost_Battle이_특정Post를_가지않는다면_false를_반환한다() {
-	// }
 
 	private Battle createBattle(Post challengingPost, Post challengedPost) {
 		return Battle.builder().challengedPost(challengedPost).challengingPost(challengingPost).build();

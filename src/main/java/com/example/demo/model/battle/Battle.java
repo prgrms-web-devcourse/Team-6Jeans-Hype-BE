@@ -44,14 +44,13 @@ public class Battle extends BaseEntity {
 
 	@Builder
 	public Battle(Post challengedPost, Post challengingPost) {
-		checkArgument(Objects.nonNull(challengedPost), "POST " + ExceptionMessage.OBJECT_NOT_NULL.getMessage());
-		checkArgument(Objects.nonNull(challengingPost), "POST " + ExceptionMessage.OBJECT_NOT_NULL.getMessage());
+		String errorMessageForNullPost = String.format("POST %s", ExceptionMessage.OBJECT_NOT_NULL.getMessage());
+		checkArgument(Objects.nonNull(challengedPost), errorMessageForNullPost);
+		checkArgument(Objects.nonNull(challengingPost), errorMessageForNullPost);
 
 		this.challengedPost = new BattleInfo(challengedPost);
 		this.challengingPost = new BattleInfo(challengingPost);
 	}
 
-	// public boolean havePost(Post post) { - vouter에서 얘기해본 거에 대한 사안
-	// 	return challengedPost.getPost().equals(post) || challengingPost.getPost().equals(post);
-	// }
+	// TODO: 2023-02-23 battle이 특정 Post를 가지고 있는지 검증하는 메소드
 }

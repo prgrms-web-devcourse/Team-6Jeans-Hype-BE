@@ -46,21 +46,20 @@ public class Vote extends BaseEntity {
 	@Builder
 	public Vote(Battle battle, Post selectedPost, Member voter) {
 		checkArgument(Objects.nonNull(battle),
-			"battle " + ExceptionMessage.OBJECT_NOT_NULL.getMessage());
+			String.format("battle %s", ExceptionMessage.OBJECT_NOT_NULL.getMessage()));
 		checkArgument(Objects.nonNull(selectedPost),
-			"선택된 post " + ExceptionMessage.OBJECT_NOT_NULL.getMessage());
+			String.format("선택된 post %s", ExceptionMessage.OBJECT_NOT_NULL.getMessage()));
 		checkArgument(Objects.nonNull(voter),
-			"투표자 " + ExceptionMessage.OBJECT_NOT_NULL.getMessage());
+			String.format("투표자 %s", ExceptionMessage.OBJECT_NOT_NULL.getMessage()));
 
-		// TODO: 2023-02-22 아래의 함수들이 있어야 하지 않을까 싶습니다. 근데 저걸 할라면 equals and hashcode의 override가 필요할 것 같아요
+		// TODO: 2023-02-23 배틀이 해당 post를 가지고 있는지 검증
 		// checkArgument(!battle.havePost(selectedPost), "selectedPost는 battle이 가지고 있는 post여야 합니다.");
-		// 배틀이 해당 post를 가지고 있는지 검증
 
+		// TODO: 2023-02-23 포스트가 해당 배틀을 가지는지 검증
 		// checkArgument(!selectedPost.haveBattle(battle), "selectedPost는 battle을 가지고 있어야 합니다.");
-		// 포스트가 해당 배틀을 가지는지 검증
 
-		// checkArgument(voter.haveBattle(battle), "해당 배틀에 이미 투표한 멤버입니다.");
-		// 멤버가 이전에 이미 투표한 적이 있는건 아닌지 검증
+		// TODO: 2023-02-23 유저기 이전에 이미 vote 한적 있는 배틀인지 검증
+		// checkArgument(voter.haveVotedBattle(battle), "해당 배틀에 이미 투표한 멤버입니다.");
 
 		this.battle = battle;
 		this.selectedPost = selectedPost;
