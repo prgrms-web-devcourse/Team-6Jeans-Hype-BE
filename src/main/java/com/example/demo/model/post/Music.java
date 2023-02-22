@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class Music {
+public class Music {
 
 	@NotBlank
 	private String musicId;
