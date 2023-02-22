@@ -35,13 +35,13 @@ class VoteTest {
 	}
 
 	@ParameterizedTest
-	@MethodSource("rwar")
+	@MethodSource("testFailDataProvider")
 	public void 실패_vote생성_battle_post_member중1개라도null이면_IllegalArgumentException이_발생한다(Battle battle, Post post,
 		Member member) {
 		assertThrows(IllegalArgumentException.class, () -> createVote(battle, post, member));
 	}
 
-	private static Stream<Arguments> rwar() {
+	private static Stream<Arguments> testFailDataProvider() {
 		Battle battle = mock(Battle.class);
 		Post post = mock(Post.class);
 		Member member = mock(Member.class);
