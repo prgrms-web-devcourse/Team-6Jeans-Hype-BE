@@ -49,9 +49,14 @@ public class Vote extends BaseEntity {
 		checkArgument(Objects.nonNull(voter), "");
 
 		// TODO: 2023-02-22 아래의 함수들이 있어야 하지 않을까 싶습니다. 근데 저걸 할라면 equals and hashcode의 override가 필요할 것 같아요
-		// checkArgument(!battle.havePost(selectedPost), "selectedPost는 battle이 가지고 있는 post여야 합니다."); // 배틀이 해당 post를 가지고 있는지 검증
-		// checkArgument(!selectedPost.haveBattle(battle), "selectedPost는 battle을 가지고 있어야 합니다."); // 포스트가 해당 배틀을 가지는지 검증
-		// checkArgument(voter.haveBattle(battle), "멤버는 배틀을 가지고 있으면 안됩니다."); //멤버가 이전에 이미 투표한 적이 있는건 아닌지 검증
+		// checkArgument(!battle.havePost(selectedPost), "selectedPost는 battle이 가지고 있는 post여야 합니다.");
+		// 배틀이 해당 post를 가지고 있는지 검증
+
+		// checkArgument(!selectedPost.haveBattle(battle), "selectedPost는 battle을 가지고 있어야 합니다.");
+		// 포스트가 해당 배틀을 가지는지 검증
+
+		// checkArgument(voter.haveBattle(battle), "멤버는 배틀을 가지고 있으면 안됩니다.");
+		// 멤버가 이전에 이미 투표한 적이 있는건 아닌지 검증
 
 		this.battle = battle;
 		this.selectedPost = selectedPost;
