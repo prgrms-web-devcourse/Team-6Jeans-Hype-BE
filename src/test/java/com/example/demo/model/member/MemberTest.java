@@ -72,8 +72,7 @@ class MemberTest {
 	@ParameterizedTest
 	@NullSource
 	void 실패_socialType_은_null_일_수_없다(Social value) {
-		assertThatThrownBy(
-			() -> createMember(profileImageUrl, nickname, refreshToken, value, socialId))
+		assertThatThrownBy(() -> createMember(profileImageUrl, nickname, refreshToken, value, socialId))
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
@@ -96,6 +95,7 @@ class MemberTest {
 	@Test
 	void 실패_profileImageUrl_의_길이는_2000자보다_클_수_없다() {
 		String url = getStringOver2000Length();
+
 		assertThatThrownBy(() -> createMember(url, nickname, refreshToken, socialType, socialId))
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
@@ -120,6 +120,7 @@ class MemberTest {
 	@Test
 	void 실패_nickname_길이가_24자보다_클_수_없다() {
 		String name = getStringOver24Length();
+
 		assertThatThrownBy(() -> createMember(profileImageUrl, name, refreshToken, socialType, socialId))
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
