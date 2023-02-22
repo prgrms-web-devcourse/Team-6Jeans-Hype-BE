@@ -26,14 +26,12 @@ class SocialInfo {
 	@NotBlank
 	private String socialId;
 
-	SocialInfo(String socialString, String socialId) {
+	SocialInfo(Social socialType, String socialId) {
+		checkArgument(Objects.nonNull(socialType), "소셜 타입은 Null 일 수 없습니다.", socialType);
+		checkArgument(Objects.nonNull(socialId), "소셜 ID가 Null 일 수 없습니다.", socialId);
+		checkArgument(!socialId.isBlank(), "소셜 ID가 공백일 수 없습니다.", socialId);
 
-		checkArgument(Social.of(socialString), "해당 소셜 로그인 방식이 존재하지 않습니다.", socialString);
-
-		checkArgument(Objects.nonNull(socialId), "소셜 ID가 Null일 수 없습니다.", socialId);
-		checkArgument(socialId.isBlank(), "소셜 ID가 공백일 수 없습니다.", socialId);
-
-		this.socialType = Social.valueOf(socialString);
+		this.socialType = socialType;
 		this.socialId = socialId;
 	}
 }
