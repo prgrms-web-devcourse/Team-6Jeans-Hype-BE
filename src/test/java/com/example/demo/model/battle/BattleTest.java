@@ -1,10 +1,16 @@
 package com.example.demo.model.battle;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.mockito.Mockito.*;
+
+import java.util.stream.Stream;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -28,20 +34,26 @@ class BattleTest {
 		assertThat(battle.getChallengingPost().getVoteCount()).isEqualTo(0);
 
 	}
-
-	@Test
-	public void 실패_Battle생성_Post가Null이면_IllegalArgumentException이_발생한다() {
+	
+	@ParameterizedTest
+	@MethodSource("testFailDataProviderForCreateBattle")
+	public void 실패_Battle생성_Post가Null이면_IllegalArgumentException이_발생한다(Post challengingPost, Post challengedPost) {
 
 		IllegalArgumentException e1 = Assert.assertThrows(IllegalArgumentException.class, () ->
-			createBattle(null, challengedPost)
+			createBattle(challengingPost, challengedPost)
 		);
-		IllegalArgumentException e2 = Assert.assertThrows(IllegalArgumentException.class, () ->
-			createBattle(challengingPost, null)
-		);
-		IllegalArgumentException e3 = Assert.assertThrows(IllegalArgumentException.class, () ->
-			createBattle(null, null)
-		);
+
 		log.info(e1.getMessage());
+	}
+
+	static Stream<Arguments> testFailDataProviderForCreateBattle() {
+		Post challengingPost = mock(Post.class);
+		Post challengedPost = mock(Post.class);
+		return Stream.of(
+			Arguments.arguments(null, challengedPost),
+			Arguments.arguments(challengingPost, null),
+			Arguments.arguments(null, null)
+		);
 	}
 
 	// @Test
