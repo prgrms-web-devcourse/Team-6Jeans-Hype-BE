@@ -2,13 +2,17 @@ package com.example.demo.model.member;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import reactor.util.annotation.NonNull;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -25,35 +29,35 @@ class MemberTest {
 
 	@Test
 	void 성공_Member_객체를_생성할_수_있다() {
-		assertThat(createMember(profileImageUrl, nickname, refreshToken, socialType, socialId)).isExactlyInstanceOf(
-			Member.class);
+		assertThat(createMember(profileImageUrl, nickname, refreshToken, socialType, socialId))
+			.isExactlyInstanceOf(Member.class);
 	}
 
-	@Test
-	void 실패_랭킹은_음수일_수_없다() {
+	@ParameterizedTest
+	@ValueSource(ints = -1)
+	void 실패_랭킹은_음수일_수_없다(int value) {
 		MemberScore memberScore = new MemberScore();
-		int minusRanking = -1;
 
-		assertThatThrownBy(() -> memberScore.update(minusRanking, victoryPoint, victoryCount)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+		assertThatThrownBy(() -> memberScore.update(value, victoryPoint, victoryCount))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
-	@Test
-	void 실패_승리_포인트는_음수일_수_없다() {
+	@ParameterizedTest
+	@ValueSource(ints = -1000)
+	void 실패_승리_포인트는_음수일_수_없다(int value) {
 		MemberScore memberScore = new MemberScore();
-		int minusPoint = -1000;
 
-		assertThatThrownBy(() -> memberScore.update(ranking, minusPoint, victoryCount)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+		assertThatThrownBy(() -> memberScore.update(ranking, value, victoryCount))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
-	@Test
-	void 실패_승리_횟수는_음수일_수_없다() {
+	@ParameterizedTest
+	@ValueSource(ints = -10)
+	void 실패_승리_횟수는_음수일_수_없다(int value) {
 		MemberScore memberScore = new MemberScore();
-		int minusCount = -10;
 
-		assertThatThrownBy(() -> memberScore.update(ranking, victoryPoint, minusCount)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+		assertThatThrownBy(() -> memberScore.update(ranking, victoryPoint, value))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -69,70 +73,76 @@ class MemberTest {
 	@NullSource
 	void 실패_socialType_은_null_일_수_없다(Social value) {
 		assertThatThrownBy(
-			() -> createMember(profileImageUrl, nickname, refreshToken, value, socialId)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+			() -> createMember(profileImageUrl, nickname, refreshToken, value, socialId))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
 	@ParameterizedTest
 	@NullSource
 	@EmptySource
 	void 실패_socialId_는_null_이거나_공백일_수_없다(String value) {
-		assertThatThrownBy(
-			() -> createMember(profileImageUrl, nickname, refreshToken, socialType, value)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+		assertThatThrownBy(() -> createMember(profileImageUrl, nickname, refreshToken, socialType, value))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
 	@ParameterizedTest
 	@NullSource
 	@EmptySource
 	void 실패_profileImageUrl_은_null_이거나_공백일_수_없다(String value) {
-		assertThatThrownBy(() -> createMember(value, nickname, refreshToken, socialType, socialId)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+		assertThatThrownBy(() -> createMember(value, nickname, refreshToken, socialType, socialId))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
 	void 실패_profileImageUrl_의_길이는_2000자보다_클_수_없다() {
+		String url = getStringOver2000Length();
+		assertThatThrownBy(() -> createMember(url, nickname, refreshToken, socialType, socialId))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
+	}
+
+	@NonNull
+	private String getStringOver2000Length() {
 		StringBuilder url = new StringBuilder();
 		while (url.length() <= 2000) {
 			url.append("profile_image_url");
 		}
-
-		assertThatThrownBy(
-			() -> createMember(url.toString(), nickname, refreshToken, socialType, socialId)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+		return url.toString();
 	}
 
 	@ParameterizedTest
 	@NullSource
 	@EmptySource
 	void 실패_nickname_은_null_이거나_공백일_수_없다(String value) {
-		assertThatThrownBy(
-			() -> createMember(profileImageUrl, value, refreshToken, socialType, socialId)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+		assertThatThrownBy(() -> createMember(profileImageUrl, value, refreshToken, socialType, socialId))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
 	void 실패_nickname_길이가_24자보다_클_수_없다() {
+		String name = getStringOver24Length();
+		assertThatThrownBy(() -> createMember(profileImageUrl, name, refreshToken, socialType, socialId))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
+	}
+
+	@NotNull
+	private String getStringOver24Length() {
 		StringBuilder name = new StringBuilder();
 		while (name.length() <= 24) {
 			name.append("name");
 		}
-
-		assertThatThrownBy(() -> createMember(profileImageUrl, name.toString(), refreshToken, socialType,
-			socialId)).isExactlyInstanceOf(IllegalArgumentException.class);
+		return name.toString();
 	}
 
 	@ParameterizedTest
 	@NullSource
 	@EmptySource
 	void 실패_refreshToken_이_null_이거나_공백일_수_없다(String value) {
-		assertThatThrownBy(
-			() -> createMember(profileImageUrl, nickname, value, socialType, socialId)).isExactlyInstanceOf(
-			IllegalArgumentException.class);
+		assertThatThrownBy(() -> createMember(profileImageUrl, nickname, value, socialType, socialId))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
-	private Member createMember(String profileImageUrl, String nickname, String refreshToken, Social socialType,
-		String socialId) {
+	private Member createMember(String profileImageUrl, String nickname,
+		String refreshToken, Social socialType, String socialId) {
 
 		return Member.builder()
 			.profileImageUrl(profileImageUrl)
