@@ -1,7 +1,5 @@
 package com.example.demo.model.post;
 
-import static com.google.common.base.Preconditions.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,7 @@ import com.example.demo.model.battle.Battle;
 import com.example.demo.model.member.Member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,7 +37,7 @@ public class Post extends BaseEntity {
 	private Music music;
 
 	@Lob
-	String content;
+	private String content;
 
 	private boolean isPossibleBattle;
 
@@ -50,21 +49,33 @@ public class Post extends BaseEntity {
 	private Member member;
 
 	@OneToMany(mappedBy = "post")
-	private List<Like> likes;
+	private final List<Like> likes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "challengedPost.post")
-	private List<Battle> challengedBattles = new ArrayList<>();
+	private final List<Battle> challengedBattles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "challengingPost.post")
-	private List<Battle> challengingBattles = new ArrayList<>();
+	private final List<Battle> challengingBattles = new ArrayList<>();
 
-	public Post(String id, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl,
-		String content, int likeCount) {
-		checkArgument(likeCount >= 0, "좋아요 개수가 음수일 수 없습니다.", likeCount);
-
-		this.music = new Music(id, albumCoverUrl, singer, title, genre, musicUrl);
+	@Builder(access = AccessLevel.PRIVATE)
+	public Post(Music music, String content, boolean isPossibleBattle, int likeCount, Member member) {
+		this.music = music;
 		this.content = content;
+		this.isPossibleBattle = isPossibleBattle;
 		this.likeCount = likeCount;
+		this.member = member;
+	}
+
+	public static Post create(String musicId, String albumCoverUrl, String singer, String title, Genre genre,
+		String musicUrl, String content, boolean isPossibleBattle, Member member) {
+
+		return Post.builder()
+			.music(new Music(musicId, albumCoverUrl, singer, title, genre, musicUrl))
+			.content(content)
+			.isPossibleBattle(isPossibleBattle)
+			.likeCount(0)
+			.member(member)
+			.build();
 	}
 
 }
