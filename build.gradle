@@ -59,7 +59,7 @@ dependencies {
     testImplementation 'org.testcontainers:mysql'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.4'
-
+    testImplementation "org.junit.jupiter:junit-jupiter-params"
     implementation 'com.google.guava:guava:31.1-jre'
     swaggerUI 'org.webjars:swagger-ui:4.1.3'
 }
