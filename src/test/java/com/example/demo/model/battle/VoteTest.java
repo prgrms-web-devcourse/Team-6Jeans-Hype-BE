@@ -36,8 +36,8 @@ class VoteTest {
 
 	@ParameterizedTest
 	@MethodSource("rwar")
-	public void 실패_vote생성_battle_post_member중1개라도null이면_IllegalArgumentException이_발생한다
-		(Battle battle, Post post, Member member) {
+	public void 실패_vote생성_battle_post_member중1개라도null이면_IllegalArgumentException이_발생한다(Battle battle, Post post,
+		Member member) {
 		assertThrows(IllegalArgumentException.class, () -> createVote(battle, post, member));
 	}
 
