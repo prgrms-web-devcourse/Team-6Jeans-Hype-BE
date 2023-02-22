@@ -56,6 +56,8 @@ class Music {
 		checkArgument(Objects.nonNull(title), "음악 제목은 Null일 수 없습니다.", title);
 		checkArgument(!title.isBlank(), "음악 제목은 공백일 수 없습니다.", title);
 
+		checkArgument(Objects.nonNull(genre), "음악 장르는 Null일 수 없습니다.", genre);
+
 		checkArgument(Objects.nonNull(musicUrl), "음악 URL은 Null일 수 없습니다.", musicUrl);
 		checkArgument(!musicUrl.isBlank(), "음악 URL은 공백일 수 없습니다.", musicUrl);
 		checkArgument(musicUrl.length() <= 2000, "음악 URL은 2000자보다 더 길 수 없습니다.", musicUrl);
