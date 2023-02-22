@@ -18,6 +18,13 @@ public record ApiResponse(
 			.build();
 	}
 
+	public static ApiResponse success(String message) {
+		return ApiResponse.builder()
+			.success(true)
+			.message(message)
+			.build();
+	}
+
 	public static ApiResponse fail(String message) {
 		return ApiResponse.builder()
 			.success(false)
