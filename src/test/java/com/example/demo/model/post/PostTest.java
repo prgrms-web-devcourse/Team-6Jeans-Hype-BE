@@ -14,7 +14,7 @@ public class PostTest {
 	private static final String albumCoverUrl = "https://localhost:8080/album/1";
 	private static final String singer = "뉴진스";
 	private static final String title = "Ditto";
-	private static final Genre genre = Genre.DANCE;
+	private static final Genre genre = Genre.ETC;
 	private static final String musicUrl = "https://localhost:8080/music/1";
 	private static final String content = "Hype(하입) 파이팅!!";
 	private static final int likeCount = 10;
