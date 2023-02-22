@@ -30,7 +30,7 @@ class BattleInfo {
 	private Post post;
 
 	BattleInfo(Post post) {
-		checkArgument(Objects.nonNull(post), "POST " + ExceptionMessage.OBJECT_NOT_NULL.getMessage());
+		checkArgument(Objects.nonNull(post), "배틀에서 포스트 " + ExceptionMessage.OBJECT_NOT_NULL.getMessage());
 		this.post = post;
 		this.voteCount = 0;
 	}

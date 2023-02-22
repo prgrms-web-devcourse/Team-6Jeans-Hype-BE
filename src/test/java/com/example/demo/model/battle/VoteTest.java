@@ -17,6 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Post;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 class VoteTest {
 	@Mock
@@ -38,7 +41,9 @@ class VoteTest {
 	@MethodSource("testFailDataProvider")
 	public void 실패_vote생성_battle_post_member중1개라도null이면_IllegalArgumentException이_발생한다(Battle battle, Post post,
 		Member member) {
-		assertThrows(IllegalArgumentException.class, () -> createVote(battle, post, member));
+		IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+			() -> createVote(battle, post, member));
+		log.info(e.getMessage());
 	}
 
 	private static Stream<Arguments> testFailDataProvider() {
