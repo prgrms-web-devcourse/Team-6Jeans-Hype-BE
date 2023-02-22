@@ -22,7 +22,7 @@ public class PostService {
 
 	@Transactional
 	public Long createPost(PostCreateRequestDto postRequestDto) {
-		// 임의 유저 생성: 소셜 로그인 구현 후 삭제
+		//TODO : 임의 유저 생성, 소셜 로그인 구현 후 삭제
 		Member member = new Member("url", "name", 0, 1,
 			10, 10, "token", Social.GOOGLE, "social");
 		memberRepository.save(member);
