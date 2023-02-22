@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class PostValidationTest {
+public class PostTest {
 
 	private static final String musicId = "A123EB";
 	private static final String albumCoverUrl = "https://localhost:8080/album/1";
@@ -27,7 +27,6 @@ public class PostValidationTest {
 		"내용이 있는 경우"
 	})
 	public void 성공_Post를_생성할_수_있다(String value) {
-		// TODO : 더 명확히 Post 생성 성공을 나타내는 테스트 방법이 있을지
 		var post = new Post(musicId, albumCoverUrl, singer, title, genre, musicUrl, value, likeCount);
 		assertThat(post).isExactlyInstanceOf(Post.class);
 	}
