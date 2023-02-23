@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import static com.example.demo.common.ResponseMessage.*;
+
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.common.ApiResponse;
-import com.example.demo.common.ResponseMessage;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.post.Genre;
@@ -36,7 +37,7 @@ public class PostController {
 			.buildAndExpand(postId)
 			.toUri();
 
-		ApiResponse apiResponse = ApiResponse.success(ResponseMessage.SUCCESS_CREATE_POST.getMessage());
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_CREATE_POST.getMessage());
 
 		return ResponseEntity.created(location).body(apiResponse);
 	}
@@ -46,7 +47,7 @@ public class PostController {
 		@RequestParam(name = "possible", required = false) Boolean possible) {
 		PostsFindResponseDto posts = postService.findAllPosts(genre, possible);
 
-		ApiResponse apiResponse = ApiResponse.success(ResponseMessage.SUCCESS_FIND_ALL_POST.getMessage(), posts);
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_POST.getMessage(), posts);
 		return ResponseEntity.ok(apiResponse);
 	}
 
