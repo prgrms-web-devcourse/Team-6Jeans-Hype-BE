@@ -159,6 +159,7 @@ jacocoTestCoverageVerification {
                     'com.example.demo.Application',
                     'com.example.demo.common.*',
                     'com.example.demo.controller.GlobalControllerAdvice',
+                    'com.example.demo.dto.*'
             ]
         }
     }
