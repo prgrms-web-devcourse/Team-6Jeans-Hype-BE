@@ -26,6 +26,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -94,8 +95,10 @@ dependencyManagement {
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
-
+    useJUnitPlatform {
+        includeTags "ParameterizedTest"
+        excludeTags "Disabled"
+    }
     finalizedBy('jacocoTestReport')
 }
 
@@ -129,9 +132,17 @@ bootJar {
 }
 
 jacocoTestReport {
+    dependsOn "test"
+
     reports {
         html.required = true
         xml.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, include: '**/*Test*.*')
+        }))
     }
 
     finalizedBy('jacocoTestCoverageVerification')
