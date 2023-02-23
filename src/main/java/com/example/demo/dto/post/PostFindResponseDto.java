@@ -23,4 +23,14 @@ public record PostFindResponseDto(
 			.nickname(post.getMember().getNickname())
 			.build();
 	}
+
+	public static PostFindResponseDto testFrom(Post post) {
+		return PostFindResponseDto.builder()
+			.postId(0L)
+			.music(PostFindMusicResponseDto.from(post.getMusic()))
+			.likeCount(post.getLikeCount())
+			.isBattlePossible(post.isPossibleBattle())
+			.nickname(post.getMember().getNickname())
+			.build();
+	}
 }
