@@ -28,7 +28,6 @@ class SocialInfo {
 
 	SocialInfo(Social socialType, String socialId) {
 		validateSocialInfo(socialType, socialId);
-    
 		this.socialType = socialType;
 		this.socialId = socialId;
 	}
