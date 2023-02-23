@@ -64,6 +64,7 @@ class PostControllerTest {
 	private final String singer = "hype";
 	private final boolean isPossibleBattle = true;
 	private final String content = "comment";
+	private final Member member = createMember();
 
 	@Test
 	void 성공_음악_공유_게시글을_등록할_수_있다() throws Exception {
@@ -117,10 +118,10 @@ class PostControllerTest {
 	void 성공_음악_공유_게시글을_장르와_대결가능여부_기준으로_조회할_수_있다() throws Exception {
 		// given
 		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
-		queries.add("genre", Genre.POP.toString());
-		queries.add("possible", "true");
+		queries.add("genre", genre.toString());
+		queries.add("possible", String.valueOf(isPossibleBattle));
 
-		when(postService.findAllPosts(Genre.POP, true)).thenReturn(getPostsDto());
+		when(postService.findAllPosts(genre, isPossibleBattle)).thenReturn(getPostsDto());
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
@@ -175,17 +176,17 @@ class PostControllerTest {
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.DANCE, musicUrl,
-				content, isPossibleBattle, createMember());
+				content, isPossibleBattle, member);
 			posts.add(post);
 		}
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, isPossibleBattle, createMember());
+				content, isPossibleBattle, member);
 			posts.add(post);
 		}
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, false, createMember());
+				content, false, member);
 			posts.add(post);
 		}
 		return posts;
