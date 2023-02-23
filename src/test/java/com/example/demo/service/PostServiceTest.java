@@ -5,6 +5,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.demo.dto.post.PostCreateRequestDto;
+import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
@@ -133,6 +137,33 @@ class PostServiceTest {
 
 		// then
 		assertThat(posts).isEqualTo(expected);
+	}
+
+	@Test
+	void 성공_음악_공유_게시글을_id로_상세조회할_수_있다() {
+		// given
+		Post post = getPosts().get(0);
+		PostDetailFindResponseDto expected = PostDetailFindResponseDto.from(post);
+
+		when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
+
+		// when
+		PostDetailFindResponseDto postDto = postService.findPostById(post.getId());
+
+		// then
+		assertThat(postDto).isEqualTo(expected);
+	}
+
+	@Test
+	void 실패_존재하지_않는_음악_공유_게시글을_id이면_EntityNotFoundException_예외_발생() {
+		// given
+		Long wrongId = 0L;
+
+		when(postRepository.findById(wrongId)).thenReturn(Optional.empty());
+
+		// when then
+		assertThatThrownBy(() -> postService.findPostById(wrongId))
+			.isExactlyInstanceOf(EntityNotFoundException.class);
 	}
 
 	private Member createMember() {

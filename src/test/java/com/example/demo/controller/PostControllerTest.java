@@ -14,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,7 +31,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
+import com.example.demo.common.ExceptionMessage;
 import com.example.demo.dto.post.PostCreateRequestDto;
+import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
@@ -132,7 +136,7 @@ class PostControllerTest {
 		// then
 		resultActions.andExpect(status().isOk())
 			.andDo(print())
-			.andDo(MockMvcRestDocumentationWrapper.document("Find Post",
+			.andDo(MockMvcRestDocumentationWrapper.document("Find Posts",
 				requestParameters(
 					parameterWithName("genre").description("필터링 할 장르 값 (null 가능)"),
 					parameterWithName("possible").description("대결 가능 여부 (null 가능)")
@@ -152,6 +156,78 @@ class PostControllerTest {
 					fieldWithPath("data.posts[].likeCount").type(NUMBER).description("조회한 공유글의 좋아요 수"),
 					fieldWithPath("data.posts[].isBattlePossible").type(BOOLEAN).description("조회한 공유글 대결 가능 여부"),
 					fieldWithPath("data.posts[].nickname").type(STRING).description("조회한 공유글 작성자 이름")
+				)
+			));
+	}
+
+	@Test
+	void 성공_음악_공유_게시글을_id로_조회할_수_있다() throws Exception {
+		// given
+		Post post = getPosts().get(0);
+		PostDetailFindResponseDto postDto = PostDetailFindResponseDto.from(post);
+		Long postId = 0L;
+
+		when(postService.findPostById(postId)).thenReturn(postDto);
+
+		// when
+		ResultActions resultActions = mockMvc.perform(
+			get("/api/v1/posts/{postId}", postId)
+				.contentType(APPLICATION_JSON)
+				.with(csrf())
+		);
+
+		// then
+		resultActions.andExpect(status().isOk())
+			.andDo(print())
+			.andDo(MockMvcRestDocumentationWrapper.document("Find Post By Id",
+				pathParameters(
+					parameterWithName("postId").description("조회할 공유 게시글 id")
+				),
+				responseFields(
+					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(OBJECT).description("API 요청 응답 메시지"),
+					fieldWithPath("data.music").type(OBJECT).description("조회한 공유글 음악 정보"),
+					fieldWithPath("data.music.musicName").type(STRING).description("조회한 공유글 음악 제목"),
+					fieldWithPath("data.music.musicUrl").type(STRING).description("조회한 공유글 음악 url"),
+					fieldWithPath("data.music.albumCoverUrl").type(STRING).description("조회한 공유글 음악 앨범 이미지 url"),
+					fieldWithPath("data.music.singer").type(STRING).description("조회한 공유글 음악 가수명"),
+					fieldWithPath("data.music.genre").type(OBJECT).description("조회한 공유글 음악 장르 정보"),
+					fieldWithPath("data.music.genre.genreValue").type(STRING).description("조회한 공유글 음악 장르 값"),
+					fieldWithPath("data.music.genre.genreName").type(STRING).description("조회한 공유글 음악 장르 이름"),
+					fieldWithPath("data.content").type(STRING).description("조회한 공유글 내용"),
+					fieldWithPath("data.isBattlePossible").type(BOOLEAN).description("조회한 공유글 대결 가능 여부"),
+					fieldWithPath("data.nickname").type(STRING).description("조회한 공유글 작성자 이름"),
+					fieldWithPath("data.likeCount").type(NUMBER).description("조회한 공유글 좋아요 수")
+				)
+			));
+	}
+
+	@Test
+	void 실패_음악_공유_게시글을_잘못된_id로_조회할_경우_404_반환() throws Exception {
+		// given
+		Long postId = 0L;
+		doThrow(new EntityNotFoundException(ExceptionMessage.NOT_FOUND_POST.getMessage()))
+			.when(postService).findPostById(postId);
+
+		// when
+		ResultActions resultActions = mockMvc.perform(
+			get("/api/v1/posts/{postId}", postId)
+				.contentType(APPLICATION_JSON)
+				.with(csrf())
+		);
+
+		// then
+		resultActions.andExpect(status().isNotFound())
+			.andDo(print())
+			.andDo(MockMvcRestDocumentationWrapper.document("Find Post By Invalid Id",
+				pathParameters(
+					parameterWithName("postId").description("조회할 공유 게시글 id")
+				),
+				responseFields(
+					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(NULL).description("API 요청 응답 메시지 - Null")
 				)
 			));
 	}
