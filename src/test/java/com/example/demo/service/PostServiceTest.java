@@ -171,8 +171,8 @@ class PostServiceTest {
 	}
 
 	private PostsFindResponseDto getPostsDto(List<Post> posts) {
-		List<PostFindResponseDto> postDtoList = new ArrayList<>();
-		posts.forEach(post -> postDtoList.add(PostFindResponseDto.from(post)));
-		return PostsFindResponseDto.from(postDtoList);
+		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
+		posts.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
+		return postsDto;
 	}
 }

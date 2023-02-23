@@ -192,9 +192,9 @@ class PostControllerTest {
 	}
 
 	private PostsFindResponseDto getPostsDto() {
-		List<PostFindResponseDto> postDtoList = new ArrayList<>();
-		getPosts().forEach(post -> postDtoList.add(PostFindResponseDto.testFrom(post)));
-		return PostsFindResponseDto.from(postDtoList);
+		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
+		getPosts().forEach(post -> postsDto.posts().add(PostFindResponseDto.testFrom(post)));
+		return postsDto;
 	}
 
 }

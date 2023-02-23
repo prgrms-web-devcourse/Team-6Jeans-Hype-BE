@@ -1,5 +1,6 @@
 package com.example.demo.dto.post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -9,9 +10,9 @@ import lombok.Builder;
 public record PostsFindResponseDto(
 	List<PostFindResponseDto> posts
 ) {
-	public static PostsFindResponseDto from(List<PostFindResponseDto> posts) {
+	public static PostsFindResponseDto create() {
 		return PostsFindResponseDto.builder()
-			.posts(posts)
+			.posts(new ArrayList<>())
 			.build();
 	}
 }
