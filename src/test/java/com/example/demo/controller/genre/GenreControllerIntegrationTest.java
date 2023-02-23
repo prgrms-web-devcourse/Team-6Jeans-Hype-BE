@@ -33,7 +33,7 @@ public class GenreControllerIntegrationTest {
 		// given
 		GenreAllResponseDto genreAllResponseDto = GenreAllResponseDto.toEntity(Genre.values());
 		// when
-		ResponseEntity<ApiResponse> response = restTemplate.getForEntity("/genres", ApiResponse.class);
+		ResponseEntity<ApiResponse> response = restTemplate.getForEntity("/api/v1/genres", ApiResponse.class);
 		// then
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().success()).isTrue();

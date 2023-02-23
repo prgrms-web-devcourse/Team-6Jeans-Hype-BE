@@ -2,13 +2,15 @@ package com.example.demo.controller.genre;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.ApiResponse;
 import com.example.demo.dto.genre.GenreAllResponseDto;
 import com.example.demo.model.post.Genre;
 
-@RestController(value = "/api/v1")
+@RestController
+@RequestMapping("/api/v1")
 public class GenreController {
 
 	@GetMapping("/genres")
