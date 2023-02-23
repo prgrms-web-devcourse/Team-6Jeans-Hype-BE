@@ -100,5 +100,5 @@ public class Member extends BaseEntity {
 		checkArgument(!refreshToken.isBlank(),
 			"refresh token 이 공백일 수 없습니다.", refreshToken);
 	}
-	// TODO: 2023-02-23 member가 특정 배틀에 투표한적 있는지 확인하는 메소드(할수 없을 것 같기도) 
+	// TODO: 2023-02-23 member가 특정 배틀에 투표한적 있는지 확인하는 메소드(할수 없을 것 같기도)
 }
