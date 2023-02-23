@@ -1,5 +1,7 @@
 package com.example.demo.model.post;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,7 @@ public class Post extends BaseEntity {
 
 	@Builder(access = AccessLevel.PRIVATE)
 	public Post(Music music, String content, boolean isPossibleBattle, int likeCount, Member member) {
+		checkArgument(likeCount >= 0, "좋아요 개수가 음수일 수 없습니다.", likeCount);
 		this.music = music;
 		this.content = content;
 		this.isPossibleBattle = isPossibleBattle;
@@ -78,4 +81,5 @@ public class Post extends BaseEntity {
 			.build();
 	}
 
+	// TODO: 2023-02-23 포스트가 특정 battle을 가지고 있는지 검증하는 메소드
 }

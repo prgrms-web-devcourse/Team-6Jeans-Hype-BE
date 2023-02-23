@@ -27,11 +27,14 @@ class SocialInfo {
 	private String socialId;
 
 	SocialInfo(Social socialType, String socialId) {
+		validateSocialInfo(socialType, socialId);
+		this.socialType = socialType;
+		this.socialId = socialId;
+	}
+
+	private void validateSocialInfo(Social socialType, String socialId) {
 		checkArgument(Objects.nonNull(socialType), "소셜 타입은 Null 일 수 없습니다.", socialType);
 		checkArgument(Objects.nonNull(socialId), "소셜 ID가 Null 일 수 없습니다.", socialId);
 		checkArgument(!socialId.isBlank(), "소셜 ID가 공백일 수 없습니다.", socialId);
-
-		this.socialType = socialType;
-		this.socialId = socialId;
 	}
 }
