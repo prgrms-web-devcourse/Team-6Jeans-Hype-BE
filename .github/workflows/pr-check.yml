@@ -23,6 +23,11 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
+      - name: docker compose for test
+        uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: "./localTestDB/docker-compose.yml"
+
       - name: Build with Gradle
         run: ./gradlew build
         shell: bash
