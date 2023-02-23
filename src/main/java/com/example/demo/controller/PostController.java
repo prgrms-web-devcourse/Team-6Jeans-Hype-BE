@@ -32,7 +32,7 @@ public class PostController {
 		Long postId = postService.createPost(postRequestDto);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-			.path("/api/v1/posts/{postId}")
+			.path("/{postId}")
 			.buildAndExpand(postId)
 			.toUri();
 

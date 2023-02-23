@@ -45,11 +45,13 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    testImplementation 'org.projectlombok:lombok:1.18.22'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -57,7 +59,7 @@ dependencies {
     testImplementation 'org.testcontainers:mysql'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.4'
-
+    testImplementation "org.junit.jupiter:junit-jupiter-params"
     implementation 'com.google.guava:guava:31.1-jre'
     swaggerUI 'org.webjars:swagger-ui:4.1.3'
 }
@@ -139,7 +141,7 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
     violationRules {
         rule {
-            enabled = false
+            enabled = true
             element = 'CLASS'
 
             limit {
@@ -154,7 +156,10 @@ jacocoTestCoverageVerification {
             }
 
             excludes = [
-                    'com.example.demo.Application'
+                    'com.example.demo.Application',
+                    'com.example.demo.common.*',
+                    'com.example.demo.controller.GlobalControllerAdvice',
+                    'com.example.demo.dto.*'
             ]
         }
     }
