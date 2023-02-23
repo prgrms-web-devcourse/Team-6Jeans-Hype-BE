@@ -1,13 +1,18 @@
 package com.example.demo.service;
 
+import static com.example.demo.common.ExceptionMessage.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.post.PostCreateRequestDto;
+import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
@@ -56,6 +61,12 @@ public class PostService {
 				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
 		}
 		return PostsFindResponseDto.from(posts);
+	}
+
+	public PostDetailFindResponseDto findPostById(Long postId) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
+		return PostDetailFindResponseDto.from(post);
 	}
 
 }
