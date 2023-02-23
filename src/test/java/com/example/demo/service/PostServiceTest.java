@@ -15,9 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
@@ -44,6 +46,7 @@ class PostServiceTest {
 	private final Genre genre = Genre.DANCE;
 	private final String singer = "hype";
 	private final boolean isPossibleBattle = true;
+	private final Member member = createMember();
 
 	@Test
 	void 성공_음악_공유_게시글을_등록할_수_있다() {
@@ -166,6 +169,24 @@ class PostServiceTest {
 			.isExactlyInstanceOf(EntityNotFoundException.class);
 	}
 
+	@Test
+	void 성공_대결곡_후보_공유글_리스트를_조회할_수_있다() {
+		// given
+		List<Post> posts = getPosts().stream()
+			.filter(post -> post.getMember() == member && post.getMusic().getGenre() == genre)
+			.toList();
+		PostsBattleCandidateResponseDto expected = getPostsBattleDto(posts);
+
+		when(postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any()))
+			.thenReturn(posts);
+
+		// when
+		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(genre);
+
+		// then
+		assertThat(postsDto).isEqualTo(expected);
+	}
+
 	private Member createMember() {
 
 		return Member.builder()
@@ -185,17 +206,17 @@ class PostServiceTest {
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.DANCE, musicUrl,
-				content, isPossibleBattle, createMember());
+				content, isPossibleBattle, member);
 			posts.add(post);
 		}
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, isPossibleBattle, createMember());
+				content, isPossibleBattle, member);
 			posts.add(post);
 		}
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, false, createMember());
+				content, false, member);
 			posts.add(post);
 		}
 		return posts;
@@ -205,5 +226,11 @@ class PostServiceTest {
 		List<PostFindResponseDto> postDtoList = new ArrayList<>();
 		posts.forEach(post -> postDtoList.add(PostFindResponseDto.from(post)));
 		return PostsFindResponseDto.from(postDtoList);
+	}
+
+	private PostsBattleCandidateResponseDto getPostsBattleDto(List<Post> posts) {
+		PostsBattleCandidateResponseDto postsDto = PostsBattleCandidateResponseDto.create();
+		posts.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.from(post)));
+		return postsDto;
 	}
 }

@@ -11,9 +11,11 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
@@ -32,11 +34,14 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final MemberRepository memberRepository;
 
+	//TODO : 임의 유저 생성, 소셜 로그인 구현 후 삭제
+	Member member = new Member("url", "name", 0, 1,
+		10, 10, "token", Social.GOOGLE, "social");
+
 	@Transactional
 	public Long createPost(PostCreateRequestDto postRequestDto) {
-		//TODO : 임의 유저 생성, 소셜 로그인 구현 후 삭제
-		Member member = new Member("url", "name", 0, 1,
-			10, 10, "token", Social.GOOGLE, "social");
+		//TODO : 임의 유저 생성, 소셜 로그인 구현 후 로그온 유저로 변경
+
 		memberRepository.save(member);
 
 		Post post = postRequestDto.toEntity(member);
@@ -67,6 +72,15 @@ public class PostService {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
 		return PostDetailFindResponseDto.from(post);
+	}
+
+	public PostsBattleCandidateResponseDto findAllBattleCandidates(Genre genre) {
+		//TODO : 임의 유저 생성, 소셜 로그인 구현 후 로그온 유저로 변경
+
+		PostsBattleCandidateResponseDto posts = PostsBattleCandidateResponseDto.create();
+		postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(member, genre)
+			.forEach(post -> posts.posts().add(PostBattleCandidateResponseDto.from(post)));
+		return posts;
 	}
 
 }

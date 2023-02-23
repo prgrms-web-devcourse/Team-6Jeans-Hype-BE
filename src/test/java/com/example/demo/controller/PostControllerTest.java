@@ -32,9 +32,11 @@ import org.springframework.util.MultiValueMap;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.example.demo.common.ExceptionMessage;
+import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
@@ -68,6 +70,7 @@ class PostControllerTest {
 	private final String singer = "hype";
 	private final boolean isPossibleBattle = true;
 	private final String content = "comment";
+	private final Member member = createMember();
 
 	@Test
 	void 성공_음악_공유_게시글을_등록할_수_있다() throws Exception {
@@ -232,6 +235,43 @@ class PostControllerTest {
 			));
 	}
 
+	@Test
+	void 성공_음악_배틀_후보곡_리스트를_조회할_수_있다() throws Exception {
+		// given
+		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
+		queries.add("genre", Genre.POP.toString());
+
+		when(postService.findAllBattleCandidates(Genre.POP)).thenReturn(getPostsBattleDto());
+
+		// when
+		ResultActions resultActions = mockMvc.perform(
+			get("/api/v1/posts/battle/candidates")
+				.contentType(APPLICATION_JSON)
+				.params(queries)
+		);
+
+		// then
+		resultActions.andExpect(status().isOk())
+			.andDo(print())
+			.andDo(MockMvcRestDocumentationWrapper.document("대결 곡 후보 리스트 조회",
+				requestParameters(
+					parameterWithName("genre").description("배틀곡 장르 값")
+				),
+				responseFields(
+					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(OBJECT).description("API 요청 응답 메시지"),
+					fieldWithPath("data.posts[]").type(ARRAY).description("대결 후보곡 정보 리스트"),
+					fieldWithPath("data.posts[].postId").type(NUMBER).description("대결 후보곡 id"),
+					fieldWithPath("data.posts[].music").type(OBJECT).description("대결 후보곡 노래 정보"),
+					fieldWithPath("data.posts[].music.musicName").type(STRING).description("대결 후보곡 노래 제목"),
+					fieldWithPath("data.posts[].music.albumCoverUrl").type(STRING)
+						.description("대결 후보곡 노래 앨범 이미지 url"),
+					fieldWithPath("data.posts[].music.singer").type(STRING).description("대결 후보곡 노래 가수명")
+				)
+			));
+	}
+
 	private Member createMember() {
 
 		return Member.builder()
@@ -251,17 +291,17 @@ class PostControllerTest {
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.DANCE, musicUrl,
-				content, isPossibleBattle, createMember());
+				content, isPossibleBattle, member);
 			posts.add(post);
 		}
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, isPossibleBattle, createMember());
+				content, isPossibleBattle, member);
 			posts.add(post);
 		}
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, false, createMember());
+				content, false, member);
 			posts.add(post);
 		}
 		return posts;
@@ -271,6 +311,15 @@ class PostControllerTest {
 		List<PostFindResponseDto> postDtoList = new ArrayList<>();
 		getPosts().forEach(post -> postDtoList.add(PostFindResponseDto.testFrom(post)));
 		return PostsFindResponseDto.from(postDtoList);
+	}
+
+	private PostsBattleCandidateResponseDto getPostsBattleDto() {
+		PostsBattleCandidateResponseDto postsDto = PostsBattleCandidateResponseDto.create();
+		getPosts().stream()
+			.filter(post ->
+				post.getMember() == member && post.getMusic().getGenre() == genre && post.isPossibleBattle())
+			.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.testFrom(post)));
+		return postsDto;
 	}
 
 }
