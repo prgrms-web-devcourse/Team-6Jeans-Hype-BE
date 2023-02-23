@@ -16,9 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.demo.model.post.Post;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 class BattleTest {
 	@Mock
@@ -39,7 +36,7 @@ class BattleTest {
 	@MethodSource("testFailDataProviderForCreateBattle")
 	public void 실패_Battle생성_Post가Null이면_IllegalArgumentException이_발생한다(Post challengingPost, Post challengedPost) {
 
-		IllegalArgumentException e1 = Assert.assertThrows(IllegalArgumentException.class, () ->
+		IllegalArgumentException exception = Assert.assertThrows(IllegalArgumentException.class, () ->
 			createBattle(challengingPost, challengedPost)
 		);
 	}

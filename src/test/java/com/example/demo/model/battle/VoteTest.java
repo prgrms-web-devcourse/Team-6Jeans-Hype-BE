@@ -17,9 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Post;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 class VoteTest {
 	@Mock
@@ -43,7 +40,6 @@ class VoteTest {
 		Member member) {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 			() -> createVote(battle, post, member));
-		log.info(exception.getMessage());
 	}
 
 	private static Stream<Arguments> testFailDataProvider() {
