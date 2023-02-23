@@ -4,8 +4,10 @@ import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
+import lombok.Builder;
 import reactor.util.annotation.NonNull;
 
+@Builder
 public record PostCreateRequestDto(
 	@NonNull String musicId,
 	@NonNull String musicName,
