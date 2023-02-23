@@ -3,12 +3,11 @@ package com.example.demo.controller;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -22,12 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostFindResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
@@ -40,7 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(PostController.class)
 @WithMockUser
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, RestDocumentationExtension.class})
 @AutoConfigureRestDocs
 class PostControllerTest {
 
@@ -90,7 +91,7 @@ class PostControllerTest {
 		resultActions.andExpect(status().isCreated())
 			.andExpect(header().string("Location", "http://localhost:8080/api/v1/posts/0"))
 			.andDo(print())
-			.andDo(document("Save Post",
+			.andDo(MockMvcRestDocumentationWrapper.document("Save Post",
 				requestFields(
 					fieldWithPath("musicId").type(STRING).description("등록할 음악의 id 값"),
 					fieldWithPath("musicName").type(STRING).description("등록할 음악의 제목"),
@@ -131,7 +132,7 @@ class PostControllerTest {
 		// then
 		resultActions.andExpect(status().isOk())
 			.andDo(print())
-			.andDo(document("Find Post",
+			.andDo(MockMvcRestDocumentationWrapper.document("Find Post",
 				requestParameters(
 					parameterWithName("genre").description("필터링 할 장르 값 (null 가능)"),
 					parameterWithName("possible").description("대결 가능 여부 (null 가능)")
