@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum Genre {
-	DANCE("댄스");
+	DANCE("댄스"),
+	POP("팝");
 
 	final String name;
 

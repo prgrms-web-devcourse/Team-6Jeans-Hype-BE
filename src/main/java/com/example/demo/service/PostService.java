@@ -1,11 +1,18 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.post.PostCreateRequestDto;
+import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
+import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
@@ -32,4 +39,23 @@ public class PostService {
 
 		return post.getId();
 	}
+
+	public PostsFindResponseDto findAllPosts(Genre genre, Boolean possible) {
+		List<PostFindResponseDto> posts = new ArrayList<>();
+		if (Objects.nonNull(genre) && Objects.nonNull(possible)) {
+			postRepository.findByMusic_GenreAndIsPossibleBattle(genre, possible)
+				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
+		} else if (Objects.nonNull(genre)) {
+			postRepository.findByMusic_Genre(genre)
+				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
+		} else if (Objects.nonNull(possible)) {
+			postRepository.findByIsPossibleBattle(possible)
+				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
+		} else {
+			postRepository.findAll()
+				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
+		}
+		return PostsFindResponseDto.from(posts);
+	}
+
 }
