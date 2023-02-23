@@ -69,20 +69,9 @@ public class Member extends BaseEntity {
 
 	@Builder
 	public Member(String profileImageUrl, String nickname, int countOfChallengeTicket, int ranking, int victoryPoint,
-		int victoryCount,
-		String refreshToken, Social socialType, String socialId) {
+		int victoryCount, String refreshToken, Social socialType, String socialId) {
 
-		checkArgument(Objects.nonNull(profileImageUrl), "프로필 이미지 URL이 Null일 수 없습니다.", profileImageUrl);
-		checkArgument(!profileImageUrl.isBlank(), "프로필 이미지 URL이 공백일 수 없습니다.", profileImageUrl);
-		checkArgument(profileImageUrl.length() <= 2000, "프로필 이미지 URL이 2000자보다 더 길 수 없습니다.", profileImageUrl);
-
-		checkArgument(Objects.nonNull(nickname), "닉네임이 Null일 수 없습니다.", nickname);
-		checkArgument(!nickname.isBlank(), "닉네임이 공백일 수 없습니다.", nickname);
-		checkArgument(nickname.length() <= 24, "닉네임의 길이는 24보다 더 길 수 없습니다.", nickname);
-
-		checkArgument(Objects.nonNull(refreshToken), "refresh token이 Null일 수 없습니다.", refreshToken);
-		checkArgument(!refreshToken.isBlank(), "refresh token이 공백일 수 없습니다.", refreshToken);
-
+		validateMember(profileImageUrl, nickname, refreshToken);
 		this.profileImageUrl = profileImageUrl;
 		this.nickname = nickname;
 		this.countOfChallengeTicket = countOfChallengeTicket;
@@ -90,4 +79,26 @@ public class Member extends BaseEntity {
 		this.refreshToken = refreshToken;
 		this.socialInfo = new SocialInfo(socialType, socialId);
 	}
+
+	private void validateMember(String profileImageUrl, String nickname, String refreshToken) {
+		checkArgument(Objects.nonNull(profileImageUrl),
+			"프로필 이미지 URL 이 Null 일 수 없습니다.", profileImageUrl);
+		checkArgument(!profileImageUrl.isBlank(),
+			"프로필 이미지 URL 이 공백일 수 없습니다.", profileImageUrl);
+		checkArgument(profileImageUrl.length() <= 2000,
+			"프로필 이미지 URL 이 2000자보다 더 길 수 없습니다.", profileImageUrl);
+
+		checkArgument(Objects.nonNull(nickname),
+			"닉네임이 Null 일 수 없습니다.", nickname);
+		checkArgument(!nickname.isBlank(),
+			"닉네임이 공백일 수 없습니다.", nickname);
+		checkArgument(nickname.length() <= 24,
+			"닉네임의 길이는 24보다 더 길 수 없습니다.", nickname);
+
+		checkArgument(Objects.nonNull(refreshToken),
+			"refresh token 이 Null 일 수 없습니다.", refreshToken);
+		checkArgument(!refreshToken.isBlank(),
+			"refresh token 이 공백일 수 없습니다.", refreshToken);
+	}
+	// TODO: 2023-02-23 member가 특정 배틀에 투표한적 있는지 확인하는 메소드(할수 없을 것 같기도)
 }

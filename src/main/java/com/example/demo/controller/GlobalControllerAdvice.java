@@ -17,4 +17,10 @@ public class GlobalControllerAdvice {
 		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
 	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException exception) {
+		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
+		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+	}
 }
