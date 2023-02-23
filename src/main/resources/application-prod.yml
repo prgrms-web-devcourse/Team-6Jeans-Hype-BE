@@ -4,7 +4,7 @@ spring:
     baseline-on-migrate: true
 
   config:
-    import: optional:classpath:prod_db_info.env[.properties]
+    import: optional:file:prod_db_info.env[.properties]
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_HOST}/${MYSQL_DATABASE}
