@@ -17,4 +17,4 @@ else
 fi
 
 echo "> $JAR_PATH 배포"
-nohup java -jar -Dspring.profiles.active=prod /home/ubuntu/build/build/libs/pearls-1.0.jar > /dev/null 2> /dev/null < /dev/null &
+nohup java -jar -Dspring.profiles.active=prod -Dspring.config.import=optional:file:/home/ubuntu/build/prod_info.env[.properties] /home/ubuntu/build/build/libs/pearls-1.0.jar > /dev/null 2> /dev/null < /dev/null &
