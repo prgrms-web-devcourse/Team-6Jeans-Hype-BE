@@ -60,7 +60,7 @@ public class PostTest {
 		" ",
 		"     "
 	})
-	public void 실패_앨범_커버_URL이_null이거나_공백이면_Post를_생성할_수_없다(String value) {
+	public void 실패_앨범_커버_Url이_null이거나_공백이면_Post를_생성할_수_없다(String value) {
 		assertThatThrownBy(() -> {
 			new Post(musicId, value, singer, title, genre, musicUrl, content, likeCount);
 		})
@@ -68,7 +68,7 @@ public class PostTest {
 	}
 
 	@Test
-	public void 실패_앨범_커버_URL_길이가_2000자가_넘으면_Post를_생성할_수_없다() {
+	public void 실패_앨범_커버_Url_길이가_2000자가_넘으면_Post를_생성할_수_없다() {
 		assertThatThrownBy(() -> {
 			new Post(musicId, createOverLengthStr(), singer, title, genre, musicUrl, content, likeCount);
 		})
@@ -118,7 +118,7 @@ public class PostTest {
 		" ",
 		"     "
 	})
-	public void 실패_음악_URL이_null이거나_공백이면_Post를_생성할_수_없다(String value) {
+	public void 실패_음악_Url이_null이거나_공백이면_Post를_생성할_수_없다(String value) {
 		assertThatThrownBy(() -> {
 			new Post(musicId, albumCoverUrl, singer, title, genre, value, content, likeCount);
 		})
@@ -126,7 +126,7 @@ public class PostTest {
 	}
 
 	@Test
-	public void 실패_음악_URL_길이가_2000자가_넘으면_Post를_생성할_수_없다() {
+	public void 실패_음악_Url_길이가_2000자가_넘으면_Post를_생성할_수_없다() {
 		assertThatThrownBy(() -> {
 			new Post(musicId, albumCoverUrl, singer, title, genre, createOverLengthStr(), content, likeCount);
 		})

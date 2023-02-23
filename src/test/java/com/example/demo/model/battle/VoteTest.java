@@ -41,9 +41,9 @@ class VoteTest {
 	@MethodSource("testFailDataProvider")
 	public void 실패_vote생성_battle_post_member중1개라도null이면_IllegalArgumentException이_발생한다(Battle battle, Post post,
 		Member member) {
-		IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 			() -> createVote(battle, post, member));
-		log.info(e.getMessage());
+		log.info(exception.getMessage());
 	}
 
 	private static Stream<Arguments> testFailDataProvider() {
