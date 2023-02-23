@@ -92,7 +92,7 @@ class PostControllerTest {
 		resultActions.andExpect(status().isCreated())
 			.andExpect(header().string("Location", "http://localhost:8080/api/v1/posts/0"))
 			.andDo(print())
-			.andDo(MockMvcRestDocumentationWrapper.document("Save Post",
+			.andDo(MockMvcRestDocumentationWrapper.document("음악 공유 게시글 등록",
 				requestFields(
 					fieldWithPath("musicId").type(STRING).description("등록할 음악의 id 값"),
 					fieldWithPath("musicName").type(STRING).description("등록할 음악의 제목"),
@@ -133,7 +133,7 @@ class PostControllerTest {
 		// then
 		resultActions.andExpect(status().isOk())
 			.andDo(print())
-			.andDo(MockMvcRestDocumentationWrapper.document("Find Post",
+			.andDo(MockMvcRestDocumentationWrapper.document("음악 공유 게시글 리스트 조회",
 				requestParameters(
 					parameterWithName("genre").description("필터링 할 장르 값 (null 가능)"),
 					parameterWithName("possible").description("대결 가능 여부 (null 가능)")
@@ -158,7 +158,6 @@ class PostControllerTest {
 	}
 
 	private Member createMember() {
-
 		return Member.builder()
 			.profileImageUrl("profile")
 			.nickname("name")
