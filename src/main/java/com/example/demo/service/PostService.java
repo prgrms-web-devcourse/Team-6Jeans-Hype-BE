@@ -2,8 +2,6 @@ package com.example.demo.service;
 
 import static com.example.demo.common.ExceptionMessage.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.EntityNotFoundException;
@@ -51,21 +49,21 @@ public class PostService {
 	}
 
 	public PostsFindResponseDto findAllPosts(Genre genre, Boolean possible) {
-		List<PostFindResponseDto> posts = new ArrayList<>();
+		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
 		if (Objects.nonNull(genre) && Objects.nonNull(possible)) {
 			postRepository.findByMusic_GenreAndIsPossibleBattle(genre, possible)
-				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
 		} else if (Objects.nonNull(genre)) {
 			postRepository.findByMusic_Genre(genre)
-				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
 		} else if (Objects.nonNull(possible)) {
 			postRepository.findByIsPossibleBattle(possible)
-				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
 		} else {
 			postRepository.findAll()
-				.forEach(post -> posts.add(PostFindResponseDto.from(post)));
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
 		}
-		return PostsFindResponseDto.from(posts);
+		return postsDto;
 	}
 
 	public PostDetailFindResponseDto findPostById(Long postId) {

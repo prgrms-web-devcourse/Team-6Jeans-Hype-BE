@@ -59,9 +59,8 @@ class PostServiceTest {
 			.genre(genre)
 			.singer(singer)
 			.isBattlePossible(isPossibleBattle)
+			.content(content)
 			.build();
-
-		Member member = createMember();
 		Post post = postCreateRequestDto.toEntity(member);
 
 		when(postRepository.save(any())).thenReturn(post);
@@ -88,58 +87,96 @@ class PostServiceTest {
 
 		// then
 		assertThat(posts).isEqualTo(expected);
+
+		verify(postRepository).findAll();
+	}
+
+	private List<Post> getPosts() {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			posts.add(post);
+		}
+		return posts;
 	}
 
 	@Test
 	void 성공_음악_공유_게시글을_장르_기준으로_조회할_수_있다() {
 		// given
-		List<Post> testPosts = getPosts().stream()
-			.filter(post -> post.getMusic().getGenre() == Genre.DANCE)
-			.toList();
+		List<Post> testPosts = getPosts(genre);
 		PostsFindResponseDto expected = getPostsDto(testPosts);
 
-		when(postRepository.findByMusic_Genre(Genre.DANCE)).thenReturn(testPosts);
+		when(postRepository.findByMusic_Genre(genre)).thenReturn(testPosts);
 
 		// when
-		PostsFindResponseDto posts = postService.findAllPosts(Genre.DANCE, null);
+		PostsFindResponseDto posts = postService.findAllPosts(genre, null);
 
 		// then
 		assertThat(posts).isEqualTo(expected);
+
+		verify(postRepository).findByMusic_Genre(genre);
+	}
+
+	private List<Post> getPosts(Genre genre) {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			posts.add(post);
+		}
+		return posts;
 	}
 
 	@Test
 	void 성공_음악_공유_게시글을_대결가능_기준으로_조회할_수_있다() {
 		// given
-		List<Post> testPosts = getPosts().stream()
-			.filter(Post::isPossibleBattle)
-			.toList();
+		List<Post> testPosts = getPosts(isPossibleBattle);
 		PostsFindResponseDto expected = getPostsDto(testPosts);
 
-		when(postRepository.findByIsPossibleBattle(true)).thenReturn(testPosts);
+		when(postRepository.findByIsPossibleBattle(isPossibleBattle)).thenReturn(testPosts);
 
 		// when
-		PostsFindResponseDto posts = postService.findAllPosts(null, true);
+		PostsFindResponseDto posts = postService.findAllPosts(null, isPossibleBattle);
 
 		// then
 		assertThat(posts).isEqualTo(expected);
 	}
 
+	private List<Post> getPosts(boolean isPossibleBattle) {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			posts.add(post);
+		}
+		return posts;
+	}
+
 	@Test
 	void 성공_음악_공유_게시글을_장르와_대결가능_기준으로_조회할_수_있다() {
 		// given
-		List<Post> testPosts = getPosts().stream()
-			.filter(post -> post.getMusic().getGenre() == Genre.POP && post.isPossibleBattle())
-			.toList();
+		List<Post> testPosts = getPosts(genre, isPossibleBattle);
 		PostsFindResponseDto expected = getPostsDto(testPosts);
 
-		when(postRepository.findByMusic_GenreAndIsPossibleBattle(Genre.POP, true))
+		when(postRepository.findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle))
 			.thenReturn(testPosts);
 
 		// when
-		PostsFindResponseDto posts = postService.findAllPosts(Genre.POP, true);
+		PostsFindResponseDto posts = postService.findAllPosts(genre, isPossibleBattle);
 
 		// then
 		assertThat(posts).isEqualTo(expected);
+	}
+
+	private List<Post> getPosts(Genre genre, boolean isPossibleBattle) {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			posts.add(post);
+		}
+		return posts;
 	}
 
 	@Test
@@ -172,9 +209,7 @@ class PostServiceTest {
 	@Test
 	void 성공_대결곡_후보_공유글_리스트를_조회할_수_있다() {
 		// given
-		List<Post> posts = getPosts().stream()
-			.filter(post -> post.getMember() == member && post.getMusic().getGenre() == genre)
-			.toList();
+		List<Post> posts = getPosts(member, genre);
 		PostsBattleCandidateResponseDto expected = getPostsBattleDto(posts);
 
 		when(postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any()))
@@ -187,8 +222,29 @@ class PostServiceTest {
 		assertThat(postsDto).isEqualTo(expected);
 	}
 
-	private Member createMember() {
+	private List<Post> getPosts(Member member, Genre genre) {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			posts.add(post);
+		}
+		return posts;
+	}
 
+	private PostsFindResponseDto getPostsDto(List<Post> posts) {
+		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
+		posts.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
+		return postsDto;
+	}
+
+	private PostsBattleCandidateResponseDto getPostsBattleDto(List<Post> posts) {
+		PostsBattleCandidateResponseDto postsDto = PostsBattleCandidateResponseDto.create();
+		posts.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.from(post)));
+		return postsDto;
+	}
+
+	private Member createMember() {
 		return Member.builder()
 			.profileImageUrl("profile")
 			.nickname("name")
@@ -200,37 +256,5 @@ class PostServiceTest {
 			.socialType(Social.GOOGLE)
 			.socialId("socialId")
 			.build();
-	}
-
-	private List<Post> getPosts() {
-		List<Post> posts = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.DANCE, musicUrl,
-				content, isPossibleBattle, member);
-			posts.add(post);
-		}
-		for (int i = 0; i < 5; i++) {
-			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, isPossibleBattle, member);
-			posts.add(post);
-		}
-		for (int i = 0; i < 5; i++) {
-			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, false, member);
-			posts.add(post);
-		}
-		return posts;
-	}
-
-	private PostsFindResponseDto getPostsDto(List<Post> posts) {
-		List<PostFindResponseDto> postDtoList = new ArrayList<>();
-		posts.forEach(post -> postDtoList.add(PostFindResponseDto.from(post)));
-		return PostsFindResponseDto.from(postDtoList);
-	}
-
-	private PostsBattleCandidateResponseDto getPostsBattleDto(List<Post> posts) {
-		PostsBattleCandidateResponseDto postsDto = PostsBattleCandidateResponseDto.create();
-		posts.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.from(post)));
-		return postsDto;
 	}
 }
