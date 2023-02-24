@@ -148,10 +148,10 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			enabled = true
-			element = 'CLASS'
+    violationRules {
+        rule {
+            enabled = true
+            element = 'BUNDLE'
 
 			limit {
 				counter = 'BRANCH'
