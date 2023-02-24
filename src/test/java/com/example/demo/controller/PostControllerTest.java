@@ -109,7 +109,7 @@ class PostControllerTest {
 				responseFields(
 					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
 					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
-					fieldWithPath("data").type(NULL).description("API 요청 응답 메시지 (null)")
+					fieldWithPath("data").type(NULL).description("API 요청 응답 데이터 (null)")
 				)
 			));
 	}
@@ -141,7 +141,7 @@ class PostControllerTest {
 				responseFields(
 					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
 					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
-					fieldWithPath("data").type(OBJECT).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(OBJECT).description("API 요청 응답 데이터"),
 					fieldWithPath("data.posts[]").type(ARRAY).description("조회한 공유글 정보 리스트"),
 					fieldWithPath("data.posts[].postId").type(NUMBER).description("조회한 공유글 id"),
 					fieldWithPath("data.posts[].music").type(OBJECT).description("조회한 공유글 음악 정보"),
