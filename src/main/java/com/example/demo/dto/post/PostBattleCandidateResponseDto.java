@@ -11,7 +11,7 @@ public record PostBattleCandidateResponseDto(
 	@NonNull Long postId,
 	@NonNull PostBattleCandidateMusicResponseDto music
 ) {
-	public static PostBattleCandidateResponseDto from(Post post) {
+	public static PostBattleCandidateResponseDto of(Post post) {
 		return PostBattleCandidateResponseDto.builder()
 			.postId(post.getId())
 			.music(PostBattleCandidateMusicResponseDto.of(post.getMusic()))

@@ -78,7 +78,7 @@ public class PostService {
 
 		PostsBattleCandidateResponseDto posts = PostsBattleCandidateResponseDto.create();
 		postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(member, genre)
-			.forEach(post -> posts.posts().add(PostBattleCandidateResponseDto.from(post)));
+			.forEach(post -> posts.posts().add(PostBattleCandidateResponseDto.of(post)));
 		return posts;
 	}
 

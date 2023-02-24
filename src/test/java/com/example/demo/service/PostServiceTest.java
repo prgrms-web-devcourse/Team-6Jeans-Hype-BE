@@ -240,7 +240,7 @@ class PostServiceTest {
 
 	private PostsBattleCandidateResponseDto getPostsBattleDto(List<Post> posts) {
 		PostsBattleCandidateResponseDto postsDto = PostsBattleCandidateResponseDto.create();
-		posts.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.from(post)));
+		posts.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.of(post)));
 		return postsDto;
 	}
 
