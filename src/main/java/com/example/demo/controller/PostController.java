@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import static com.example.demo.common.ResponseMessage.*;
+
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.common.ApiResponse;
-import com.example.demo.common.ResponseMessage;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
@@ -38,7 +39,7 @@ public class PostController {
 			.buildAndExpand(postId)
 			.toUri();
 
-		ApiResponse apiResponse = ApiResponse.success(ResponseMessage.SUCCESS_CREATE_POST.getMessage());
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_CREATE_POST.getMessage());
 
 		return ResponseEntity.created(location).body(apiResponse);
 	}
@@ -48,7 +49,7 @@ public class PostController {
 		@RequestParam(name = "possible", required = false) Boolean possible) {
 		PostsFindResponseDto posts = postService.findAllPosts(genre, possible);
 
-		ApiResponse apiResponse = ApiResponse.success(ResponseMessage.SUCCESS_FIND_ALL_POST.getMessage(), posts);
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_POST.getMessage(), posts);
 		return ResponseEntity.ok(apiResponse);
 	}
 
@@ -56,7 +57,7 @@ public class PostController {
 	public ResponseEntity<ApiResponse> findPostById(@PathVariable("postId") Long postId) {
 		PostDetailFindResponseDto post = postService.findPostById(postId);
 
-		ApiResponse apiResponse = ApiResponse.success(ResponseMessage.SUCCESS_FIND_POST.getMessage(), post);
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_POST.getMessage(), post);
 
 		return ResponseEntity.ok(apiResponse);
 	}

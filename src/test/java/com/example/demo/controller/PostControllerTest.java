@@ -68,6 +68,7 @@ class PostControllerTest {
 	private final String singer = "hype";
 	private final boolean isPossibleBattle = true;
 	private final String content = "comment";
+	private final Member member = createMember();
 
 	@Test
 	void 성공_음악_공유_게시글을_등록할_수_있다() throws Exception {
@@ -95,7 +96,7 @@ class PostControllerTest {
 		resultActions.andExpect(status().isCreated())
 			.andExpect(header().string("Location", "http://localhost:8080/api/v1/posts/0"))
 			.andDo(print())
-			.andDo(MockMvcRestDocumentationWrapper.document("Save Post",
+			.andDo(MockMvcRestDocumentationWrapper.document("음악 공유 게시글 등록",
 				requestFields(
 					fieldWithPath("musicId").type(STRING).description("등록할 음악의 id 값"),
 					fieldWithPath("musicName").type(STRING).description("등록할 음악의 제목"),
@@ -121,10 +122,10 @@ class PostControllerTest {
 	void 성공_음악_공유_게시글을_장르와_대결가능여부_기준으로_조회할_수_있다() throws Exception {
 		// given
 		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
-		queries.add("genre", Genre.POP.toString());
-		queries.add("possible", "true");
+		queries.add("genre", genre.toString());
+		queries.add("possible", String.valueOf(isPossibleBattle));
 
-		when(postService.findAllPosts(Genre.POP, true)).thenReturn(getPostsDto());
+		when(postService.findAllPosts(genre, isPossibleBattle)).thenReturn(getPostsDto());
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
@@ -136,7 +137,7 @@ class PostControllerTest {
 		// then
 		resultActions.andExpect(status().isOk())
 			.andDo(print())
-			.andDo(MockMvcRestDocumentationWrapper.document("Find Posts",
+			.andDo(MockMvcRestDocumentationWrapper.document("음악 공유 게시글 리스트 조회",
 				requestParameters(
 					parameterWithName("genre").description("필터링 할 장르 값 (null 가능)"),
 					parameterWithName("possible").description("대결 가능 여부 (null 가능)")
@@ -233,7 +234,6 @@ class PostControllerTest {
 	}
 
 	private Member createMember() {
-
 		return Member.builder()
 			.profileImageUrl("profile")
 			.nickname("name")
@@ -251,26 +251,26 @@ class PostControllerTest {
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.DANCE, musicUrl,
-				content, isPossibleBattle, createMember());
+				content, isPossibleBattle, member);
 			posts.add(post);
 		}
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, isPossibleBattle, createMember());
+				content, isPossibleBattle, member);
 			posts.add(post);
 		}
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.POP, musicUrl,
-				content, false, createMember());
+				content, false, member);
 			posts.add(post);
 		}
 		return posts;
 	}
 
 	private PostsFindResponseDto getPostsDto() {
-		List<PostFindResponseDto> postDtoList = new ArrayList<>();
-		getPosts().forEach(post -> postDtoList.add(PostFindResponseDto.testFrom(post)));
-		return PostsFindResponseDto.from(postDtoList);
+		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
+		getPosts().forEach(post -> postsDto.posts().add(PostFindResponseDto.testFrom(post)));
+		return postsDto;
 	}
 
 }
