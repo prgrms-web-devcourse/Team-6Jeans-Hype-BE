@@ -69,16 +69,7 @@ class PostControllerTest {
 	@Test
 	void 성공_음악_공유_게시글을_등록할_수_있다() throws Exception {
 		// given
-		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
-			.musicId(musicId)
-			.musicName(musicName)
-			.musicUrl(musicUrl)
-			.albumCoverUrl(albumCoverUrl)
-			.genre(genre)
-			.singer(singer)
-			.isBattlePossible(isPossibleBattle)
-			.content(content)
-			.build();
+		PostCreateRequestDto postCreateRequestDto = getPostCreateRequestDto();
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
@@ -112,6 +103,19 @@ class PostControllerTest {
 					fieldWithPath("data").type(NULL).description("API 요청 응답 데이터 (null)")
 				)
 			));
+	}
+
+	private PostCreateRequestDto getPostCreateRequestDto() {
+		return PostCreateRequestDto.builder()
+			.musicId(musicId)
+			.musicName(musicName)
+			.musicUrl(musicUrl)
+			.albumCoverUrl(albumCoverUrl)
+			.genre(genre)
+			.singer(singer)
+			.isBattlePossible(isPossibleBattle)
+			.content(content)
+			.build();
 	}
 
 	@Test
