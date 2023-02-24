@@ -10,7 +10,7 @@ public enum PostFilteringCase {
 	POSSIBLE_ONLY_NOT_NULL,
 	BOTH_NULL;
 
-	public static PostFilteringCase getCase(Genre genre, boolean isBattlePossible) {
+	public static PostFilteringCase getCase(Genre genre, Boolean isBattlePossible) {
 		if (Objects.nonNull(genre) && Objects.nonNull(isBattlePossible)) {
 			return BOTH_NOT_NULL;
 		} else if (Objects.nonNull(genre)) {
