@@ -63,6 +63,7 @@ class MemberTest {
 	@Test
 	void 성공_Member_에서_MemberScore_를_업데이트_할_수_있다() {
 		Member member = createMember(profileImageUrl, nickname, refreshToken, socialType, socialId);
+		member.updateMemberScore(ranking, victoryPoint, victoryCount);
 
 		assertThat(member.getMemberScore().getRanking()).isEqualTo(ranking);
 		assertThat(member.getMemberScore().getVictoryPoint()).isEqualTo(victoryPoint);
@@ -148,10 +149,6 @@ class MemberTest {
 		return Member.builder()
 			.profileImageUrl(profileImageUrl)
 			.nickname(nickname)
-			.countOfChallengeTicket(5)
-			.ranking(ranking)
-			.victoryPoint(victoryPoint)
-			.victoryCount(victoryCount)
 			.refreshToken(refreshToken)
 			.socialType(socialType)
 			.socialId(socialId)

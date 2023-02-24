@@ -25,7 +25,7 @@ class PostRepositoryTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	private final Genre genre = Genre.DANCE;
+	private final Genre genre = Genre.K_POP;
 	private final boolean isPossibleBattle = true;
 	private final Member member = createMember();
 
@@ -134,10 +134,6 @@ class PostRepositoryTest {
 		return Member.builder()
 			.profileImageUrl("profile")
 			.nickname("name")
-			.countOfChallengeTicket(5)
-			.ranking(1)
-			.victoryPoint(10)
-			.victoryCount(10)
 			.refreshToken("token")
 			.socialType(Social.GOOGLE)
 			.socialId("socialId")
