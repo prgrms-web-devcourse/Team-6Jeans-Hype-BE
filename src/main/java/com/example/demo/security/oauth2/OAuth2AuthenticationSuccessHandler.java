@@ -1,8 +1,12 @@
 package com.example.demo.security.oauth2;
 
 
+import static com.example.demo.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,6 +20,7 @@ import java.util.Optional;
 
 import com.example.demo.config.AppProperties;
 import com.example.demo.security.TokenProvider;
+import com.example.demo.service.MemberService;
 import com.example.demo.util.CookieUtils;
 
 @Component
@@ -27,18 +32,24 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
+	private final MemberService memberService;
 
     @Autowired
     OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties,
-                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository,
+		MemberService memberService) {
         this.tokenProvider = tokenProvider;
         this.appProperties = appProperties;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
-    }
+		this.memberService = memberService;
+	}
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
+
+		long memberId = joinMember((OAuth2AuthenticationToken)authentication);
+
+		String targetUrl = determineTargetUrl(request, response, memberId);
 
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
@@ -49,17 +60,24 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+	private long joinMember(OAuth2AuthenticationToken authentication) {
+		OAuth2AuthenticationToken oauth2Token = authentication;
+		OAuth2User oAuth2User = oauth2Token.getPrincipal();
+		String social = oauth2Token.getAuthorizedClientRegistrationId();
+		return memberService.join(oAuth2User,social);
+	}
+
+	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,long targetUserId) {
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
         if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
+            throw new RuntimeException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = tokenProvider.createToken(authentication);
+        String token = tokenProvider.createToken(targetUserId);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
