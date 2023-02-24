@@ -68,14 +68,12 @@ public class Member extends BaseEntity {
 	private List<Like> likes = new ArrayList<>();
 
 	@Builder
-	public Member(String profileImageUrl, String nickname, int countOfChallengeTicket, int ranking, int victoryPoint,
-		int victoryCount, String refreshToken, Social socialType, String socialId) {
+	public Member(String profileImageUrl, String nickname, String refreshToken, Social socialType, String socialId) {
 
 		validateMember(profileImageUrl, nickname, refreshToken);
 		this.profileImageUrl = profileImageUrl;
 		this.nickname = nickname;
-		this.countOfChallengeTicket = countOfChallengeTicket;
-		memberScore.update(ranking, victoryPoint, victoryCount);
+		this.countOfChallengeTicket = 5;
 		this.refreshToken = refreshToken;
 		this.socialInfo = new SocialInfo(socialType, socialId);
 	}
