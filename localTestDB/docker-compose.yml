@@ -1,0 +1,14 @@
+version: '3'
+services:
+  hype-testDB:
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    volumes:
+      - ./conf.d:/etc/mysql/conf.d
+
+    env_file: db_info.env
+    environment:
+      TZ: Asia/Seoul
+    restart: always
+
