@@ -14,10 +14,8 @@ import com.example.demo.dto.post.PostFindResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
-import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
-import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,21 +26,11 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 
 	private final PostRepository postRepository;
-	private final MemberRepository memberRepository;
-
-	//TODO : 임의 유저 생성, 소셜 로그인 구현 후 삭제
-	Member member = new Member("url", "name", 0, 1,
-		10, 10, "token", Social.GOOGLE, "social");
 
 	@Transactional
-	public Long createPost(PostCreateRequestDto postRequestDto) {
-		//TODO : 임의 유저 생성, 소셜 로그인 구현 후 로그온 유저로 변경
-
-		memberRepository.save(member);
-
+	public Long createPost(Member member, PostCreateRequestDto postRequestDto) {
 		Post post = postRequestDto.toEntity(member);
 		postRepository.save(post);
-
 		return post.getId();
 	}
 
@@ -73,9 +61,7 @@ public class PostService {
 		return PostDetailFindResponseDto.of(post);
 	}
 
-	public PostsBattleCandidateResponseDto findAllBattleCandidates(Genre genre) {
-		//TODO : 임의 유저 생성, 소셜 로그인 구현 후 로그온 유저로 변경
-
+	public PostsBattleCandidateResponseDto findAllBattleCandidates(Member member, Genre genre) {
 		PostsBattleCandidateResponseDto posts = PostsBattleCandidateResponseDto.create();
 		postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(member, genre)
 			.forEach(post -> posts.posts().add(PostBattleCandidateResponseDto.of(post)));

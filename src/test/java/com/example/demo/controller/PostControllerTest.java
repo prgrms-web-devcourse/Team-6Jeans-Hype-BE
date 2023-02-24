@@ -11,6 +11,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +84,7 @@ class PostControllerTest {
 		ResultActions resultActions = mockMvc.perform(
 			post("/api/v1/posts")
 				.contentType(APPLICATION_JSON)
+				.principal((Principal)member)
 				.content(mapper.writeValueAsString(postCreateRequestDto))
 				.with(csrf())
 		);
@@ -253,7 +255,7 @@ class PostControllerTest {
 		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
 		queries.add("genre", genre.toString());
 
-		when(postService.findAllBattleCandidates(genre)).thenReturn(getPostsBattleDto(genre));
+		when(postService.findAllBattleCandidates(member, genre)).thenReturn(getPostsBattleDto(genre));
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
@@ -283,7 +285,7 @@ class PostControllerTest {
 				)
 			));
 
-		verify(postService).findAllBattleCandidates(genre);
+		verify(postService).findAllBattleCandidates(member, genre);
 	}
 
 	private Member createMember() {

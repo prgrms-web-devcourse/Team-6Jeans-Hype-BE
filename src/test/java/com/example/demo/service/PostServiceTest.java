@@ -66,7 +66,7 @@ class PostServiceTest {
 		when(postRepository.save(any())).thenReturn(post);
 
 		// when
-		Long postId = postService.createPost(postCreateRequestDto);
+		Long postId = postService.createPost(member, postCreateRequestDto);
 
 		// then
 		assertThat(postId).isEqualTo(post.getId());
@@ -224,7 +224,7 @@ class PostServiceTest {
 			.thenReturn(posts);
 
 		// when
-		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(genre);
+		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(member, genre);
 
 		// then
 		assertThat(postsDto).isEqualTo(expected);

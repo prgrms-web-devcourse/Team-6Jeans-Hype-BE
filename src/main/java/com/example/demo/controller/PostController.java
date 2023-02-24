@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import static com.example.demo.common.ResponseMessage.*;
 
 import java.net.URI;
+import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
+import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.service.PostService;
 
@@ -32,8 +34,9 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse> createPost(@RequestBody PostCreateRequestDto postRequestDto) {
-		Long postId = postService.createPost(postRequestDto);
+	public ResponseEntity<ApiResponse> createPost(
+		Principal principal, @RequestBody PostCreateRequestDto postRequestDto) {
+		Long postId = postService.createPost((Member)principal, postRequestDto);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
 			.path("/{postId}")
@@ -64,8 +67,9 @@ public class PostController {
 	}
 
 	@GetMapping("/battle/candidates")
-	public ResponseEntity<ApiResponse> findAllBattleCandidates(@RequestParam(name = "genre") Genre genre) {
-		PostsBattleCandidateResponseDto posts = postService.findAllBattleCandidates(genre);
+	public ResponseEntity<ApiResponse> findAllBattleCandidates(
+		Principal principal, @RequestParam(name = "genre") Genre genre) {
+		PostsBattleCandidateResponseDto posts = postService.findAllBattleCandidates((Member)principal, genre);
 
 		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_CANDIDATE_POST.getMessage(), posts);
 		return ResponseEntity.ok(apiResponse);
