@@ -96,10 +96,7 @@ dependencyManagement {
 }
 
 tasks.named('test') {
-    useJUnitPlatform {
-        includeTags "ParameterizedTest"
-        excludeTags "Disabled"
-    }
+    useJUnitPlatform();
     systemProperty 'spring.profiles.active', 'test'
     finalizedBy('jacocoTestReport')
 }
