@@ -65,7 +65,7 @@ public class PostService {
 	public PostDetailFindResponseDto findPostById(Long postId) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
-		return PostDetailFindResponseDto.from(post);
+		return PostDetailFindResponseDto.of(post);
 	}
 
 }

@@ -171,7 +171,7 @@ class PostServiceTest {
 	void 성공_음악_공유_게시글을_id로_상세조회할_수_있다() {
 		// given
 		Post post = getPosts().get(0);
-		PostDetailFindResponseDto expected = PostDetailFindResponseDto.from(post);
+		PostDetailFindResponseDto expected = PostDetailFindResponseDto.of(post);
 
 		when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
 

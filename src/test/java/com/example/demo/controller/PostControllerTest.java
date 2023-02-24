@@ -170,7 +170,7 @@ class PostControllerTest {
 	void 성공_음악_공유_게시글을_id로_조회할_수_있다() throws Exception {
 		// given
 		Post post = getPosts().get(0);
-		PostDetailFindResponseDto postDto = PostDetailFindResponseDto.from(post);
+		PostDetailFindResponseDto postDto = PostDetailFindResponseDto.of(post);
 		Long postId = 0L;
 
 		when(postService.findPostById(postId)).thenReturn(postDto);
