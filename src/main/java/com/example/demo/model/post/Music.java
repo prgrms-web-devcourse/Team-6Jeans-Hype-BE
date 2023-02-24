@@ -42,7 +42,7 @@ public class Music {
 	@Length(max = 2000)
 	private String musicUrl;
 
-	Music(String musicId, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl) {
+	public Music(String musicId, String albumCoverUrl, String singer, String title, Genre genre, String musicUrl) {
 		checkArgument(Objects.nonNull(musicId), "음악 고유 번호는 Null일 수 없습니다.", musicId);
 		checkArgument(!musicId.isBlank(), "음악 고유 번호는 공백일 수 없습니다.", musicId);
 

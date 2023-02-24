@@ -17,7 +17,6 @@ public enum Genre {
 	EDM("EDM"),
 	POP("POP"),
 	ETC("기타");
-
 	final String name;
 
 	Genre(String name) {
