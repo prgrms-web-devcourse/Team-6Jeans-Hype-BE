@@ -6,7 +6,6 @@ import lombok.Builder;
 
 @Builder
 public record MemberDetailsResponseDto(
-	Long memberId,
 	String nickname,
 	String profileImageUrl,
 	int ranking,
@@ -16,7 +15,6 @@ public record MemberDetailsResponseDto(
 ) {
 	public static MemberDetailsResponseDto of(Member member) {
 		return MemberDetailsResponseDto.builder()
-			.memberId(member.getId())
 			.nickname(member.getNickname())
 			.profileImageUrl(member.getProfileImageUrl())
 			.ranking(member.getRanking())

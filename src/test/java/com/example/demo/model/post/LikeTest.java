@@ -60,7 +60,6 @@ public class LikeTest {
 		return Member.builder()
 			.profileImageUrl("https://localhost:8080/profile/1")
 			.nickname("A씨")
-			.countOfChallengeTicket(5)
 			.refreshToken("refreshToken")
 			.socialType(Social.GOOGLE)
 			.socialId("socialId")
