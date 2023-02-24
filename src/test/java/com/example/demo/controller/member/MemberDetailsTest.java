@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -20,12 +21,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.demo.common.ApiResponse;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.service.MemberService;
+import com.example.demo.service.PrincipalService;
 
 @ExtendWith(MockitoExtension.class)
-public class MemberControllerTest {
+public class MemberDetailsTest {
 
 	@Mock
 	private MemberRepository memberRepository;
+
+	private PrincipalService principalService;
+	private MemberService memberService;
+	private MemberController memberController;
+
+	@BeforeEach
+	void setUp() {
+		principalService = new PrincipalService(memberRepository);
+		memberService = new MemberService(memberRepository);
+		memberController = new MemberController(principalService, memberService);
+	}
 
 	@Test
 	public void 성공_유저_세부정보를_조회할_수_있다() {
@@ -36,7 +50,6 @@ public class MemberControllerTest {
 
 		// when
 		when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
-		MemberController memberController = new MemberController(memberRepository);
 		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication);
 
 		// then
@@ -54,7 +67,6 @@ public class MemberControllerTest {
 
 		// when
 		when(memberRepository.findById(any())).thenReturn(Optional.empty());
-		MemberController memberController = new MemberController(memberRepository);
 
 		// then
 		assertThatThrownBy(() -> {
