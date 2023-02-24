@@ -73,7 +73,7 @@ public class MemberControllerRestDocsTest {
 			.andExpect(jsonPath("success").value(true))
 			.andExpect(jsonPath("data").exists())
 			.andDo(print())
-			.andDo(document("find-member-all-posts",
+			.andDo(document("find-member-details",
 				responseFields(
 					fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
 					fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
