@@ -84,6 +84,7 @@ public class Member extends BaseEntity {
 		validateMember(profileImageUrl, nickname, refreshToken);
 		this.profileImageUrl = profileImageUrl;
 		this.nickname = nickname;
+		this.countOfChallengeTicket = 5;
 		this.refreshToken = refreshToken;
 		this.socialInfo = new SocialInfo(socialType, socialId);
 	}
@@ -99,7 +100,11 @@ public class Member extends BaseEntity {
 	public int getVictoryCount() {
 		return memberScore.getVictoryCount();
 	}
-  
+
+	public void updateMemberScore(int ranking, int victoryPoint, int victoryCount) {
+		memberScore.update(ranking, victoryPoint, victoryCount);
+	}
+
 	private void validateMember(String profileImageUrl, String nickname, String refreshToken) {
 		checkArgument(Objects.nonNull(profileImageUrl),
 			"프로필 이미지 URL 이 Null 일 수 없습니다.", profileImageUrl);
