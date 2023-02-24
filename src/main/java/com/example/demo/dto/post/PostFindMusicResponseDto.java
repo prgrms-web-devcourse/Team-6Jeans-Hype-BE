@@ -14,7 +14,7 @@ public record PostFindMusicResponseDto(
 	@NonNull String singer,
 	@NonNull Genre genre
 ) {
-	public static PostFindMusicResponseDto from(Music music) {
+	public static PostFindMusicResponseDto of(Music music) {
 		return PostFindMusicResponseDto.builder()
 			.musicName(music.getTitle())
 			.albumCoverUrl(music.getAlbumCoverUrl())
