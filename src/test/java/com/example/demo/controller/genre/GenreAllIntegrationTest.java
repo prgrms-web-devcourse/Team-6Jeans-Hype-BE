@@ -18,7 +18,7 @@ import com.example.demo.model.post.Genre;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GenreControllerIntegrationTest {
+public class GenreAllIntegrationTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;

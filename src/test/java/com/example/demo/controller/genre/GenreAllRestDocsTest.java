@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @WebMvcTest(GenreController.class)
 @AutoConfigureRestDocs
-public class GenreControllerRestDocsTest {
+public class GenreAllRestDocsTest {
 
 	@Autowired
 	private MockMvc mockMvc;
