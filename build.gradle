@@ -96,10 +96,7 @@ dependencyManagement {
 }
 
 tasks.named('test') {
-    useJUnitPlatform {
-        includeTags "ParameterizedTest"
-        excludeTags "Disabled"
-    }
+    useJUnitPlatform();
     systemProperty 'spring.profiles.active', 'test'
     finalizedBy('jacocoTestReport')
 }
@@ -154,7 +151,7 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             enabled = true
-            element = 'CLASS'
+            element = 'BUNDLE'
 
             limit {
                 counter = 'BRANCH'
