@@ -3,6 +3,7 @@ package com.example.demo.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,10 @@ class PostServiceTest {
 	private PostRepository postRepository;
 	@Mock
 	private MemberRepository memberRepository;
+	@Mock
+	private PrincipalService principalService;
+	@Mock
+	private Principal principal;
 
 	private final String musicId = "musicId";
 	private final String musicName = "musicName";
@@ -66,7 +71,7 @@ class PostServiceTest {
 		when(postRepository.save(any())).thenReturn(post);
 
 		// when
-		Long postId = postService.createPost(member, postCreateRequestDto);
+		Long postId = postService.createPost(principal, postCreateRequestDto);
 
 		// then
 		assertThat(postId).isEqualTo(post.getId());
@@ -224,7 +229,7 @@ class PostServiceTest {
 			.thenReturn(posts);
 
 		// when
-		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(member, genre);
+		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(principal, genre);
 
 		// then
 		assertThat(postsDto).isEqualTo(expected);

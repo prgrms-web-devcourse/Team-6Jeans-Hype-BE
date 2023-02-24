@@ -20,7 +20,6 @@ import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
-import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.service.PostService;
 
@@ -36,7 +35,7 @@ public class PostController {
 	@PostMapping
 	public ResponseEntity<ApiResponse> createPost(
 		Principal principal, @RequestBody PostCreateRequestDto postRequestDto) {
-		Long postId = postService.createPost((Member)principal, postRequestDto);
+		Long postId = postService.createPost(principal, postRequestDto);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
 			.path("/{postId}")
@@ -69,7 +68,7 @@ public class PostController {
 	@GetMapping("/battle/candidates")
 	public ResponseEntity<ApiResponse> findAllBattleCandidates(
 		Principal principal, @RequestParam(name = "genre") Genre genre) {
-		PostsBattleCandidateResponseDto posts = postService.findAllBattleCandidates((Member)principal, genre);
+		PostsBattleCandidateResponseDto posts = postService.findAllBattleCandidates(principal, genre);
 
 		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_CANDIDATE_POST.getMessage(), posts);
 		return ResponseEntity.ok(apiResponse);

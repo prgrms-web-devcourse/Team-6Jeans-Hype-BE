@@ -1,19 +1,19 @@
-package com.example.demo.common;
+package com.example.demo.service;
 
 import java.security.Principal;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class PrincipalHandler {
+public class PrincipalService {
 
 	private final MemberRepository memberRepository;
 

@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import static com.example.demo.common.ExceptionMessage.*;
 
+import java.security.Principal;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -26,9 +28,11 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 
 	private final PostRepository postRepository;
+	private final PrincipalService principalService;
 
 	@Transactional
-	public Long createPost(Member member, PostCreateRequestDto postRequestDto) {
+	public Long createPost(Principal principal, PostCreateRequestDto postRequestDto) {
+		Member member = principalService.getMemberByPrincipal(principal);
 		Post post = postRequestDto.toEntity(member);
 		postRepository.save(post);
 		return post.getId();
@@ -61,7 +65,8 @@ public class PostService {
 		return PostDetailFindResponseDto.of(post);
 	}
 
-	public PostsBattleCandidateResponseDto findAllBattleCandidates(Member member, Genre genre) {
+	public PostsBattleCandidateResponseDto findAllBattleCandidates(Principal principal, Genre genre) {
+		Member member = principalService.getMemberByPrincipal(principal);
 		PostsBattleCandidateResponseDto posts = PostsBattleCandidateResponseDto.create();
 		postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(member, genre)
 			.forEach(post -> posts.posts().add(PostBattleCandidateResponseDto.of(post)));
