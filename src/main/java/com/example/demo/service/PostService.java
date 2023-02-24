@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import java.util.Objects;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,19 +38,22 @@ public class PostService {
 
 	public PostsFindResponseDto findAllPosts(Genre genre, Boolean possible) {
 		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
-		if (Objects.nonNull(genre) && Objects.nonNull(possible)) {
-			postRepository.findByMusic_GenreAndIsPossibleBattle(genre, possible)
+
+		switch (PostFilteringCase.getCase(genre, possible)) {
+			case BOTH_NOT_NULL -> postRepository
+				.findByMusic_GenreAndIsPossibleBattle(genre, possible)
 				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
-		} else if (Objects.nonNull(genre)) {
-			postRepository.findByMusic_Genre(genre)
+			case GENRE_ONLY_NOT_NULL -> postRepository
+				.findByMusic_Genre(genre)
 				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
-		} else if (Objects.nonNull(possible)) {
-			postRepository.findByIsPossibleBattle(possible)
+			case POSSIBLE_ONLY_NOT_NULL -> postRepository
+				.findByIsPossibleBattle(possible)
 				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
-		} else {
-			postRepository.findAll()
+			case BOTH_NULL -> postRepository
+				.findAll()
 				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
 		}
+
 		return postsDto;
 	}
 
