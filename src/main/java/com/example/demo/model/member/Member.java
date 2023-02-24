@@ -68,9 +68,7 @@ public class Member extends BaseEntity {
 	private List<Like> likes = new ArrayList<>();
 
 	@Builder
-	public Member(String profileImageUrl, String nickname, int countOfChallengeTicket, int ranking, int victoryPoint,
-		int victoryCount,
-		String refreshToken, Social socialType, String socialId) {
+	public Member(String profileImageUrl, String nickname, String refreshToken, Social socialType, String socialId) {
 
 		checkArgument(Objects.nonNull(profileImageUrl), "프로필 이미지 URL이 Null일 수 없습니다.", profileImageUrl);
 		checkArgument(!profileImageUrl.isBlank(), "프로필 이미지 URL이 공백일 수 없습니다.", profileImageUrl);
@@ -85,9 +83,19 @@ public class Member extends BaseEntity {
 
 		this.profileImageUrl = profileImageUrl;
 		this.nickname = nickname;
-		this.countOfChallengeTicket = countOfChallengeTicket;
-		memberScore.update(ranking, victoryPoint, victoryCount);
 		this.refreshToken = refreshToken;
 		this.socialInfo = new SocialInfo(socialType, socialId);
+	}
+
+	public int getRanking() {
+		return memberScore.getRanking();
+	}
+
+	public int getVictoryPoint() {
+		return memberScore.getVictoryPoint();
+	}
+
+	public int getVictoryCount() {
+		return memberScore.getVictoryCount();
 	}
 }
