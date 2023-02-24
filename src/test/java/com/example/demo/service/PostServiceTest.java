@@ -5,6 +5,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
+import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
@@ -173,9 +179,68 @@ class PostServiceTest {
 		return posts;
 	}
 
+	@Test
+	void 성공_음악_공유_게시글을_id로_상세조회할_수_있다() {
+		// given
+		Post post = getPosts().get(0);
+		PostDetailFindResponseDto expected = PostDetailFindResponseDto.of(post);
+
+		when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
+
+		// when
+		PostDetailFindResponseDto postDto = postService.findPostById(post.getId());
+
+		// then
+		assertThat(postDto).isEqualTo(expected);
+	}
+
+	@Test
+	void 실패_존재하지_않는_음악_공유_게시글을_id이면_EntityNotFoundException_예외_발생() {
+		// given
+		Long wrongId = 0L;
+
+		when(postRepository.findById(wrongId)).thenReturn(Optional.empty());
+
+		// when then
+		assertThatThrownBy(() -> postService.findPostById(wrongId))
+			.isExactlyInstanceOf(EntityNotFoundException.class);
+	}
+
+	@Test
+	void 성공_대결곡_후보_공유글_리스트를_조회할_수_있다() {
+		// given
+		List<Post> posts = getPosts(member, genre);
+		PostsBattleCandidateResponseDto expected = getPostsBattleDto(posts);
+
+		when(postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any()))
+			.thenReturn(posts);
+
+		// when
+		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(genre);
+
+		// then
+		assertThat(postsDto).isEqualTo(expected);
+	}
+
+	private List<Post> getPosts(Member member, Genre genre) {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			posts.add(post);
+		}
+		return posts;
+	}
+
 	private PostsFindResponseDto getPostsDto(List<Post> posts) {
 		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
 		posts.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
+		return postsDto;
+	}
+
+	private PostsBattleCandidateResponseDto getPostsBattleDto(List<Post> posts) {
+		PostsBattleCandidateResponseDto postsDto = PostsBattleCandidateResponseDto.create();
+		posts.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.of(post)));
 		return postsDto;
 	}
 
@@ -192,5 +257,4 @@ class PostServiceTest {
 			.socialId("socialId")
 			.build();
 	}
-
 }
