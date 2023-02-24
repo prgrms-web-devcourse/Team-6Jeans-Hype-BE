@@ -15,9 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
@@ -167,6 +169,16 @@ class PostServiceTest {
 		assertThat(posts).isEqualTo(expected);
 	}
 
+	private List<Post> getPosts(Genre genre, boolean isPossibleBattle) {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			posts.add(post);
+		}
+		return posts;
+	}
+
 	@Test
 	void 성공_음악_공유_게시글을_id로_상세조회할_수_있다() {
 		// given
@@ -194,7 +206,23 @@ class PostServiceTest {
 			.isExactlyInstanceOf(EntityNotFoundException.class);
 	}
 
-	private List<Post> getPosts(Genre genre, boolean isPossibleBattle) {
+	@Test
+	void 성공_대결곡_후보_공유글_리스트를_조회할_수_있다() {
+		// given
+		List<Post> posts = getPosts(member, genre);
+		PostsBattleCandidateResponseDto expected = getPostsBattleDto(posts);
+
+		when(postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any()))
+			.thenReturn(posts);
+
+		// when
+		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(genre);
+
+		// then
+		assertThat(postsDto).isEqualTo(expected);
+	}
+
+	private List<Post> getPosts(Member member, Genre genre) {
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
@@ -207,6 +235,12 @@ class PostServiceTest {
 	private PostsFindResponseDto getPostsDto(List<Post> posts) {
 		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
 		posts.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
+		return postsDto;
+	}
+
+	private PostsBattleCandidateResponseDto getPostsBattleDto(List<Post> posts) {
+		PostsBattleCandidateResponseDto postsDto = PostsBattleCandidateResponseDto.create();
+		posts.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.of(post)));
 		return postsDto;
 	}
 
@@ -223,5 +257,4 @@ class PostServiceTest {
 			.socialId("socialId")
 			.build();
 	}
-
 }

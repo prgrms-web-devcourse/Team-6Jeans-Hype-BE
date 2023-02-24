@@ -105,6 +105,31 @@ class PostRepositoryTest {
 		return posts;
 	}
 
+	@Test
+	@Transactional
+	void 음악_대결곡_후보_리스트를_조회할_수_있다() {
+		// given
+		List<Post> posts = getPosts(member, genre);
+		memberRepository.save(member);
+		postRepository.saveAll(posts);
+
+		// when
+		List<Post> actual = postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(member, genre);
+
+		// then
+		assertThat(actual).isEqualTo(posts);
+	}
+
+	private List<Post> getPosts(Member member, Genre genre) {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = Post.create("mid", "album", "singer", "title",
+				genre, "url", "content", isPossibleBattle, member);
+			posts.add(post);
+		}
+		return posts;
+	}
+
 	private Member createMember() {
 		return Member.builder()
 			.profileImageUrl("profile")
