@@ -141,6 +141,8 @@ class PostServiceTest {
 
 		// then
 		assertThat(posts).isEqualTo(expected);
+
+		verify(postRepository).findByIsPossibleBattle(isPossibleBattle);
 	}
 
 	private List<Post> getPosts(boolean isPossibleBattle) {
@@ -167,6 +169,8 @@ class PostServiceTest {
 
 		// then
 		assertThat(posts).isEqualTo(expected);
+
+		verify(postRepository).findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle);
 	}
 
 	private List<Post> getPosts(Genre genre, boolean isPossibleBattle) {
@@ -192,6 +196,8 @@ class PostServiceTest {
 
 		// then
 		assertThat(postDto).isEqualTo(expected);
+
+		verify(postRepository).findById(post.getId());
 	}
 
 	@Test
@@ -204,6 +210,8 @@ class PostServiceTest {
 		// when then
 		assertThatThrownBy(() -> postService.findPostById(wrongId))
 			.isExactlyInstanceOf(EntityNotFoundException.class);
+
+		verify(postRepository).findById(wrongId);
 	}
 
 	@Test
@@ -220,6 +228,8 @@ class PostServiceTest {
 
 		// then
 		assertThat(postsDto).isEqualTo(expected);
+
+		verify(postRepository).findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any());
 	}
 
 	private List<Post> getPosts(Member member, Genre genre) {
