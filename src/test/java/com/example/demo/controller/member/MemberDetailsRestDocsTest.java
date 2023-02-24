@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,19 +28,28 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.example.demo.common.ExceptionMessage;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.service.MemberService;
+import com.example.demo.service.PrincipalService;
 
 @AutoConfigureRestDocs
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(MemberController.class)
-public class MemberControllerRestDocsTest {
+public class MemberDetailsRestDocsTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
 	MemberRepository memberRepository;
+
+	@MockBean
+	PrincipalService principalService;
+
+	@MockBean
+	MemberService memberService;
 
 	@BeforeEach
 	void setUp() {
@@ -63,6 +74,8 @@ public class MemberControllerRestDocsTest {
 		// when
 		when(memberRepository.findById(anyLong()))
 			.thenReturn(Optional.of(member));
+		when(principalService.getMemberByPrincipal(any()))
+			.thenReturn(member);
 		var actions = mockMvc.perform(get("/api/v1/members/profile")
 			.contentType(MediaType.APPLICATION_JSON)
 			.header("Authorization", "Bearer accessToken"));
@@ -73,7 +86,7 @@ public class MemberControllerRestDocsTest {
 			.andExpect(jsonPath("success").value(true))
 			.andExpect(jsonPath("data").exists())
 			.andDo(print())
-			.andDo(document("find-member-details",
+			.andDo(document("success-find-member-details",
 				responseFields(
 					fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
 					fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
@@ -84,6 +97,36 @@ public class MemberControllerRestDocsTest {
 					fieldWithPath("data.victoryPoint").type(JsonFieldType.NUMBER).description("획득한 승리 포인트"),
 					fieldWithPath("data.victoryCount").type(JsonFieldType.NUMBER).description("승리 횟수"),
 					fieldWithPath("data.countOfChanllenge").type(JsonFieldType.NUMBER).description("남은 대결권 개수")
+				)
+			));
+	}
+
+	@Test
+	@WithMockUser
+	public void 실패_유저가_존재하지_않으면_상세정보를_조회할_수_없다() throws Exception {
+		// given
+		Member member = createMember();
+
+		// when
+		when(memberRepository.findById(anyLong()))
+			.thenReturn(Optional.empty());
+		when(principalService.getMemberByPrincipal(any()))
+			.thenThrow(new EntityNotFoundException(ExceptionMessage.NOT_FOUND_MEMBER.getMessage()));
+		var actions = mockMvc.perform(get("/api/v1/members/profile")
+			.contentType(MediaType.APPLICATION_JSON)
+			.header("Authorization", "Bearer accessToken"));
+
+		// then
+		actions
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("success").value(false))
+			.andExpect(jsonPath("data").doesNotExist())
+			.andDo(print())
+			.andDo(document("fail-no-user-find-member-details",
+				responseFields(
+					fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(JsonFieldType.NULL).description("API 요청 응답 데이터")
 				)
 			));
 	}
