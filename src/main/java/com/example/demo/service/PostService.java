@@ -42,16 +42,16 @@ public class PostService {
 		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
 		if (Objects.nonNull(genre) && Objects.nonNull(possible)) {
 			postRepository.findByMusic_GenreAndIsPossibleBattle(genre, possible)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
 		} else if (Objects.nonNull(genre)) {
 			postRepository.findByMusic_Genre(genre)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
 		} else if (Objects.nonNull(possible)) {
 			postRepository.findByIsPossibleBattle(possible)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
 		} else {
 			postRepository.findAll()
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
 		}
 		return postsDto;
 	}

@@ -14,10 +14,10 @@ public record PostFindResponseDto(
 	boolean isBattlePossible,
 	String nickname
 ) {
-	public static PostFindResponseDto from(Post post) {
+	public static PostFindResponseDto of(Post post) {
 		return PostFindResponseDto.builder()
 			.postId(post.getId())
-			.music(PostFindMusicResponseDto.from(post.getMusic()))
+			.music(PostFindMusicResponseDto.of(post.getMusic()))
 			.likeCount(post.getLikeCount())
 			.isBattlePossible(post.isPossibleBattle())
 			.nickname(post.getMember().getNickname())
@@ -27,7 +27,7 @@ public record PostFindResponseDto(
 	public static PostFindResponseDto testFrom(Post post) {
 		return PostFindResponseDto.builder()
 			.postId(0L)
-			.music(PostFindMusicResponseDto.from(post.getMusic()))
+			.music(PostFindMusicResponseDto.of(post.getMusic()))
 			.likeCount(post.getLikeCount())
 			.isBattlePossible(post.isPossibleBattle())
 			.nickname(post.getMember().getNickname())
