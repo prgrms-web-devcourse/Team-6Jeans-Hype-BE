@@ -19,4 +19,4 @@ public class WebMVcConfig implements WebMvcConfigurer {
 			.maxAge(MAX_AGE_SECS);
 	}
 }
-}
+
