@@ -167,6 +167,8 @@ class PostControllerTest {
 					fieldWithPath("data.posts[].nickname").type(STRING).description("조회한 공유글 작성자 이름")
 				)
 			));
+
+		verify(postService).findAllPosts(genre, isPossibleBattle);
 	}
 
 	@Test
@@ -210,6 +212,8 @@ class PostControllerTest {
 					fieldWithPath("data.likeCount").type(NUMBER).description("조회한 공유글 좋아요 수")
 				)
 			));
+
+		verify(postService).findPostById(postId);
 	}
 
 	@Test
@@ -239,15 +243,17 @@ class PostControllerTest {
 					fieldWithPath("data").type(NULL).description("API 요청 응답 메시지 - Null")
 				)
 			));
+
+		verify(postService).findPostById(postId);
 	}
 
 	@Test
 	void 성공_음악_배틀_후보곡_리스트를_조회할_수_있다() throws Exception {
 		// given
 		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
-		queries.add("genre", Genre.POP.toString());
+		queries.add("genre", genre.toString());
 
-		when(postService.findAllBattleCandidates(Genre.POP)).thenReturn(getPostsBattleDto());
+		when(postService.findAllBattleCandidates(genre)).thenReturn(getPostsBattleDto(genre));
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
@@ -276,6 +282,8 @@ class PostControllerTest {
 					fieldWithPath("data.posts[].music.singer").type(STRING).description("대결 후보곡 노래 가수명")
 				)
 			));
+
+		verify(postService).findAllBattleCandidates(genre);
 	}
 
 	private Member createMember() {
@@ -328,7 +336,7 @@ class PostControllerTest {
 			.build();
 	}
 
-	private PostsBattleCandidateResponseDto getPostsBattleDto() {
+	private PostsBattleCandidateResponseDto getPostsBattleDto(Genre genre) {
 		PostsBattleCandidateResponseDto postsDto = PostsBattleCandidateResponseDto.create();
 		getPosts().stream()
 			.filter(post ->
