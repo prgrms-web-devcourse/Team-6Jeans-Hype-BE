@@ -32,6 +32,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.example.demo.common.ExceptionMessage;
+import com.example.demo.dto.post.PostBattleCandidateMusicResponseDto;
 import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
@@ -332,8 +333,15 @@ class PostControllerTest {
 		getPosts().stream()
 			.filter(post ->
 				post.getMember() == member && post.getMusic().getGenre() == genre && post.isPossibleBattle())
-			.forEach(post -> postsDto.posts().add(PostBattleCandidateResponseDto.testFrom(post)));
+			.forEach(post -> postsDto.posts().add(testPostBattleOf(post)));
 		return postsDto;
+	}
+
+	private PostBattleCandidateResponseDto testPostBattleOf(Post post) {
+		return PostBattleCandidateResponseDto.builder()
+			.postId(0L)
+			.music(PostBattleCandidateMusicResponseDto.of(post.getMusic()))
+			.build();
 	}
 
 }
