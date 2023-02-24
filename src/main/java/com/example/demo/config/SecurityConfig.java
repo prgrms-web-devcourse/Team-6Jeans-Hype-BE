@@ -41,16 +41,17 @@ public class SecurityConfig {
 			.oauth2Login()
 			.authorizationEndpoint()
 			.baseUri("/oauth2/authorization") //로그인페이지를 받기위한 서버의 엔드포인트 설정
-			.authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository())
+			// .authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository())
 			.and()
 			.redirectionEndpoint()
-			.baseUri("/*/oauth2/code/*")
-			.and()
-			.userInfoEndpoint()
-			.userService(customOauth2UserService)
-			.and()
-			.successHandler(oAuth2AuthenticationSuccessHandler(userService));
-		return httpSecurity.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-			.build();
+			.baseUri("/*/oauth2/code/*");
+		// 	.and()
+		// 	.userInfoEndpoint()
+		// 	.userService(customOauth2UserService)
+		// 	.and()
+		// 	.successHandler(oAuth2AuthenticationSuccessHandler(userService));
+		// return httpSecurity.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+		// 	.build();
+		return httpSecurity.build();
 	}
 }
