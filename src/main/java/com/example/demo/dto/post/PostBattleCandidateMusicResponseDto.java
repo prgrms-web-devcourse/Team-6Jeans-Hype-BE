@@ -12,7 +12,7 @@ public record PostBattleCandidateMusicResponseDto(
 	@NonNull String albumCoverUrl,
 	@NonNull String singer
 ) {
-	public static PostBattleCandidateMusicResponseDto from(Music music) {
+	public static PostBattleCandidateMusicResponseDto of(Music music) {
 		return PostBattleCandidateMusicResponseDto.builder()
 			.musicName(music.getTitle())
 			.albumCoverUrl(music.getAlbumCoverUrl())

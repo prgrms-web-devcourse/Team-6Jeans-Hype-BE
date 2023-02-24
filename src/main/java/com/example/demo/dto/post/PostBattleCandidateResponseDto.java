@@ -14,14 +14,14 @@ public record PostBattleCandidateResponseDto(
 	public static PostBattleCandidateResponseDto from(Post post) {
 		return PostBattleCandidateResponseDto.builder()
 			.postId(post.getId())
-			.music(PostBattleCandidateMusicResponseDto.from(post.getMusic()))
+			.music(PostBattleCandidateMusicResponseDto.of(post.getMusic()))
 			.build();
 	}
 
 	public static PostBattleCandidateResponseDto testFrom(Post post) {
 		return PostBattleCandidateResponseDto.builder()
 			.postId(0L)
-			.music(PostBattleCandidateMusicResponseDto.from(post.getMusic()))
+			.music(PostBattleCandidateMusicResponseDto.of(post.getMusic()))
 			.build();
 	}
 }
