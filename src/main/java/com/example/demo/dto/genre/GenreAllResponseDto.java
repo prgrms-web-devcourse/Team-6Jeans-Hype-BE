@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 import com.example.demo.model.post.Genre;
 
 public record GenreAllResponseDto(
-	List<GenreObjectResponseDto> genres
+	List<GenreVoResponseDto> genres
 ) {
-	public static GenreAllResponseDto toEntity(Genre... genres) {
+	public static GenreAllResponseDto of(Genre... genres) {
 		return new GenreAllResponseDto(
 			Arrays.stream(genres)
-				.map(GenreObjectResponseDto::toObject)
+				.map(GenreVoResponseDto::of)
 				.collect(Collectors.toList())
 		);
 	}

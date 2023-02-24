@@ -9,11 +9,11 @@ import com.example.demo.model.post.Genre;
 public class GenreAllResponseDtoTest {
 
 	@Test
-	public void 성공_모든_장르를_Dto로_바꿀수_있다() {
+	public void 성공_모든_리스트를_Dto로_바꿀수_있다() {
 		// given
 		var allGenres = Genre.values();
 		// when
-		var genreAllResponseDto = GenreAllResponseDto.toEntity(allGenres);
+		var genreAllResponseDto = GenreAllResponseDto.of(allGenres);
 		// then
 		assertThat(genreAllResponseDto.genres()).hasSize(allGenres.length);
 	}

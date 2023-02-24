@@ -31,7 +31,7 @@ public class GenreControllerIntegrationTest {
 	@Test
 	public void 성공_모든_장르_정보를_조회할_수_있다() {
 		// given
-		GenreAllResponseDto genreAllResponseDto = GenreAllResponseDto.toEntity(Genre.values());
+		GenreAllResponseDto genreAllResponseDto = GenreAllResponseDto.of(Genre.values());
 		// when
 		ResponseEntity<ApiResponse> response = restTemplate.getForEntity("/api/v1/genres", ApiResponse.class);
 		// then

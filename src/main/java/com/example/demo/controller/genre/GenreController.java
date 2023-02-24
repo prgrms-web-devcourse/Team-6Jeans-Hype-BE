@@ -9,13 +9,16 @@ import com.example.demo.common.ApiResponse;
 import com.example.demo.dto.genre.GenreAllResponseDto;
 import com.example.demo.model.post.Genre;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
-@RequestMapping("/api/v1")
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/genres")
 public class GenreController {
 
-	@GetMapping("/genres")
+	@GetMapping
 	public ResponseEntity<ApiResponse> getAllGenres() {
-		GenreAllResponseDto genreAllResponseDto = GenreAllResponseDto.toEntity(Genre.values());
+		GenreAllResponseDto genreAllResponseDto = GenreAllResponseDto.of(Genre.values());
 		return ResponseEntity.ok(
 			ApiResponse.success(
 				"장르 전체 조회 성공",
