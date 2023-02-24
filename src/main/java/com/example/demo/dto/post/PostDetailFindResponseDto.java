@@ -14,9 +14,9 @@ public record PostDetailFindResponseDto(
 	@NonNull String nickname,
 	int likeCount
 ) {
-	public static PostDetailFindResponseDto from(Post post) {
+	public static PostDetailFindResponseDto of(Post post) {
 		return PostDetailFindResponseDto.builder()
-			.music(PostDetailFindMusicResponseDto.from(post.getMusic()))
+			.music(PostDetailFindMusicResponseDto.of(post.getMusic()))
 			.content(post.getContent())
 			.isBattlePossible(post.isPossibleBattle())
 			.nickname(post.getMember().getNickname())

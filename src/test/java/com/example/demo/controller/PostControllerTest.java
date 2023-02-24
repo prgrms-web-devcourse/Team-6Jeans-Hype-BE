@@ -35,6 +35,7 @@ import com.example.demo.common.ExceptionMessage;
 import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
+import com.example.demo.dto.post.PostFindMusicResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
@@ -75,16 +76,7 @@ class PostControllerTest {
 	@Test
 	void 성공_음악_공유_게시글을_등록할_수_있다() throws Exception {
 		// given
-		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
-			.musicId(musicId)
-			.musicName(musicName)
-			.musicUrl(musicUrl)
-			.albumCoverUrl(albumCoverUrl)
-			.genre(genre)
-			.singer(singer)
-			.isBattlePossible(isPossibleBattle)
-			.content(content)
-			.build();
+		PostCreateRequestDto postCreateRequestDto = getPostCreateRequestDto();
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
@@ -115,9 +107,22 @@ class PostControllerTest {
 				responseFields(
 					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
 					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
-					fieldWithPath("data").type(NULL).description("API 요청 응답 메시지 (null)")
+					fieldWithPath("data").type(NULL).description("API 요청 응답 데이터 (null)")
 				)
 			));
+	}
+
+	private PostCreateRequestDto getPostCreateRequestDto() {
+		return PostCreateRequestDto.builder()
+			.musicId(musicId)
+			.musicName(musicName)
+			.musicUrl(musicUrl)
+			.albumCoverUrl(albumCoverUrl)
+			.genre(genre)
+			.singer(singer)
+			.isBattlePossible(isPossibleBattle)
+			.content(content)
+			.build();
 	}
 
 	@Test
@@ -147,7 +152,7 @@ class PostControllerTest {
 				responseFields(
 					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
 					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
-					fieldWithPath("data").type(OBJECT).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(OBJECT).description("API 요청 응답 데이터"),
 					fieldWithPath("data.posts[]").type(ARRAY).description("조회한 공유글 정보 리스트"),
 					fieldWithPath("data.posts[].postId").type(NUMBER).description("조회한 공유글 id"),
 					fieldWithPath("data.posts[].music").type(OBJECT).description("조회한 공유글 음악 정보"),
@@ -167,7 +172,7 @@ class PostControllerTest {
 	void 성공_음악_공유_게시글을_id로_조회할_수_있다() throws Exception {
 		// given
 		Post post = getPosts().get(0);
-		PostDetailFindResponseDto postDto = PostDetailFindResponseDto.from(post);
+		PostDetailFindResponseDto postDto = PostDetailFindResponseDto.of(post);
 		Long postId = 0L;
 
 		when(postService.findPostById(postId)).thenReturn(postDto);
@@ -308,8 +313,18 @@ class PostControllerTest {
 
 	private PostsFindResponseDto getPostsDto() {
 		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
-		getPosts().forEach(post -> postsDto.posts().add(PostFindResponseDto.testFrom(post)));
+		getPosts().forEach(post -> postsDto.posts().add(testOf(post)));
 		return postsDto;
+	}
+
+	private PostFindResponseDto testOf(Post post) {
+		return PostFindResponseDto.builder()
+			.postId(0L)
+			.music(PostFindMusicResponseDto.of(post.getMusic()))
+			.likeCount(post.getLikeCount())
+			.isBattlePossible(post.isPossibleBattle())
+			.nickname(post.getMember().getNickname())
+			.build();
 	}
 
 	private PostsBattleCandidateResponseDto getPostsBattleDto() {

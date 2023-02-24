@@ -2,8 +2,6 @@ package com.example.demo.service;
 
 import static com.example.demo.common.ExceptionMessage.*;
 
-import java.util.Objects;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -50,26 +48,29 @@ public class PostService {
 
 	public PostsFindResponseDto findAllPosts(Genre genre, Boolean possible) {
 		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
-		if (Objects.nonNull(genre) && Objects.nonNull(possible)) {
-			postRepository.findByMusic_GenreAndIsPossibleBattle(genre, possible)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
-		} else if (Objects.nonNull(genre)) {
-			postRepository.findByMusic_Genre(genre)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
-		} else if (Objects.nonNull(possible)) {
-			postRepository.findByIsPossibleBattle(possible)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
-		} else {
-			postRepository.findAll()
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.from(post)));
+
+		switch (PostFilteringCase.getCase(genre, possible)) {
+			case BOTH_NOT_NULL -> postRepository
+				.findByMusic_GenreAndIsPossibleBattle(genre, possible)
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
+			case GENRE_ONLY_NOT_NULL -> postRepository
+				.findByMusic_Genre(genre)
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
+			case POSSIBLE_ONLY_NOT_NULL -> postRepository
+				.findByIsPossibleBattle(possible)
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
+			case BOTH_NULL -> postRepository
+				.findAll()
+				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
 		}
+
 		return postsDto;
 	}
 
 	public PostDetailFindResponseDto findPostById(Long postId) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
-		return PostDetailFindResponseDto.from(post);
+		return PostDetailFindResponseDto.of(post);
 	}
 
 	public PostsBattleCandidateResponseDto findAllBattleCandidates(Genre genre) {

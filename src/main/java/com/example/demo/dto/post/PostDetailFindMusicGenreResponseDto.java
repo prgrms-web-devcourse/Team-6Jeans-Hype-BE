@@ -11,7 +11,7 @@ public record PostDetailFindMusicGenreResponseDto(
 	@NonNull String genreValue,
 	@NonNull String genreName
 ) {
-	public static PostDetailFindMusicGenreResponseDto from(Genre genre) {
+	public static PostDetailFindMusicGenreResponseDto of(Genre genre) {
 		return PostDetailFindMusicGenreResponseDto.builder()
 			.genreValue(genre.toString())
 			.genreName(genre.getName())

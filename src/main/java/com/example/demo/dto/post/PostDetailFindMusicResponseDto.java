@@ -14,13 +14,13 @@ public record PostDetailFindMusicResponseDto(
 	@NonNull String singer,
 	@NonNull PostDetailFindMusicGenreResponseDto genre
 ) {
-	public static PostDetailFindMusicResponseDto from(Music music) {
+	public static PostDetailFindMusicResponseDto of(Music music) {
 		return PostDetailFindMusicResponseDto.builder()
 			.musicName(music.getTitle())
 			.musicUrl(music.getMusicUrl())
 			.albumCoverUrl(music.getAlbumCoverUrl())
 			.singer(music.getSinger())
-			.genre(PostDetailFindMusicGenreResponseDto.from(music.getGenre()))
+			.genre(PostDetailFindMusicGenreResponseDto.of(music.getGenre()))
 			.build();
 	}
 }
