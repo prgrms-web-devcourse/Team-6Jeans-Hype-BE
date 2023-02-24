@@ -1,6 +1,6 @@
 package com.example.demo.controller.genre;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @WebMvcTest(GenreController.class)
 @AutoConfigureRestDocs
-public class GenreControllerTest {
+public class GenreControllerRestDocsTest {
 
 	@Autowired
 	private MockMvc mockMvc;
