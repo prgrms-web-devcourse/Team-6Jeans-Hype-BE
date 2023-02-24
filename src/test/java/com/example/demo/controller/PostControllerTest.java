@@ -11,6 +11,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 import com.example.demo.service.PostService;
+import com.example.demo.service.PrincipalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(PostController.class)
@@ -63,6 +65,10 @@ class PostControllerTest {
 
 	@MockBean
 	private PostService postService;
+	@MockBean
+	private PrincipalService principalService;
+	@MockBean
+	private Principal principal;
 
 	private final String musicId = "musicId";
 	private final String musicName = "musicName";
@@ -83,6 +89,7 @@ class PostControllerTest {
 		ResultActions resultActions = mockMvc.perform(
 			post("/api/v1/posts")
 				.contentType(APPLICATION_JSON)
+				.principal(principal)
 				.content(mapper.writeValueAsString(postCreateRequestDto))
 				.with(csrf())
 		);
@@ -253,12 +260,13 @@ class PostControllerTest {
 		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
 		queries.add("genre", genre.toString());
 
-		when(postService.findAllBattleCandidates(genre)).thenReturn(getPostsBattleDto(genre));
+		when(postService.findAllBattleCandidates(any(), any())).thenReturn(getPostsBattleDto(genre));
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
 			get("/api/v1/posts/battle/candidates")
 				.contentType(APPLICATION_JSON)
+				.principal(principal)
 				.params(queries)
 		);
 
@@ -283,7 +291,7 @@ class PostControllerTest {
 				)
 			));
 
-		verify(postService).findAllBattleCandidates(genre);
+		verify(postService).findAllBattleCandidates(any(), any());
 	}
 
 	private Member createMember() {
@@ -303,7 +311,7 @@ class PostControllerTest {
 	private List<Post> getPosts() {
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
-			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, Genre.DANCE, musicUrl,
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
 				content, isPossibleBattle, member);
 			posts.add(post);
 		}
