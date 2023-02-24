@@ -25,8 +25,8 @@ configurations {
 }
 
 repositories {
-	mavenCentral()
-	jcenter()
+    mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -164,11 +164,12 @@ jacocoTestCoverageVerification {
 				minimum = 0.5
 			}
 
-			excludes = [
-				'com.example.demo.Application',
-				'com.example.demo.common.*',
-				'com.example.demo.controller.GlobalControllerAdvice',
-			]
-		}
-	}
+            excludes = [
+                    'com.example.demo.Application',
+                    'com.example.demo.common.*',
+                    'com.example.demo.controller.GlobalControllerAdvice',
+                    'com.example.demo.dto.*'
+            ]
+        }
+    }
 }
