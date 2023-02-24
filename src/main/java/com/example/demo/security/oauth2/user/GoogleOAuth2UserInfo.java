@@ -1,6 +1,8 @@
-package com.example.springsocial.security.oauth2.user;
+package com.example.demo.security.oauth2.user;
 
 import java.util.Map;
+
+import com.example.demo.model.member.Social;
 
 public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
 
@@ -13,8 +15,13 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
         return (String) attributes.get("sub");
     }
 
-    @Override
-    public String getName() {
+	@Override
+	public Social getSocialType() {
+		return Social.GOOGLE;
+	}
+
+	@Override
+    public String getNickname() {
         return (String) attributes.get("name");
     }
 
