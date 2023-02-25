@@ -28,9 +28,7 @@ public class LikeTest {
 	@NullSource
 	public void 실패_게시글이_존재하지_않으면_Like를_생성할_수_없다(Post notPresentPost) {
 		var member = createMember();
-		assertThatThrownBy(() -> {
-			new Like(notPresentPost, member);
-		})
+		assertThatThrownBy(() -> new Like(notPresentPost, member))
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
@@ -38,9 +36,7 @@ public class LikeTest {
 	@NullSource
 	public void 실패_멤버가_존재하지_않으면_Like를_생성할_수_없다(Member notPresentMember) {
 		var post = createPost();
-		assertThatThrownBy(() -> {
-			new Like(post, notPresentMember);
-		})
+		assertThatThrownBy(() -> new Like(post, notPresentMember))
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
@@ -49,18 +45,19 @@ public class LikeTest {
 		String albumCoverUrl = "https://localhost:8080/album/1";
 		String singer = "뉴진스";
 		String title = "Ditto";
-		Genre genre = Genre.DANCE;
+		Genre genre = Genre.K_POP;
 		String musicUrl = "https://localhost:8080/music/1";
+		boolean isBattlePossible = true;
 		String content = "Hype(하입) 파이팅!!";
 		int likeCount = 10;
-		return new Post(musicId, albumCoverUrl, singer, title, genre, musicUrl, content, likeCount);
+		Music music = new Music(musicId, albumCoverUrl, singer, title, genre, musicUrl);
+		return new Post(music, content, isBattlePossible, likeCount, createMember());
 	}
 
 	private Member createMember() {
 		return Member.builder()
 			.profileImageUrl("https://localhost:8080/profile/1")
 			.nickname("A씨")
-			.countOfChallengeTicket(5)
 			.refreshToken("refreshToken")
 			.socialType(Social.GOOGLE)
 			.socialId("socialId")

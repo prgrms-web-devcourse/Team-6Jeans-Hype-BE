@@ -5,6 +5,6 @@
 
 <suppressions>
     <suppress
-            files="src/test/.*\.java"
+            files="test[\\/]java[\\/].+\.(?:java)$"
             checks="MethodName"/>
 </suppressions>

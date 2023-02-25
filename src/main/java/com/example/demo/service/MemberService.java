@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import static com.example.demo.common.ExceptionMessage.*;
-
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -10,6 +8,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
 import com.example.demo.repository.MemberRepository;
@@ -53,5 +52,9 @@ public class MemberService {
 		}).orElseThrow(
 			() -> new EntityNotFoundException("찾을 수 없는 유저 입니다")
 		);
+	}
+
+	public MemberAllMyPostsResponseDto getAllPosts(Member member) {
+		return MemberAllMyPostsResponseDto.of(member);
 	}
 }

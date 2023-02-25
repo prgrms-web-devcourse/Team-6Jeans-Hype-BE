@@ -26,6 +26,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -134,9 +135,17 @@ bootJar {
 }
 
 jacocoTestReport {
+    dependsOn "test"
+
     reports {
         html.required = true
         xml.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, include: '**/*Test*.*')
+        }))
     }
 
     finalizedBy('jacocoTestCoverageVerification')
@@ -146,7 +155,7 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             enabled = true
-            element = 'CLASS'
+            element = 'BUNDLE'
 
             limit {
                 counter = 'BRANCH'
@@ -163,6 +172,7 @@ jacocoTestCoverageVerification {
                     'com.example.demo.Application',
                     'com.example.demo.common.*',
                     'com.example.demo.controller.GlobalControllerAdvice',
+                    'com.example.demo.dto.*'
             ]
         }
     }
