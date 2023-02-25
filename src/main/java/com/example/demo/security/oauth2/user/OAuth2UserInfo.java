@@ -34,6 +34,4 @@ public abstract class OAuth2UserInfo {
 			.socialType(getSocialType())
 			.build();
 	}
-
-	;
 }
