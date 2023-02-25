@@ -2,6 +2,7 @@ package com.example.demo.model.member;
 
 import static com.google.common.base.Preconditions.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,10 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.security.auth.Subject;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.lang.Nullable;
 
 import com.example.demo.model.BaseEntity;
 import com.example.demo.model.battle.Battle;
@@ -51,7 +54,7 @@ public class Member extends BaseEntity {
 	@Embedded
 	private MemberScore memberScore = new MemberScore();
 
-	@NotBlank
+	@Nullable
 	private String refreshToken;
 
 	@Embedded
@@ -94,11 +97,10 @@ public class Member extends BaseEntity {
 			"닉네임이 공백일 수 없습니다.", nickname);
 		checkArgument(nickname.length() <= 24,
 			"닉네임의 길이는 24보다 더 길 수 없습니다.", nickname);
-
-		checkArgument(Objects.nonNull(refreshToken),
-			"refresh token 이 Null 일 수 없습니다.", refreshToken);
-		checkArgument(!refreshToken.isBlank(),
-			"refresh token 이 공백일 수 없습니다.", refreshToken);
 	}
 	// TODO: 2023-02-23 member가 특정 배틀에 투표한적 있는지 확인하는 메소드(할수 없을 것 같기도)
+
+	public void setRefreshTken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
 }
