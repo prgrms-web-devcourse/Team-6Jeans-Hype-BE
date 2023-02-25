@@ -25,8 +25,7 @@ configurations {
 }
 
 repositories {
-    mavenCentral()
-    jcenter()
+	mavenCentral()
 }
 
 ext {
@@ -118,11 +117,9 @@ tasks.register('copySwaggerUI', Copy) {
 
 }
 
-
 tasks.named("bootJar") {
 	dependsOn "copySwaggerUI"
 }
-
 
 bootJar {
 	archivesBaseName = 'pearls-1.0'
@@ -131,27 +128,19 @@ bootJar {
 }
 
 jacocoTestReport {
-	dependsOn "test"
-
 	reports {
 		html.required = true
 		xml.required = true
-	}
-
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it, include: '**/*Test*.*')
-		}))
 	}
 
 	finalizedBy('jacocoTestCoverageVerification')
 }
 
 jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            enabled = true
-            element = 'BUNDLE'
+	violationRules {
+		rule {
+			enabled = true
+			element = 'BUNDLE'
 
 			limit {
 				counter = 'BRANCH'
@@ -164,12 +153,12 @@ jacocoTestCoverageVerification {
 				minimum = 0.5
 			}
 
-            excludes = [
-                    'com.example.demo.Application',
-                    'com.example.demo.common.*',
-                    'com.example.demo.controller.GlobalControllerAdvice',
-                    'com.example.demo.dto.*'
-            ]
-        }
-    }
+			excludes = [
+				'com.example.demo.Application',
+				'com.example.demo.common.*',
+				'com.example.demo.controller.GlobalControllerAdvice',
+				'com.example.demo.dto.*'
+			]
+		}
+	}
 }
