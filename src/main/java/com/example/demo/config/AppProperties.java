@@ -11,11 +11,28 @@ import java.util.List;
 public class AppProperties {
 	private final Auth auth = new Auth();
 	private final OAuth2 oauth2 = new OAuth2();
-
 	public static class Auth {
 		private String tokenSecret;
 		private long tokenExpirationMsec;
 
+		public String getRefreshTokenSecret() {
+			return refreshTokenSecret;
+		}
+
+		public void setRefreshTokenSecret(String refreshTokenSecret) {
+			this.refreshTokenSecret = refreshTokenSecret;
+		}
+
+		public long getRefreshTokenExpirationMsec() {
+			return refreshTokenExpirationMsec;
+		}
+
+		public void setRefreshTokenExpirationMsec(long refreshTokenExpirationMsec) {
+			this.refreshTokenExpirationMsec = refreshTokenExpirationMsec;
+		}
+
+		private String refreshTokenSecret;
+		private long refreshTokenExpirationMsec;
 		public String getTokenSecret() {
 			return tokenSecret;
 		}

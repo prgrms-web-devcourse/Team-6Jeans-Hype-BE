@@ -1,5 +1,11 @@
 package com.example.demo.service;
 
+import static com.example.demo.common.ExceptionMessage.*;
+
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,5 +42,16 @@ public class MemberService {
 				return memberRepository.save(userInfo.toEntity());
 			});
 		return foundedMember.getId();
+	}
+
+	@Transactional
+	public void assignRefreshToken(long memberId, String refreshToken) {
+		Optional<Member> member = memberRepository.findById(memberId);
+		member.map(element -> {
+			element.setRefreshTken(refreshToken);
+			return element;
+		}).orElseThrow(
+			() -> new EntityNotFoundException("찾을 수 없는 유저 입니다")
+		);
 	}
 }

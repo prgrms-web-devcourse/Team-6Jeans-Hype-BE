@@ -3,8 +3,6 @@ package com.example.demo.security;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,18 +20,28 @@ public class TokenProvider {
         this.appProperties = appProperties;
     }
 
-    public String createToken(Long userId ) {
+    public String createAccessToken(Long memberId ) {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
 
         return Jwts.builder()
-                .setSubject(Long.toString(userId))
+                .setSubject(Long.toString(memberId))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                 .compact();
     }
+	public String createRefrshToken(Long memberId){
+		Date now = new Date();
+		Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+		return Jwts.builder()
+			.setSubject(Long.toString(memberId))
+			.setIssuedAt(new Date())
+			.setExpiration(expiryDate)
+			.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getRefreshTokenSecret())
+			.compact();
+	}
 
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
@@ -61,5 +69,15 @@ public class TokenProvider {
         }
         return false;
     }
+	public boolean isExpiredToken(String authToken){
 
+		try {
+				Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+				return false;
+		}catch (ExpiredJwtException e){
+			return true;
+		}catch (Exception e){
+			return false;
+		}
+	}
 }

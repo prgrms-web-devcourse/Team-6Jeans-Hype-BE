@@ -16,10 +16,12 @@ spring:
 
 app:
   auth:
-    tokenSecret: ${ TOKEN_SECRET }
-    tokenExpirationMsec: 864000000
+    tokenSecret: ${TOKEN_SECRET}
+    tokenExpirationMsec: 864000000 # 1000 * 60 * 60 * 4
+    refreshTokenSecret: ${REFRESH_TOKEN_SECRET}
+    refreshTokenExpirationMsec: 2592000000 #1000 * 60 * 60 * 24 * 30
   cors:
-    allowedOrigins: http://localhost:3000,http://localhost:8080
+    allowedOrigins: http://localhost:3000, http://localhost:8080
   oauth2:
     # After successfully authenticating with the OAuth2 Provider,
     # we'll be generating an auth token for the user and sending the token to the

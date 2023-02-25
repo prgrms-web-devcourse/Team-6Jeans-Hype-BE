@@ -49,8 +49,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 		long memberId = joinMember((OAuth2AuthenticationToken)authentication);
 
-		String targetUrl = determineTargetUrl(request, response, memberId);
-
+		String accessToken = tokenProvider.createAccessToken(memberId);
+		String refreshToken = tokenProvider.createRefrshToken(memberId);
+		memberService.assignRefreshToken(memberId,refreshToken);
+		String targetUrl = determineTargetUrl(request, response, accessToken,refreshToken);
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
@@ -67,24 +69,27 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		return memberService.join(oAuth2User,social);
 	}
 
-	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,long targetUserId) {
+	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,String accessToken,String refreshToken) {
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
         if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new RuntimeException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
+            throw new RuntimeException(
+				"Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication"
+			);
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = tokenProvider.createToken(targetUserId);
-
-        return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", token)
-                .build().toUriString();
+		CookieUtils.deleteCookie(request,response, REFRESH_TOKEN_COOKIE_NAME);
+		int refreshTokenExpirationMsec = (int) appProperties.getAuth().getRefreshTokenExpirationMsec();
+		CookieUtils.addCookie(response,REFRESH_TOKEN_COOKIE_NAME,refreshToken, refreshTokenExpirationMsec);
+		return UriComponentsBuilder.fromUriString(targetUrl)
+			.queryParam("token", accessToken)
+			.build().toUriString();
     }
 
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
+	protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }

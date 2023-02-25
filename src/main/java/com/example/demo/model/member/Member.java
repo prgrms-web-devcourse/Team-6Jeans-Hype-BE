@@ -91,4 +91,8 @@ public class Member extends BaseEntity{
 		this.refreshToken = refreshToken;
 		this.socialInfo = new SocialInfo(socialType, socialId);
 	}
+
+	public void setRefreshTken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
 }
