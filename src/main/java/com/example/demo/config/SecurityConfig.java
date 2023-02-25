@@ -10,7 +10,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.example.demo.security.TokenAuthenticationFilter;
 import com.example.demo.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.example.demo.service.MemberService;
 import com.example.demo.security.oauth2.OAuth2AuthenticationSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
@@ -27,11 +26,12 @@ public class SecurityConfig {
 
 	@Autowired
 	TokenAuthenticationFilter tokenAuthenticationFilter;
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
 			.cors()
-				.and()
+			.and()
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
@@ -68,7 +68,7 @@ public class SecurityConfig {
 			.authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository)
 			.and()
 			.redirectionEndpoint()
-				.baseUri("/*/oauth2/code/*")
+			.baseUri("/*/oauth2/code/*")
 			.and()
 			.successHandler(oAuth2AuthenticationSuccessHandler);
 		return httpSecurity.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
