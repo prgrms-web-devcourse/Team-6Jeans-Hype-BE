@@ -60,7 +60,7 @@ public class SecurityConfig {
 			.antMatchers("/auth/**", "/oauth2/**")
 			.permitAll()
 			.anyRequest()
-			.authenticated()
+			.permitAll()
 			.and()
 			.oauth2Login()
 			.authorizationEndpoint()
