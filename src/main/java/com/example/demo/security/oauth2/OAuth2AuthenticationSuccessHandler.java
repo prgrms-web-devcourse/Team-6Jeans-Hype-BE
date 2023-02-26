@@ -77,6 +77,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 			.map(Cookie::getValue);
 
 		if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+			// TODO: 23. 2. 26. 좀더 의미 있는 예외로 변경
 			throw new RuntimeException(
 				"Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication"
 			);
