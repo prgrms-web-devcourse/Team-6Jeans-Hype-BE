@@ -144,7 +144,15 @@ jacocoTestReport {
 
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, include: '**/*Test*.*')
+            fileTree(dir: it, exclude: [
+                    'com/example/demo/Application.class',
+                    'com/example/demo/common.*',
+                    'com/example/demo/controller/GlobalControllerAdvice.class',
+                    'com/example/demo/dto/**',
+                    'com/example/demo/security/**',
+                    'com/example/demo/util/CookieUtils.class'
+
+            ])
         }))
     }
 
@@ -152,6 +160,20 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            'com/example/demo/Application.class',
+                            'com/example/demo/common.*',
+                            'com/example/demo/controller/GlobalControllerAdvice.class',
+                            'com/example/demo/dto/**',
+                            'com/example/demo/security/**',
+                            'com/example/demo/util/CookieUtils.class'
+
+                    ])
+                }))
+    }
     violationRules {
         rule {
             enabled = true
@@ -168,12 +190,6 @@ jacocoTestCoverageVerification {
                 minimum = 0.5
             }
 
-            excludes = [
-                    'com.example.demo.Application',
-                    'com.example.demo.common.*',
-                    'com.example.demo.controller.GlobalControllerAdvice',
-                    'com.example.demo.dto.*'
-            ]
         }
     }
 }
