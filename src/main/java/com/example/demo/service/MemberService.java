@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import static com.example.demo.common.ExceptionMessage.*;
+
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -50,7 +52,7 @@ public class MemberService {
 			element.setRefreshTken(refreshToken);
 			return element;
 		}).orElseThrow(
-			() -> new EntityNotFoundException("찾을 수 없는 유저 입니다")
+			() -> new EntityNotFoundException(NOT_FOUND_MEMBER.getMessage())
 		);
 	}
 
