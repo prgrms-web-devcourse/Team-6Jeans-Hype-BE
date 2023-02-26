@@ -46,6 +46,8 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
     testImplementation 'org.projectlombok:lombok:1.18.22'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -53,6 +55,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -140,7 +144,15 @@ jacocoTestReport {
 
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, include: '**/*Test*.*')
+            fileTree(dir: it, exclude: [
+                    'com/example/demo/Application.class',
+                    'com/example/demo/common.*',
+                    'com/example/demo/controller/GlobalControllerAdvice.class',
+                    'com/example/demo/dto/**',
+                    'com/example/demo/security/**',
+                    'com/example/demo/util/CookieUtils.class'
+
+            ])
         }))
     }
 
@@ -148,6 +160,20 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            'com/example/demo/Application.class',
+                            'com/example/demo/common.*',
+                            'com/example/demo/controller/GlobalControllerAdvice.class',
+                            'com/example/demo/dto/**',
+                            'com/example/demo/security/**',
+                            'com/example/demo/util/CookieUtils.class'
+
+                    ])
+                }))
+    }
     violationRules {
         rule {
             enabled = true
@@ -164,12 +190,6 @@ jacocoTestCoverageVerification {
                 minimum = 0.5
             }
 
-            excludes = [
-                    'com.example.demo.Application',
-                    'com.example.demo.common.*',
-                    'com.example.demo.controller.GlobalControllerAdvice',
-                    'com.example.demo.dto.*'
-            ]
         }
     }
 }

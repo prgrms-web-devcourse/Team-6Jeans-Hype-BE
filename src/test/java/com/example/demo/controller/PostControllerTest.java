@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,11 +47,18 @@ import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
+import com.example.demo.security.TokenAuthenticationFilter;
 import com.example.demo.service.PostService;
 import com.example.demo.service.PrincipalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebMvcTest(PostController.class)
+@WebMvcTest(
+	value = PostController.class,
+	excludeFilters = @ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE,
+		classes = TokenAuthenticationFilter.class
+	)
+)
 @WithMockUser
 @ExtendWith({MockitoExtension.class, RestDocumentationExtension.class})
 @AutoConfigureRestDocs
