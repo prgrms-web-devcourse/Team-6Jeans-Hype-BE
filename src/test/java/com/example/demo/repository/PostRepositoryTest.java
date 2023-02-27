@@ -138,6 +138,7 @@ class PostRepositoryTest {
 		Post post = Post.create("mid", "album", "singer", "title", genre,
 			musicUrl, "content", isPossibleBattle, member);
 
+		memberRepository.save(member);
 		postRepository.save(post);
 
 		// when
