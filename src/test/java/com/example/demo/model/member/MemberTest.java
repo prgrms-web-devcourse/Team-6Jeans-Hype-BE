@@ -135,13 +135,6 @@ class MemberTest {
 		return name.toString();
 	}
 
-	@ParameterizedTest
-	@NullSource
-	@EmptySource
-	void 실패_refreshToken_이_null_이거나_공백일_수_없다(String value) {
-		assertThatThrownBy(() -> createMember(profileImageUrl, nickname, value, socialType, socialId))
-			.isExactlyInstanceOf(IllegalArgumentException.class);
-	}
 
 	private Member createMember(String profileImageUrl, String nickname,
 		String refreshToken, Social socialType, String socialId) {

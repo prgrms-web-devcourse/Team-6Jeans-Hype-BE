@@ -10,24 +10,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.example.demo.security.TokenAuthenticationFilter;
 
-@AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(RestDocumentationExtension.class)
+@WebMvcTest(
+	value = HealthController.class,
+	excludeFilters = @ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE,
+		classes = TokenAuthenticationFilter.class
+	)
+)
+
 @AutoConfigureRestDocs
-@WebMvcTest(controllers = HealthController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
+@AutoConfigureMockMvc
+// @EnableConfigurationProperties(value = AppProperties.class)
+@WithMockUser
 class HealthControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
+	// @SpyBean
+	// TokenProvider tokenProvider;
 
 	@Test
 	public void 성공_헬스체크_요청을했을때_특정문자열반환() throws Exception {
@@ -55,3 +69,4 @@ class HealthControllerTest {
 			).andDo(print());
 	}
 }
+

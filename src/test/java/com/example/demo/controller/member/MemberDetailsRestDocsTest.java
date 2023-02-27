@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,12 +33,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.example.demo.common.ExceptionMessage;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.security.TokenAuthenticationFilter;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.PrincipalService;
 
 @AutoConfigureRestDocs
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(MemberController.class)
+@WebMvcTest(value = MemberController.class,
+	excludeFilters = @ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE,
+		classes = TokenAuthenticationFilter.class
+	)
+)
 public class MemberDetailsRestDocsTest {
 
 	@Autowired
