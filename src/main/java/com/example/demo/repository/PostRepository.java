@@ -18,4 +18,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	List<Post> findByIsPossibleBattle(boolean isPossibleBattle);
 
 	List<Post> findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(Member member, Genre genre);
+
+	boolean existsByMemberAndMusic_MusicId(Member member, String musicId);
 }
