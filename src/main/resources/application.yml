@@ -30,3 +30,9 @@ app:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
       - ${FRONT_URI}${FRONT_REDIRECT_PATH}
+      - http://localhost:3000${FRONT_REDIRECT_PATH}
+cloud:
+  aws:
+    credentials:
+      accessKey: ${ACCESS_KEY}
+      secretKey: ${SECRET_KEY}
