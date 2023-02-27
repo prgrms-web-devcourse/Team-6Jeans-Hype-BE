@@ -130,6 +130,23 @@ class PostRepositoryTest {
 		return posts;
 	}
 
+	@Test
+	@Transactional
+	void 같은_유저와_음악_id가_존재함을_알_수_있다() {
+		// given
+		String musicUrl = "url";
+		Post post = Post.create("mid", "album", "singer", "title", genre,
+			musicUrl, "content", isPossibleBattle, member);
+
+		postRepository.save(post);
+
+		// when
+		boolean isExisted = postRepository.existsByMemberAndMusic_MusicId(member, musicUrl);
+
+		// then
+		assertThat(isExisted).isEqualTo(true);
+	}
+
 	private Member createMember() {
 		return Member.builder()
 			.profileImageUrl("profile")

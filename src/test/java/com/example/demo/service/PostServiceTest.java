@@ -80,6 +80,29 @@ class PostServiceTest {
 	}
 
 	@Test
+	void 실패_한_유저는_중복된_music_url은_등록할_수_없다() {
+		// given
+		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
+			.musicId(musicId)
+			.musicName(musicName)
+			.musicUrl(musicUrl)
+			.albumCoverUrl(albumCoverUrl)
+			.genre(genre)
+			.singer(singer)
+			.isBattlePossible(isPossibleBattle)
+			.content(content)
+			.build();
+
+		when(postRepository.existsByMemberAndMusic_MusicId(any(), any())).thenReturn(true);
+
+		// when then
+		assertThatThrownBy(() -> postService.createPost(principal, postCreateRequestDto))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
+
+		verify(postRepository).existsByMemberAndMusic_MusicId(any(), any());
+	}
+
+	@Test
 	void 성공_음악_공유_게시글을_모두_조회할_수_있다() {
 		// given
 		List<Post> testPosts = getPosts();
