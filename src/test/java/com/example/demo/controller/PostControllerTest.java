@@ -130,7 +130,7 @@ class PostControllerTest {
 	}
 
 	@Test
-	void 실패_중복된_유저_음악_url_등록의_경우_400_에러_반환() throws Exception {
+	void 실패_중복된_유저_음악_id_등록의_경우_400_에러_반환() throws Exception {
 		// given
 		PostCreateRequestDto postCreateRequestDto = getPostCreateRequestDto();
 

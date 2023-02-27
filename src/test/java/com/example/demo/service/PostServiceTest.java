@@ -80,7 +80,7 @@ class PostServiceTest {
 	}
 
 	@Test
-	void 실패_한_유저는_중복된_music_url은_등록할_수_없다() {
+	void 실패_한_유저는_중복된_music_id는_등록할_수_없다() {
 		// given
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
 			.musicId(musicId)

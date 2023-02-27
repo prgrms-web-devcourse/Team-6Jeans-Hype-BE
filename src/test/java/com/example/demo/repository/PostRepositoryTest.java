@@ -134,15 +134,15 @@ class PostRepositoryTest {
 	@Transactional
 	void 같은_유저와_음악_id가_존재함을_알_수_있다() {
 		// given
-		String musicUrl = "url";
-		Post post = Post.create("mid", "album", "singer", "title", genre,
-			musicUrl, "content", isPossibleBattle, member);
+		String musicId = "musicId";
+		Post post = Post.create(musicId, "album", "singer", "title", genre,
+			"url", "content", isPossibleBattle, member);
 
 		memberRepository.save(member);
 		postRepository.save(post);
 
 		// when
-		boolean isExisted = postRepository.existsByMemberAndMusic_MusicId(member, musicUrl);
+		boolean isExisted = postRepository.existsByMemberAndMusic_MusicId(member, musicId);
 
 		// then
 		assertThat(isExisted).isEqualTo(true);
