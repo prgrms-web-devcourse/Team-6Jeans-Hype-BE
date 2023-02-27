@@ -204,8 +204,8 @@ class PostControllerTest {
 			.andDo(print())
 			.andDo(MockMvcRestDocumentationWrapper.document("음악 공유 게시글 리스트 조회",
 				requestParameters(
-					parameterWithName("genre").description("필터링 할 장르 값 (null 가능)"),
-					parameterWithName("possible").description("대결 가능 여부 (null 가능)")
+					parameterWithName("genre").optional().description("필터링 할 장르 값 (null 가능)"),
+					parameterWithName("possible").optional().description("대결 가능 여부 (null 가능)")
 				),
 				responseFields(
 					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
