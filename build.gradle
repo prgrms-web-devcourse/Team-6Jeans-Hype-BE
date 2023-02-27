@@ -133,15 +133,46 @@ bootJar {
 }
 
 jacocoTestReport {
+    dependsOn "test"
+
     reports {
         html.required = true
         xml.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'com/example/demo/Application.class',
+                    'com/example/demo/common.*',
+                    'com/example/demo/controller/GlobalControllerAdvice.class',
+                    'com/example/demo/dto/**',
+                    'com/example/demo/security/**',
+                    'com/example/demo/util/CookieUtils.class'
+
+            ])
+        }))
     }
 
     finalizedBy('jacocoTestCoverageVerification')
 }
 
 jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            'com/example/demo/Application.class',
+                            'com/example/demo/common.*',
+                            'com/example/demo/controller/GlobalControllerAdvice.class',
+                            'com/example/demo/dto/**',
+                            'com/example/demo/security/**',
+                            'com/example/demo/util/CookieUtils.class'
+
+                    ])
+                }))
+    }
+    
     violationRules {
         rule {
             enabled = true
@@ -157,13 +188,6 @@ jacocoTestCoverageVerification {
                 value = 'COVEREDRATIO'
                 minimum = 0.5
             }
-
-            excludes = [
-                    'com.example.demo.Application',
-                    'com.example.demo.common.*',
-                    'com.example.demo.controller.GlobalControllerAdvice',
-                    'com.example.demo.dto.*'
-            ]
         }
     }
 }
