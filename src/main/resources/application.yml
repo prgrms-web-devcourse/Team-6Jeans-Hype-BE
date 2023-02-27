@@ -1,4 +1,12 @@
 spring:
+  config:
+    import: optional:file:aws.env[.properties]
   profiles:
     active:
       - test
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${ACCESS_KEY}
+      secretKey: ${SECRET_KEY}

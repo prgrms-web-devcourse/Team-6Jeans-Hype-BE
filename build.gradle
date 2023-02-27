@@ -1,16 +1,16 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.8'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id 'org.ec4j.editorconfig' version '0.0.3'
-	id 'checkstyle'
-	id 'jacoco'
-	id 'com.epages.restdocs-api-spec' version '0.16.4'
-	id 'org.hidetake.swagger.generator' version '2.19.2'
+    id 'java'
+    id 'org.springframework.boot' version '2.7.8'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'org.ec4j.editorconfig' version '0.0.3'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'com.epages.restdocs-api-spec' version '0.16.4'
+    id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
 jacoco {
-	toolVersion = '0.8.8'
+    toolVersion = '0.8.8'
 }
 
 group = 'com.prgrms'
@@ -19,146 +19,151 @@ sourceCompatibility = '17'
 
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
-	set('testcontainersVersion', "1.17.6")
+    set('snippetsDir', file("build/generated-snippets"))
+    set('testcontainersVersion', "1.17.6")
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.flywaydb:flyway-core'
-	implementation 'org.flywaydb:flyway-mysql'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-	testImplementation 'org.projectlombok:lombok:1.18.22'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.testcontainers:junit-jupiter'
-	testImplementation 'org.testcontainers:mysql'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.4'
-	testImplementation "org.junit.jupiter:junit-jupiter-params"
-	implementation 'com.google.guava:guava:31.1-jre'
-	swaggerUI 'org.webjars:swagger-ui:4.1.3'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    testImplementation 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.4'
+    testImplementation "org.junit.jupiter:junit-jupiter-params"
+    implementation 'com.google.guava:guava:31.1-jre'
+    swaggerUI 'org.webjars:swagger-ui:4.1.3'
+    implementation "ca.pjer:logback-awslogs-appender:1.6.0"
 }
 openapi3 {
-	server = 'https://localhost:8080'
-	title = 'API 명세서'
-	description = 'API 명세서 입니다.'
-	version = "0.1.0"
-	format = 'yaml'
+    server = 'https://localhost:8080'
+    title = 'API 명세서'
+    description = 'API 명세서 입니다.'
+    version = "0.1.0"
+    format = 'yaml'
 }
 
 swaggerSources {
-	register("ApiDocument").configure {
-		setInputFile(file("${rootProject.buildDir}/api-spec/openapi3.yaml"))
-	}
+    register("ApiDocument").configure {
+        setInputFile(file("${rootProject.buildDir}/api-spec/openapi3.yaml"))
+    }
 }
 editorconfig {
-	excludes = ['build']
+    excludes = ['build']
 }
 //check.dependsOn editorconfigCheck
 
 checkstyle {
-	maxWarnings = 0
-	configFile = file("${rootProject.projectDir}/config/checkstyle/naver-checkstyle-rules.xml")
-	configProperties = ["suppressionFile": "${rootProject.projectDir}/config/checkstyle/naver-checkstyle-suppressions.xml"]
-	toolVersion = "10.7.0"  // checkstyle
+    maxWarnings = 0
+    configFile = file("${rootProject.projectDir}/config/checkstyle/naver-checkstyle-rules.xml")
+    configProperties = ["suppressionFile": "${rootProject.projectDir}/config/checkstyle/naver-checkstyle-suppressions.xml"]
+    toolVersion = "10.7.0"  // checkstyle
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
-	}
+    imports {
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
-	systemProperty 'spring.profiles.active', 'test'
-	finalizedBy('jacocoTestReport')
+    useJUnitPlatform()
+    systemProperty 'spring.profiles.active', 'test'
+    finalizedBy('jacocoTestReport')
 }
 
 
 tasks.withType(GenerateSwaggerUI).configureEach {
-	dependsOn "openapi3"
+    dependsOn "openapi3"
 }
 
 tasks.register('copySwaggerUI', Copy) {
-	dependsOn "generateSwaggerUIApiDocument"
-	dependsOn "jacocoTestCoverageVerification"
-	dependsOn "jacocoTestReport"
-	dependsOn "jar"
-	dependsOn "bootJarMainClassName"
+    dependsOn "generateSwaggerUIApiDocument"
+    dependsOn "jacocoTestCoverageVerification"
+    dependsOn "jacocoTestReport"
+    dependsOn "jar"
+    dependsOn "bootJarMainClassName"
 
-	from "${generateSwaggerUIApiDocument.outputDir}"
-	into "${rootProject.buildDir}/resources/main/static/docs"
+    from "${generateSwaggerUIApiDocument.outputDir}"
+    into "${rootProject.buildDir}/resources/main/static/docs"
 
 }
 
 tasks.named("bootJar") {
-	dependsOn "copySwaggerUI"
+    dependsOn "copySwaggerUI"
 }
 
 bootJar {
-	archivesBaseName = 'pearls-1.0'
-	archiveFileName = 'pearls-1.0.jar'
-	archiveVersion = "0.0.0"
+    archivesBaseName = 'pearls-1.0'
+    archiveFileName = 'pearls-1.0.jar'
+    archiveVersion = "0.0.0"
 }
 
 jacocoTestReport {
-	reports {
-		html.required = true
-		xml.required = true
-	}
+    reports {
+        html.required = true
+        xml.required = true
+    }
 
-	finalizedBy('jacocoTestCoverageVerification')
+    finalizedBy('jacocoTestCoverageVerification')
 }
 
 jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			enabled = true
-			element = 'BUNDLE'
+    violationRules {
+        rule {
+            enabled = true
+            element = 'BUNDLE'
 
-			limit {
-				counter = 'BRANCH'
-				value = 'COVEREDRATIO'
-				minimum = 0.5
-			}
-			limit {
-				counter = 'LINE'
-				value = 'COVEREDRATIO'
-				minimum = 0.5
-			}
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.5
+            }
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.5
+            }
 
-			excludes = [
-				'com.example.demo.Application',
-				'com.example.demo.common.*',
-				'com.example.demo.controller.GlobalControllerAdvice',
-				'com.example.demo.dto.*'
-			]
-		}
-	}
+            excludes = [
+                    'com.example.demo.Application',
+                    'com.example.demo.common.*',
+                    'com.example.demo.controller.GlobalControllerAdvice',
+                    'com.example.demo.dto.*'
+            ]
+        }
+    }
 }
