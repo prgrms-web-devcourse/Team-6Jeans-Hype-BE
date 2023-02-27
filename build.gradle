@@ -26,7 +26,6 @@ configurations {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 ext {
@@ -122,11 +121,9 @@ tasks.register('copySwaggerUI', Copy) {
 
 }
 
-
 tasks.named("bootJar") {
     dependsOn "copySwaggerUI"
 }
-
 
 bootJar {
     archivesBaseName = 'pearls-1.0'
