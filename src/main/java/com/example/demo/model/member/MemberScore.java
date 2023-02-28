@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class MemberScore {
+public class MemberScore {
 
 	@Min(value = 0)
 	private int ranking;
