@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
@@ -19,6 +20,7 @@ import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
 @DataJpaTest
+@EnableJpaAuditing
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BattleRepositoryTest {
 
@@ -38,6 +40,11 @@ class BattleRepositoryTest {
 		List<Battle> mocks = getBattles();
 		battleRepository.saveAll(mocks);
 		LocalDateTime after = LocalDateTime.now().plusDays(3);
+
+		for (Battle battle :
+			mocks) {
+			System.out.println(battle.getCreatedAt());
+		}
 
 		// when
 		List<Battle> battles = battleRepository.findByStatusAndCreatedAtIsBefore(status, after);
