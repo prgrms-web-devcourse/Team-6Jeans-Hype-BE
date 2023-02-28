@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.battle.Battle;
+import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.repository.BattleRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,22 @@ public class BattleService {
 
 	private final BattleRepository battleRepository;
 
-	public List<Battle> findBattlesWithinPerm(int perm) {
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime startDate = now.minusDays(perm);
-		return battleRepository.findByCreatedAtBetween(startDate, now);
+	public void quitBattles() {
+		findBattleProgress().forEach(Battle::quitBattle);
 	}
 
-	//TODO : 대결 종료 후 상태 변경
+	public void updateWinnerPoint(int perm) {
+		findBattlesEndWithinPerm(perm).forEach(Battle::updateWinnerPoint);
+	}
+
+	private List<Battle> findBattleProgress() {
+		LocalDateTime endDate = LocalDateTime.now().minusDays(2);
+		return battleRepository.findByStatusAndCreatedAtIsBefore(BattleStatus.PROGRESS, endDate);
+	}
+
+	private List<Battle> findBattlesEndWithinPerm(int perm) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime lastBattleDay = now.minusDays(perm - 1);
+		return battleRepository.findByStatusAndUpdatedAtBetween(BattleStatus.END, lastBattleDay, now);
+	}
 }
