@@ -88,7 +88,7 @@ public class Battle extends BaseEntity {
 
 	private void updateCountOfWinner() {
 		Optional<Member> winner = getWinner();
-		winner.ifPresent(Member::updateCount);
+		winner.ifPresent(Member::plusCount);
 	}
 
 	private Optional<Member> getWinner() {
