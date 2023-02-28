@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @EnableScheduling
 @RequiredArgsConstructor
-public class ScheduleController {
+public class SchedulerController {
 
 	private final BattleService battleService;
 	private final MemberService memberService;
