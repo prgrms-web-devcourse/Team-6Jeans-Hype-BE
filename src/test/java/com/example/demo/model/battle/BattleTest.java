@@ -11,9 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +43,19 @@ class BattleTest {
 		);
 	}
 
+	@ParameterizedTest
+	@NullSource
+	public void 실패_Battle생성_장르가_null인_경우_게시글을_생성할_수_없다(Genre nullGenre) {
+		assertThatThrownBy(() -> {
+			Battle.builder()
+				.genre(nullGenre)
+				.challengedPost(challengedPost)
+				.challengingPost(challengingPost)
+				.build();
+		})
+			.isExactlyInstanceOf(IllegalArgumentException.class);
+	}
+
 	static Stream<Arguments> testFailDataProviderForCreateBattle() {
 		Post challengingPost = mock(Post.class);
 		Post challengedPost = mock(Post.class);
@@ -52,6 +67,10 @@ class BattleTest {
 	}
 
 	private Battle createBattle(Post challengingPost, Post challengedPost) {
-		return Battle.builder().challengedPost(challengedPost).challengingPost(challengingPost).build();
+		return Battle.builder()
+			.genre(Genre.CLASSIC)
+			.challengedPost(challengedPost)
+			.challengingPost(challengingPost)
+			.build();
 	}
 }
