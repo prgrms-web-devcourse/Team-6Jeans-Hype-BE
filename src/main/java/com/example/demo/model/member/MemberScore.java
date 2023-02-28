@@ -49,4 +49,9 @@ public class MemberScore {
 		checkArgument(point >= 0, "포인트가 음수일 수 없습니다.", point);
 		this.victoryPoint += point;
 	}
+
+	void updateRanking(int ranking) {
+		checkArgument(ranking >= 0, "랭킹이 음수일 수 없습니다.", ranking);
+		this.ranking = ranking;
+	}
 }

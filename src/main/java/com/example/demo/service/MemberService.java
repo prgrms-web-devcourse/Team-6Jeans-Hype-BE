@@ -70,7 +70,7 @@ public class MemberService {
 		memberRepository.findAll()
 			.forEach(member -> {
 				int ranking = points.indexOf(member.getVictoryPoint()) + 1;
-				member.updateMemberScore(ranking, member.getVictoryPoint(), member.getVictoryCount());
+				member.updateRanking(ranking);
 			});
 	}
 

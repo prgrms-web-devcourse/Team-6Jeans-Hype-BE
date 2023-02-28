@@ -107,6 +107,10 @@ public class Member extends BaseEntity {
 		this.memberScore.plusPoint(point);
 	}
 
+	public void updateRanking(int ranking) {
+		this.memberScore.updateRanking(ranking);
+	}
+
 	private void validateMember(String profileImageUrl, String nickname) {
 		checkArgument(Objects.nonNull(profileImageUrl),
 			"프로필 이미지 URL 이 Null 일 수 없습니다.", profileImageUrl);
