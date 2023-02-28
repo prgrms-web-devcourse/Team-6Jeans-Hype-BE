@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class MemberScore {
+public class MemberScore {
 
 	@Min(value = 0)
 	private int ranking;
@@ -34,5 +34,24 @@ class MemberScore {
 		checkArgument(ranking >= 0, "랭킹이 음수일 수 없습니다.", ranking);
 		checkArgument(victoryPoint >= 0, "승리 포인트가 음수일 수 없습니다.", victoryPoint);
 		checkArgument(victoryCount >= 0, "승리 횟수가 음수일 수 없습니다.", victoryCount);
+	}
+
+	void plusCount() {
+		this.victoryCount += 1;
+	}
+
+	void resetRankingAndPoint() {
+		this.ranking = 0;
+		this.victoryPoint = 0;
+	}
+
+	void plusPoint(int point) {
+		checkArgument(point >= 0, "포인트가 음수일 수 없습니다.", point);
+		this.victoryPoint += point;
+	}
+
+	void updateRanking(int ranking) {
+		checkArgument(ranking >= 0, "랭킹이 음수일 수 없습니다.", ranking);
+		this.ranking = ranking;
 	}
 }
