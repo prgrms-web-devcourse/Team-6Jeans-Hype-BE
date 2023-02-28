@@ -40,7 +40,10 @@ public class Battle extends BaseEntity {
 	@Enumerated(value = EnumType.STRING)
 	private Genre genre;
 
-	private boolean isEnded;
+	@NotNull
+	@Enumerated(value = EnumType.STRING)
+	@Column(name = "status")
+	private BattleStatus status;
 
 	@Embedded
 	@AttributeOverride(name = "voteCount", column = @Column(name = "challenged_vote_count"))
@@ -53,13 +56,15 @@ public class Battle extends BaseEntity {
 	private BattleInfo challengingPost;
 
 	@Builder
-	public Battle(Genre genre, Post challengedPost, Post challengingPost) {
+	public Battle(Genre genre, BattleStatus status, Post challengedPost, Post challengingPost) {
 		String errorMessageForNullPost = String.format("POST %s", ExceptionMessage.OBJECT_NOT_NULL.getMessage());
 		checkArgument(Objects.nonNull(genre), errorMessageForNullPost);
+		checkArgument(Objects.nonNull(status), errorMessageForNullPost);
 		checkArgument(Objects.nonNull(challengedPost), errorMessageForNullPost);
 		checkArgument(Objects.nonNull(challengingPost), errorMessageForNullPost);
 
 		this.genre = genre;
+		this.status = status;
 		this.challengedPost = new BattleInfo(challengedPost);
 		this.challengingPost = new BattleInfo(challengingPost);
 	}

@@ -49,6 +49,21 @@ class BattleTest {
 		assertThatThrownBy(() -> {
 			Battle.builder()
 				.genre(nullGenre)
+				.status(BattleStatus.PROGRESS)
+				.challengedPost(challengedPost)
+				.challengingPost(challengingPost)
+				.build();
+		})
+			.isExactlyInstanceOf(IllegalArgumentException.class);
+	}
+
+	@ParameterizedTest
+	@NullSource
+	public void 실패_Battle생성_대결상태가_null인_경우_게시글을_생성할_수_없다(BattleStatus nullStatus) {
+		assertThatThrownBy(() -> {
+			Battle.builder()
+				.genre(Genre.CLASSIC)
+				.status(nullStatus)
 				.challengedPost(challengedPost)
 				.challengingPost(challengingPost)
 				.build();
@@ -69,6 +84,7 @@ class BattleTest {
 	private Battle createBattle(Post challengingPost, Post challengedPost) {
 		return Battle.builder()
 			.genre(Genre.CLASSIC)
+			.status(BattleStatus.PROGRESS)
 			.challengedPost(challengedPost)
 			.challengingPost(challengingPost)
 			.build();
