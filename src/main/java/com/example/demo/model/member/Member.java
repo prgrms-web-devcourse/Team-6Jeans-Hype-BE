@@ -50,7 +50,7 @@ public class Member extends BaseEntity {
 	private int countOfChallengeTicket;
 
 	@Embedded
-	private MemberScore memberScore = new MemberScore();
+	private final MemberScore memberScore = new MemberScore();
 
 	@Nullable
 	private String refreshToken;
@@ -60,18 +60,18 @@ public class Member extends BaseEntity {
 
 	@OneToMany
 	@JoinColumn(name = "member_id")
-	private List<Battle> battles = new ArrayList<>();
+	private final List<Battle> battles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member")
-	private List<Post> posts = new ArrayList<>();
+	private final List<Post> posts = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member")
-	private List<Like> likes = new ArrayList<>();
+	private final List<Like> likes = new ArrayList<>();
 
 	@Builder
-	public Member(String profileImageUrl, String nickname, String refreshToken, Social socialType, String socialId) {
-
-		validateMember(profileImageUrl, nickname, refreshToken);
+	public Member(String profileImageUrl, String nickname,
+		@Nullable String refreshToken, Social socialType, String socialId) {
+		validateMember(profileImageUrl, nickname);
 		this.profileImageUrl = profileImageUrl;
 		this.nickname = nickname;
 		this.countOfChallengeTicket = 5;
@@ -95,14 +95,25 @@ public class Member extends BaseEntity {
 		memberScore.update(ranking, victoryPoint, victoryCount);
 	}
 
-	private void validateMember(String profileImageUrl, String nickname, String refreshToken) {
+	public void plusCount() {
+		this.memberScore.plusCount();
+	}
+
+	public void resetRankingAndPoint() {
+		this.memberScore.resetRankingAndPoint();
+	}
+
+	public void plusPoint(int point) {
+		this.memberScore.plusPoint(point);
+	}
+
+	private void validateMember(String profileImageUrl, String nickname) {
 		checkArgument(Objects.nonNull(profileImageUrl),
 			"프로필 이미지 URL 이 Null 일 수 없습니다.", profileImageUrl);
 		checkArgument(!profileImageUrl.isBlank(),
 			"프로필 이미지 URL 이 공백일 수 없습니다.", profileImageUrl);
 		checkArgument(profileImageUrl.length() <= 2000,
 			"프로필 이미지 URL 이 2000자보다 더 길 수 없습니다.", profileImageUrl);
-
 		checkArgument(Objects.nonNull(nickname),
 			"닉네임이 Null 일 수 없습니다.", nickname);
 		checkArgument(!nickname.isBlank(),
@@ -110,9 +121,12 @@ public class Member extends BaseEntity {
 		checkArgument(nickname.length() <= 24,
 			"닉네임의 길이는 24보다 더 길 수 없습니다.", nickname);
 	}
-	// TODO: 2023-02-23 member가 특정 배틀에 투표한적 있는지 확인하는 메소드(할수 없을 것 같기도)
 
-	public void setRefreshTken(String refreshToken) {
+	public void setRefreshToken(String refreshToken) {
+		checkArgument(Objects.nonNull(refreshToken),
+			"Refresh Token 은 Null 일 수 없습니다.", refreshToken);
 		this.refreshToken = refreshToken;
 	}
+
+	// TODO: 2023-02-23 member가 특정 배틀에 투표한적 있는지 확인하는 메소드(할수 없을 것 같기도)
 }
