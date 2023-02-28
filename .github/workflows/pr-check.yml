@@ -55,13 +55,13 @@ jobs:
       - name: Upload to AWS S3
         run: |
           aws deploy push \
-            --application-name pearls-code-deploy \
+            --application-name hype-deploy \
             --ignore-hidden-files \
             --s3-location s3://devcourse-pearls-bucket/$GITHUB_SHA.zip \
             --source .
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name pearls-code-deploy
+        run: aws deploy create-deployment --application-name hype-deploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name pearls-deploy-group
+          --deployment-group-name hype-group
           --s3-location bucket=devcourse-pearls-bucket,bundleType=zip,key=$GITHUB_SHA.zip
