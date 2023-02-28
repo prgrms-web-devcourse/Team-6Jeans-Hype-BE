@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,6 +76,19 @@ class MemberServiceTest {
 		}
 
 		verify(memberRepository).findAll();
+	}
+
+	@Test
+	void 실패_유저에_null_토큰을_넣으면_에러가_발생한다() {
+		// given
+		Member member = createMember();
+
+		// when
+		when(memberRepository.findById(0L)).thenReturn(Optional.of(member));
+
+		// then
+		assertThatThrownBy(() -> memberService.assignRefreshToken(0L, null))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
 	private List<Member> getMembers() {

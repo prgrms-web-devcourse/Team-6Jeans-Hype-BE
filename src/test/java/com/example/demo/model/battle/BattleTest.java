@@ -15,6 +15,8 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.demo.model.member.Member;
+import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
@@ -72,9 +74,17 @@ class BattleTest {
 	}
 
 	@Test
-	public void 성공_대결에서_승리한_유저를_반환할_수_있다() {
+	public void 성공_대결에서_동점이면_빈_Optional을_반환할_수_있다() {
 		Battle battle = createBattle(challengingPost, challengedPost);
 		assertThat(battle.getWinner().isEmpty()).isEqualTo(true);
+	}
+
+	@Test
+	public void 성공_대결에서_승리한_유저를_반환할_수_있다() {
+		Battle battle = createBattle(createPost(createMember()), createPost(createMember()));
+		battle.plusVoteCount(battle.getChallengingPost(), 10);
+		assertThat(battle.getWinner().isPresent()).isEqualTo(true);
+		assertThat(battle.getWinner().get()).isEqualTo(battle.getChallengingPost().getPost().getMember());
 	}
 
 	@Test
@@ -99,6 +109,30 @@ class BattleTest {
 			.status(BattleStatus.PROGRESS)
 			.challengedPost(challengedPost)
 			.challengingPost(challengingPost)
+			.build();
+	}
+
+	private Post createPost(Member member) {
+		return Post.create(
+			"musicId",
+			"albumCoverUrl",
+			"hype",
+			"musicName",
+			Genre.CLASSIC,
+			"musicUrl",
+			"recommend",
+			true,
+			member
+		);
+	}
+
+	private Member createMember() {
+		return Member.builder()
+			.profileImageUrl("profile")
+			.nickname("name")
+			.refreshToken("token")
+			.socialType(Social.GOOGLE)
+			.socialId("socialId")
 			.build();
 	}
 }

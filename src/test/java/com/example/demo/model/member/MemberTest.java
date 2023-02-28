@@ -133,6 +133,14 @@ class MemberTest {
 		assertThat(member.getVictoryCount()).isEqualTo(1);
 	}
 
+	@ParameterizedTest
+	@NullSource
+	void 실패_null_토큰을_업데이트하면_IllegalArgumentException_에러가_발생한다(String value) {
+		Member member = createMember(profileImageUrl, nickname, refreshToken, socialType, socialId);
+		assertThatThrownBy(() -> member.setRefreshToken(value))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
+	}
+
 	@NotNull
 	private String getStringOver24Length() {
 		StringBuilder name = new StringBuilder();
