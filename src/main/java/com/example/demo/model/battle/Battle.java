@@ -95,7 +95,7 @@ public class Battle extends BaseEntity {
 		winner.ifPresent(Member::plusCount);
 	}
 
-	private Optional<Member> getWinner() {
+	public Optional<Member> getWinner() {
 		int diff = challengedPost.getVoteCount() - challengingPost.getVoteCount();
 
 		if (diff > 0) {
@@ -107,7 +107,7 @@ public class Battle extends BaseEntity {
 		return Optional.empty();
 	}
 
-	private int getPoint() {
+	public int getPoint() {
 		return Math.abs(challengedPost.getVoteCount() - challengingPost.getVoteCount());
 	}
 

@@ -126,6 +126,13 @@ class MemberTest {
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
+	@Test
+	void 성공_유저의_성공_수를_1만큼_더할_수_있다() {
+		Member member = createMember(profileImageUrl, nickname, refreshToken, socialType, socialId);
+		member.plusCount();
+		assertThat(member.getVictoryCount()).isEqualTo(1);
+	}
+
 	@NotNull
 	private String getStringOver24Length() {
 		StringBuilder name = new StringBuilder();
@@ -134,7 +141,6 @@ class MemberTest {
 		}
 		return name.toString();
 	}
-
 
 	private Member createMember(String profileImageUrl, String nickname,
 		String refreshToken, Social socialType, String socialId) {

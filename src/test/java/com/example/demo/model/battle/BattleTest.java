@@ -71,6 +71,18 @@ class BattleTest {
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
+	@Test
+	public void 성공_대결에서_승리한_유저를_반환할_수_있다() {
+		Battle battle = createBattle(challengingPost, challengedPost);
+		assertThat(battle.getWinner().isEmpty()).isEqualTo(true);
+	}
+
+	@Test
+	public void 성공_대결에서_득표_수_차이를_반환할_수_있다() {
+		Battle battle = createBattle(challengingPost, challengedPost);
+		assertThat(battle.getPoint()).isEqualTo(0);
+	}
+
 	static Stream<Arguments> testFailDataProviderForCreateBattle() {
 		Post challengingPost = mock(Post.class);
 		Post challengedPost = mock(Post.class);
