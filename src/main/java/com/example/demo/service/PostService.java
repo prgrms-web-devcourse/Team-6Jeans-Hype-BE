@@ -33,6 +33,12 @@ public class PostService {
 	@Transactional
 	public Long createPost(Principal principal, PostCreateRequestDto postRequestDto) {
 		Member member = principalService.getMemberByPrincipal(principal);
+
+		boolean isExisted = postRepository.existsByMemberAndMusic_MusicId(member, postRequestDto.musicId());
+		if (isExisted) {
+			throw new IllegalArgumentException(DUPLICATED_USER_MUSIC_URL.getMessage());
+		}
+
 		Post post = postRequestDto.toEntity(member);
 		postRepository.save(post);
 		return post.getId();
