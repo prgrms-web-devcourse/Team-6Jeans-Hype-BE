@@ -1,26 +1,29 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.service.BattleService;
+import com.example.demo.service.MemberService;
+
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @EnableScheduling
+@RequiredArgsConstructor
 public class ScheduleController {
 
-	@Value("${spring.profiles.active}")
-	private String profile;
+	private final BattleService battleService;
+	private final MemberService memberService;
+
+	private final int rankingTerm = 7;
 
 	@Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
-	public void testScheduler() {
-		System.out.println("schedule test - " + System.currentTimeMillis() / 10);
-	}
-
-	@Scheduled(cron = "0 * * * * *", zone = "Asia/Seoul")
-	public void testLogic() {
-		if (profile.equals("test")) {
-			System.out.println("schedule test - " + System.currentTimeMillis() / 10);
-		}
+	public void updateBattleResult() {
+		battleService.quitBattles();
+		memberService.resetAllRankingAndPoint();
+		battleService.updateWinnerPoint(rankingTerm);
+		memberService.updateAllMemberRanking();
 	}
 }
