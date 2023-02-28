@@ -19,10 +19,12 @@ public class BattleService {
 
 	private final BattleRepository battleRepository;
 
+	@Transactional
 	public void quitBattles() {
 		findBattleProgress().forEach(Battle::quitBattle);
 	}
 
+	@Transactional
 	public void updateWinnerPoint(int perm) {
 		findBattlesEndWithinPerm(perm).forEach(Battle::updateWinnerPoint);
 	}
