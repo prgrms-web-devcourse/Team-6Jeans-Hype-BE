@@ -2,10 +2,13 @@ package com.example.demo.service;
 
 import static com.example.demo.common.ExceptionMessage.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +23,9 @@ import com.example.demo.security.oauth2.user.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
+@Slf4j
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 	private final MemberRepository memberRepository;
@@ -49,7 +53,7 @@ public class MemberService {
 	public void assignRefreshToken(long memberId, String refreshToken) {
 		Optional<Member> member = memberRepository.findById(memberId);
 		member.map(element -> {
-			element.setRefreshTken(refreshToken);
+			element.setRefreshToken(refreshToken);
 			return element;
 		}).orElseThrow(
 			() -> new EntityNotFoundException(NOT_FOUND_MEMBER.getMessage())
@@ -58,5 +62,27 @@ public class MemberService {
 
 	public MemberAllMyPostsResponseDto getAllPosts(Member member) {
 		return MemberAllMyPostsResponseDto.of(member);
+	}
+
+	@Transactional
+	public void updateAllMemberRanking() {
+		List<Integer> points = getAllPoints();
+		memberRepository.findAll()
+			.forEach(member -> {
+				int ranking = points.indexOf(member.getVictoryPoint()) + 1;
+				member.updateMemberScore(ranking, member.getVictoryPoint(), member.getVictoryCount());
+			});
+	}
+
+	@Transactional
+	public void resetAllRankingAndPoint() {
+		memberRepository.findAll().forEach(Member::resetRankingAndPoint);
+	}
+
+	private List<Integer> getAllPoints() {
+		List<Integer> points = new ArrayList<>();
+		memberRepository.findAll(Sort.by(Sort.Direction.DESC, "memberScore.victoryPoint"))
+			.forEach(member -> points.add(member.getVictoryPoint()));
+		return points.stream().distinct().toList();
 	}
 }
