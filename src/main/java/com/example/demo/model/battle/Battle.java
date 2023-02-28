@@ -72,6 +72,10 @@ public class Battle extends BaseEntity {
 		this.challengingPost = new BattleInfo(challengingPost);
 	}
 
+	public void plusVoteCount(BattleInfo battleInfo, int voteCount) {
+		battleInfo.plusVoteCount(voteCount);
+	}
+
 	public void quitBattle() {
 		this.status = BattleStatus.END;
 		this.updateTime(LocalDateTime.now());
