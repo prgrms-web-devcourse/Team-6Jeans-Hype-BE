@@ -129,6 +129,47 @@ class PostControllerTest {
 			));
 	}
 
+	@Test
+	void 실패_중복된_유저_음악_id_등록의_경우_400_에러_반환() throws Exception {
+		// given
+		PostCreateRequestDto postCreateRequestDto = getPostCreateRequestDto();
+
+		doThrow(new IllegalArgumentException(ExceptionMessage.DUPLICATED_USER_MUSIC_URL.getMessage()))
+			.when(postService).createPost(any(), any());
+
+		// when
+		ResultActions resultActions = mockMvc.perform(
+			post("/api/v1/posts")
+				.contentType(APPLICATION_JSON)
+				.principal(principal)
+				.content(mapper.writeValueAsString(postCreateRequestDto))
+				.with(csrf())
+		);
+
+		// then
+		resultActions.andExpect(status().isBadRequest())
+			.andDo(print())
+			.andDo(MockMvcRestDocumentationWrapper.document("중복된 유저와 음악 url",
+				requestFields(
+					fieldWithPath("musicId").type(STRING).description("등록할 음악의 id 값"),
+					fieldWithPath("musicName").type(STRING).description("등록할 음악의 제목"),
+					fieldWithPath("musicUrl").type(STRING).description("등록할 음악의 url"),
+					fieldWithPath("albumCoverUrl").type(STRING).description("등록할 음악의 앨범 표지 이미지 url"),
+					fieldWithPath("genre").type(STRING).description("등록할 음악의 장르 값"),
+					fieldWithPath("singer").type(STRING).description("등록할 음악의 가수명"),
+					fieldWithPath("isBattlePossible").type(BOOLEAN).description("등록할 게시글의 배틀 가능 여부"),
+					fieldWithPath("content").type(STRING).description("등록할 게시글의 내용")
+				),
+				responseFields(
+					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(NULL).description("API 요청 응답 메시지 - Null")
+				)
+			));
+
+		verify(postService).createPost(any(), any());
+	}
+
 	private PostCreateRequestDto getPostCreateRequestDto() {
 		return PostCreateRequestDto.builder()
 			.musicId(musicId)
@@ -163,8 +204,8 @@ class PostControllerTest {
 			.andDo(print())
 			.andDo(MockMvcRestDocumentationWrapper.document("음악 공유 게시글 리스트 조회",
 				requestParameters(
-					parameterWithName("genre").description("필터링 할 장르 값 (null 가능)"),
-					parameterWithName("possible").description("대결 가능 여부 (null 가능)")
+					parameterWithName("genre").optional().description("필터링 할 장르 값 (null 가능)"),
+					parameterWithName("possible").optional().description("대결 가능 여부 (null 가능)")
 				),
 				responseFields(
 					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),

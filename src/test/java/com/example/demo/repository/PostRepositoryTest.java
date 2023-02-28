@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
@@ -30,7 +29,6 @@ class PostRepositoryTest {
 	private final Member member = createMember();
 
 	@Test
-	@Transactional
 	void 음악_공유_게시글을_장르와_대결가능여부_기준으로_조회할_수_있다() {
 		// given
 		List<Post> posts = getPosts(genre, isPossibleBattle);
@@ -56,7 +54,6 @@ class PostRepositoryTest {
 	}
 
 	@Test
-	@Transactional
 	void 음악_공유_게시글을_장르_기준으로_조회할_수_있다() {
 		// given
 		List<Post> posts = getPosts(genre);
@@ -81,7 +78,6 @@ class PostRepositoryTest {
 	}
 
 	@Test
-	@Transactional
 	void 음악_공유_게시글을_대결가능여부_기준으로_조회할_수_있다() {
 		// given
 		List<Post> posts = getPosts(isPossibleBattle);
@@ -106,7 +102,6 @@ class PostRepositoryTest {
 	}
 
 	@Test
-	@Transactional
 	void 음악_대결곡_후보_리스트를_조회할_수_있다() {
 		// given
 		List<Post> posts = getPosts(member, genre);
@@ -128,6 +123,23 @@ class PostRepositoryTest {
 			posts.add(post);
 		}
 		return posts;
+	}
+
+	@Test
+	void 같은_유저와_음악_id가_존재함을_알_수_있다() {
+		// given
+		String musicId = "musicId";
+		Post post = Post.create(musicId, "album", "singer", "title", genre,
+			"url", "content", isPossibleBattle, member);
+
+		memberRepository.save(member);
+		postRepository.save(post);
+
+		// when
+		boolean isExisted = postRepository.existsByMemberAndMusic_MusicId(member, musicId);
+
+		// then
+		assertThat(isExisted).isEqualTo(true);
 	}
 
 	private Member createMember() {
