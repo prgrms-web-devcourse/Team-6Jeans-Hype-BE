@@ -133,6 +133,13 @@ class MemberTest {
 		assertThat(member.getVictoryCount()).isEqualTo(1);
 	}
 
+	@Test
+	void 성공_토큰을_업데이트하면_유저의_토큰이_업데이트_된다() {
+		Member member = createMember(profileImageUrl, nickname, refreshToken, socialType, socialId);
+		member.setRefreshToken("token");
+		assertThat(member.getRefreshToken()).isEqualTo("token");
+	}
+
 	@ParameterizedTest
 	@NullSource
 	void 실패_null_토큰을_업데이트하면_IllegalArgumentException_에러가_발생한다(String value) {
