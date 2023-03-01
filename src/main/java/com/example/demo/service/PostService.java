@@ -43,7 +43,7 @@ public class PostService {
 		postRepository.save(post);
 
 		if (post.isPossibleBattle()) {
-			member.giveOneChallengeTicket();
+			member.addOneChallengeTicket();
 		}
 
 		return post.getId();

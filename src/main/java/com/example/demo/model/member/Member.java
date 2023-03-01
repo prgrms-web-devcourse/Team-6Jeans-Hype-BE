@@ -132,7 +132,7 @@ public class Member extends BaseEntity {
 		this.refreshToken = refreshToken;
 	}
 
-	public void giveOneChallengeTicket() {
+	public void addOneChallengeTicket() {
 		this.countOfChallengeTicket += 1;
 	}
 
