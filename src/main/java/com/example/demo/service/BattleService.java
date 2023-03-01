@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.repository.BattleRepository;
@@ -39,4 +40,12 @@ public class BattleService {
 		LocalDateTime lastBattleDay = now.minusDays(perm - 1);
 		return battleRepository.findByStatusAndUpdatedAtBetween(BattleStatus.END, lastBattleDay, now);
 	}
+
+	public BattleDetailsListResponseDto getBattleDetailsListInProgress() {
+		List<Battle> battleListInProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
+		return BattleDetailsListResponseDto.of(
+			battleListInProgress
+		);
+	}
 }
+
