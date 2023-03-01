@@ -10,8 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.context.annotation.Import;
 
+import com.example.demo.config.JpaAuditingConfig;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
@@ -20,7 +21,7 @@ import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
 @DataJpaTest
-@EnableJpaAuditing
+@Import(value = JpaAuditingConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BattleRepositoryTest {
 
