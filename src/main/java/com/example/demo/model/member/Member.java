@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -20,7 +19,6 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 
 import com.example.demo.model.BaseEntity;
-import com.example.demo.model.battle.Battle;
 import com.example.demo.model.post.Like;
 import com.example.demo.model.post.Post;
 
@@ -57,10 +55,6 @@ public class Member extends BaseEntity {
 
 	@Embedded
 	private SocialInfo socialInfo;
-
-	@OneToMany
-	@JoinColumn(name = "member_id")
-	private final List<Battle> battles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member")
 	private final List<Post> posts = new ArrayList<>();
