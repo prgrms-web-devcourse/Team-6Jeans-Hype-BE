@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -67,6 +68,14 @@ public class Post extends BaseEntity {
 		this.isPossibleBattle = isPossibleBattle;
 		this.likeCount = likeCount;
 		this.member = member;
+	}
+
+	public void setMember(Member member) {
+		if (Objects.nonNull(this.member)) {
+			this.member.getPosts().remove(this);
+		}
+		this.member = member;
+		member.getPosts().add(this);
 	}
 
 	public static Post create(String musicId, String albumCoverUrl, String singer, String title, Genre genre,
