@@ -2,7 +2,6 @@ package com.example.demo.model.battle;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -78,7 +77,6 @@ public class Battle extends BaseEntity {
 
 	public void quitBattle() {
 		this.status = BattleStatus.END;
-		this.updateTime(LocalDateTime.now());
 		updateCountOfWinner();
 	}
 
