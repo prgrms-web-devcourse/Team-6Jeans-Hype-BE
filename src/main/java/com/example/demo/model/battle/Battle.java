@@ -3,6 +3,7 @@ package com.example.demo.model.battle;
 import static com.google.common.base.Preconditions.*;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.AttributeOverride;
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import com.example.demo.common.ExceptionMessage;
 import com.example.demo.model.BaseEntity;
+import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
@@ -67,6 +69,44 @@ public class Battle extends BaseEntity {
 		this.status = status;
 		this.challengedPost = new BattleInfo(challengedPost);
 		this.challengingPost = new BattleInfo(challengingPost);
+	}
+
+	public void plusVoteCount(BattleInfo battleInfo, int voteCount) {
+		battleInfo.plusVoteCount(voteCount);
+	}
+
+	public void quitBattle() {
+		this.status = BattleStatus.END;
+		updateCountOfWinner();
+	}
+
+	public void updateWinnerPoint() {
+		Optional<Member> winner = getWinner();
+		if (winner.isPresent()) {
+			int point = getPoint();
+			winner.get().plusPoint(point);
+		}
+	}
+
+	private void updateCountOfWinner() {
+		Optional<Member> winner = getWinner();
+		winner.ifPresent(Member::plusCount);
+	}
+
+	public Optional<Member> getWinner() {
+		int diff = challengedPost.getVoteCount() - challengingPost.getVoteCount();
+
+		if (diff > 0) {
+			return Optional.of(challengedPost.getPost().getMember());
+		} else if (diff < 0) {
+			return Optional.of(challengingPost.getPost().getMember());
+		}
+
+		return Optional.empty();
+	}
+
+	public int getPoint() {
+		return Math.abs(challengedPost.getVoteCount() - challengingPost.getVoteCount());
 	}
 
 	// TODO: 2023-02-23 battle이 특정 Post를 가지고 있는지 검증하는 메소드
