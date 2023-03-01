@@ -82,6 +82,37 @@ class PostServiceTest {
 	}
 
 	@Test
+	void 성공_등록할_게시글의_대결가능여부를_확인할_수_있다() {
+		// given
+		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
+			.musicId(musicId)
+			.musicName(musicName)
+			.musicUrl(musicUrl)
+			.albumCoverUrl(albumCoverUrl)
+			.genre(genre)
+			.singer(singer)
+			.isBattlePossible(true)
+			.content(content)
+			.build();
+
+		Post post = postCreateRequestDto.toEntity(member);
+
+		// when
+		when(postRepository.save(any())).thenReturn(post);
+		when(postRepository.existsByMemberAndMusic_MusicId(any(), any())).thenReturn(false);
+		when(principalService.getMemberByPrincipal(principal)).thenReturn(member);
+
+		postService.createPost(principal, postCreateRequestDto);
+
+		// then
+		assertThat(post.isPossibleBattle()).isEqualTo(true);
+
+		verify(postRepository).save(any());
+		verify(postRepository).existsByMemberAndMusic_MusicId(any(), any());
+		verify(principalService).getMemberByPrincipal(principal);
+	}
+
+	@Test
 	void 성공_대결가능한_게시글을_등록한_유저는_도전권을_얻을_수_있다() {
 		// given
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
