@@ -9,7 +9,6 @@ import com.example.demo.common.ApiResponse;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.service.BattleService;
 import com.example.demo.service.PrincipalService;
-import com.example.demo.service.VoteService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +19,6 @@ public class BattleController {
 
 	private final PrincipalService principalService;
 	private final BattleService battleService;
-	private final VoteService voteService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse> getBattleDetailsList() {
