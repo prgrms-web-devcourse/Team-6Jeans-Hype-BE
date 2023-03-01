@@ -80,6 +80,39 @@ class PostServiceTest {
 	}
 
 	@Test
+	void 성공_대결가능한_게시글을_등록한_유저는_도전권을_얻을_수_있다() {
+		// given
+		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
+			.musicId(musicId)
+			.musicName(musicName)
+			.musicUrl(musicUrl)
+			.albumCoverUrl(albumCoverUrl)
+			.genre(genre)
+			.singer(singer)
+			.isBattlePossible(true)
+			.content(content)
+			.build();
+
+		Post post = postCreateRequestDto.toEntity(member);
+
+		int originChallengeTicketCount = member.getCountOfChallengeTicket();
+
+		// when
+		when(postRepository.save(any())).thenReturn(post);
+		when(postRepository.existsByMemberAndMusic_MusicId(any(), any())).thenReturn(false);
+		when(principalService.getMemberByPrincipal(principal)).thenReturn(member);
+
+		postService.createPost(principal, postCreateRequestDto);
+
+		// then
+		assertThat(member.getCountOfChallengeTicket()).isEqualTo(originChallengeTicketCount + 1);
+
+		verify(postRepository).save(any());
+		verify(postRepository).existsByMemberAndMusic_MusicId(any(), any());
+		verify(principalService).getMemberByPrincipal(principal);
+	}
+
+	@Test
 	void 실패_한_유저는_중복된_music_id는_등록할_수_없다() {
 		// given
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
