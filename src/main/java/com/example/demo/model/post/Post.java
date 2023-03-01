@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -69,16 +70,27 @@ public class Post extends BaseEntity {
 		this.member = member;
 	}
 
+	private void setMember(Member member) {
+		if (Objects.nonNull(this.member)) {
+			this.member.getPosts().remove(this);
+		}
+		this.member = member;
+		member.getPosts().add(this);
+	}
+
 	public static Post create(String musicId, String albumCoverUrl, String singer, String title, Genre genre,
 		String musicUrl, String content, boolean isPossibleBattle, Member member) {
 
-		return Post.builder()
+		Post post = Post.builder()
 			.music(new Music(musicId, albumCoverUrl, singer, title, genre, musicUrl))
 			.content(content)
 			.isPossibleBattle(isPossibleBattle)
 			.likeCount(0)
-			.member(member)
 			.build();
+
+		post.setMember(member);
+
+		return post;
 	}
 
 	// TODO: 2023-02-23 포스트가 특정 battle을 가지고 있는지 검증하는 메소드
