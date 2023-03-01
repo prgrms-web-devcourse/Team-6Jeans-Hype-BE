@@ -148,7 +148,8 @@ jacocoTestReport {
                     'com/example/demo/controller/GlobalControllerAdvice.class',
                     'com/example/demo/dto/**',
                     'com/example/demo/security/**',
-                    'com/example/demo/util/CookieUtils.class'
+                    'com/example/demo/util/CookieUtils.class',
+                    'com/example/demo/controller/SchedulerController.java'
 
             ])
         }))
