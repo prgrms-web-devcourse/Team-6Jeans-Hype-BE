@@ -1,4 +1,4 @@
-package com.example.demo.service.battle;
+package com.example.demo.service;
 
 import java.security.Principal;
 
@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.controller.battle.BattleCreateRequestDto;
 import com.example.demo.model.member.Member;
-import com.example.demo.service.PrincipalService;
 
 import lombok.RequiredArgsConstructor;
 

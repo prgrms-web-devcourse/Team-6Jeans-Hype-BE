@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.common.ApiResponse;
-import com.example.demo.service.battle.BattleService;
+import com.example.demo.service.BattleService;
 
 import lombok.RequiredArgsConstructor;
 
