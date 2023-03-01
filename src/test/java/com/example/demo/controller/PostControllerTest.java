@@ -337,6 +337,7 @@ class PostControllerTest {
 					fieldWithPath("data.posts[].music.musicName").type(STRING).description("대결 후보곡 노래 제목"),
 					fieldWithPath("data.posts[].music.albumCoverUrl").type(STRING)
 						.description("대결 후보곡 노래 앨범 이미지 url"),
+					fieldWithPath("data.posts[].music.musicUrl").type(STRING).description("대결 후보곡 노래 음원 url"),
 					fieldWithPath("data.posts[].music.singer").type(STRING).description("대결 후보곡 노래 가수명")
 				)
 			));
