@@ -69,6 +69,7 @@ class PostServiceTest {
 		Post post = postCreateRequestDto.toEntity(member);
 
 		when(postRepository.save(any())).thenReturn(post);
+		when(principalService.getMemberByPrincipal(principal)).thenReturn(member);
 
 		// when
 		Long postId = postService.createPost(principal, postCreateRequestDto);
@@ -77,6 +78,7 @@ class PostServiceTest {
 		assertThat(postId).isEqualTo(post.getId());
 
 		verify(postRepository).save(any());
+		verify(principalService).getMemberByPrincipal(principal);
 	}
 
 	@Test
