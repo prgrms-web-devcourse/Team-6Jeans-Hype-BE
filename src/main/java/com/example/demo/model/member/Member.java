@@ -132,5 +132,9 @@ public class Member extends BaseEntity {
 		this.refreshToken = refreshToken;
 	}
 
+	public void giveOneChallengeTicket() {
+		this.countOfChallengeTicket += 1;
+	}
+
 	// TODO: 2023-02-23 member가 특정 배틀에 투표한적 있는지 확인하는 메소드(할수 없을 것 같기도)
 }
