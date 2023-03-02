@@ -10,7 +10,7 @@ import reactor.util.annotation.NonNull;
 @Builder
 public record PostCreateRequestDto(
 	@NonNull String musicId,
-	@NonNull String musicName,
+	@NonNull String title,
 	@NonNull String musicUrl,
 	@NonNull String albumCoverUrl,
 	@NonNull Genre genre,
@@ -21,6 +21,6 @@ public record PostCreateRequestDto(
 
 	public Post toEntity(Member member) {
 		return Post
-			.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl, content, isBattlePossible, member);
+			.create(musicId, albumCoverUrl, singer, title, genre, musicUrl, content, isBattlePossible, member);
 	}
 }
