@@ -115,4 +115,8 @@ public class Member extends BaseEntity {
 	public void setRefreshTken(String refreshToken) {
 		this.refreshToken = refreshToken;
 	}
+
+	public void subtractCountOfChallengeTicket() {
+		this.countOfChallengeTicket--;
+	}
 }

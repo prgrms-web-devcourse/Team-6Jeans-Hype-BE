@@ -61,7 +61,7 @@ public class BattleService {
 			.status(BattleStatus.PROGRESS)
 			.build();
 		battleRepository.save(newBattle);
-
+		memberByPrincipal.subtractCountOfChallengeTicket();
 		return newBattle.getId();
 	}
 
