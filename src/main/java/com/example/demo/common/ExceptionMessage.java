@@ -10,7 +10,8 @@ public enum ExceptionMessage {
 	OBJECT_NOT_NULL("은(는) Null 일 수 없습니다."),
 
 	// IllegalArgumentException
-	DUPLICATED_USER_MUSIC_URL("이미 공유한 곡입니다.");
+	DUPLICATED_USER_MUSIC_URL("이미 공유한 곡입니다."),
+	SERVER_ERROR("서버 내부에 오류가 발생했습니다.");
 
 	final String message;
 

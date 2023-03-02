@@ -2,21 +2,26 @@ package com.example.demo.service;
 
 import static com.example.demo.common.ExceptionMessage.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
+import com.example.demo.exception.ServerNotActiveException;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
+import com.example.demo.model.post.Genre;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.PostRepository;
 import com.example.demo.security.oauth2.user.OAuth2UserInfo;
 import com.example.demo.security.oauth2.user.OAuth2UserInfoFactory;
 
@@ -28,6 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
+
+	private final PrincipalService principalService;
+	private final PostRepository postRepository;
 	private final MemberRepository memberRepository;
 
 	@Transactional
@@ -60,8 +68,41 @@ public class MemberService {
 		);
 	}
 
-	public MemberAllMyPostsResponseDto getAllPosts(Member member) {
-		return MemberAllMyPostsResponseDto.of(member);
+	public MemberAllMyPostsResponseDto getAllPosts(
+		Principal principal,
+		Optional<Long> memberId,
+		Optional<Genre> genre,
+		Optional<Integer> limit) {
+
+		Member member = principalService.getMemberByPrincipal(principal);
+
+		switch (MemberFilteringCase.getCase(memberId, member.getId())) { // 마이페이지
+			case MY_PAGE -> {
+				return genre.map(value -> limit.map(integer -> MemberAllMyPostsResponseDto.of(
+					postRepository.findAllByIdLimitAndGenreOrderByIdDesc(member.getId(), value,
+						PageRequest.of(0, integer))
+				)).orElseGet(() -> MemberAllMyPostsResponseDto.of(
+					postRepository.findAllByMemberIdAndMusic_GenreOrderByIdDesc(member.getId(), value)
+				))).orElseGet(() -> limit.map(integer -> MemberAllMyPostsResponseDto.of(
+					postRepository.findAllByIdLimitOrderByIdDesc(member.getId(), PageRequest.of(0, integer))
+				)).orElseGet(() -> MemberAllMyPostsResponseDto.of(
+					postRepository.findAllByMemberIdOrderByIdDesc(member.getId())
+				)));
+			}
+			case USER_PAGE -> {
+				return genre.map(value -> limit.map(integer -> MemberAllMyPostsResponseDto.of(
+					postRepository.findAllByIdLimitAndGenreOrderByIdDesc(memberId.get(), value,
+						PageRequest.of(0, integer)))).orElseGet(() -> MemberAllMyPostsResponseDto.of(
+					postRepository.findAllByMemberIdAndMusic_GenreOrderByIdDesc(memberId.get(), value)
+				))).orElseGet(() -> limit.map(integer -> MemberAllMyPostsResponseDto.of(
+					postRepository.findAllByIdLimitOrderByIdDesc(memberId.get(), PageRequest.of(0, integer))
+				)).orElseGet(() -> MemberAllMyPostsResponseDto.of(
+					postRepository.findAllByMemberIdOrderByIdDesc(memberId.get())
+				)));
+			}
+		}
+
+		throw new ServerNotActiveException(SERVER_ERROR.getMessage());
 	}
 
 	@Transactional
