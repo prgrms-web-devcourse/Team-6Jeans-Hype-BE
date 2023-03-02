@@ -1,26 +1,25 @@
 package com.example.demo.controller;
 
-
 import java.security.Principal;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.ApiResponse;
+import com.example.demo.common.ResponseMessage;
+import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.dto.vote.BattleVoteRequestDto;
 import com.example.demo.dto.vote.VoteResultResponseDto;
 import com.example.demo.model.member.Member;
-import com.example.demo.service.VoteService;
-import com.example.demo.common.ResponseMessage;
-import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.service.BattleService;
 import com.example.demo.service.PrincipalService;
+import com.example.demo.service.VoteService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +30,7 @@ public class BattleController {
 
 	private final PrincipalService principalService;
 	private final VoteService voteService;
-  	private final BattleService battleService;
+	private final BattleService battleService;
 
 	@PostMapping("/vote")
 	public ResponseEntity<ApiResponse> vote(
@@ -47,8 +46,8 @@ public class BattleController {
 			ApiResponse.success(
 				"대결 투표 성공",
 				voteResultDto
-      ));
-  }
+			));
+	}
 
 	@GetMapping
 	public ResponseEntity<ApiResponse> getBattleDetailsList() {
