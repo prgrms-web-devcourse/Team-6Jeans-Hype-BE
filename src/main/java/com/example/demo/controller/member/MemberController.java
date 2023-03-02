@@ -1,16 +1,19 @@
 package com.example.demo.controller.member;
 
 import java.security.Principal;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.ApiResponse;
 import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.dto.member.MemberDetailsResponseDto;
 import com.example.demo.model.member.Member;
+import com.example.demo.model.post.Genre;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.PrincipalService;
 
@@ -25,10 +28,14 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@GetMapping("/posts")
-	public ResponseEntity<ApiResponse> getMemberAllPosts(Principal principal) {
-		Member member = principalService.getMemberByPrincipal(principal);
-		MemberAllMyPostsResponseDto responseDto = memberService.getAllPosts(member);
+	public ResponseEntity<ApiResponse> getMemberAllPosts(
+		Principal principal,
+		@RequestParam Optional<Long> memberId,
+		@RequestParam Optional<Genre> genre,
+		@RequestParam Optional<Integer> limit) {
 
+		MemberAllMyPostsResponseDto responseDto = memberService.getAllPosts(
+			principal, memberId, genre, limit);
 		return ResponseEntity.ok(
 			ApiResponse.success(
 				"유저가 공유한 게시글 리스트 조회 성공",
