@@ -110,7 +110,6 @@ public class Battle extends BaseEntity {
 	}
 
 	public BattleVotedResult vote(Post post) {
-		// TODO : 현재 동시성 고려되어 있지 않음. -> 해결하기.
 		Long postId = post.getId();
 		Long challengedPostId = challengedPost.getPost().getId();
 		Long challengingPostId = challengingPost.getPost().getId();
