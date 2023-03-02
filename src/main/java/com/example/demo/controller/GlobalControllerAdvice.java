@@ -30,4 +30,10 @@ public class GlobalControllerAdvice {
 		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
 	}
+
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<ApiResponse> handleIllegalStateException(IllegalStateException exception) {
+		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
+		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+	}
 }
