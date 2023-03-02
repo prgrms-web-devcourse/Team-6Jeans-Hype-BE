@@ -123,7 +123,7 @@ public class MemberService {
 			battles.addAll(post.getChallengingBattles());
 		});
 
-		battles.sort(Collections.reverseOrder());
+		Collections.reverse(battles);
 
 		return battles.stream()
 			.map(MemberBattleResponseDto::of)
