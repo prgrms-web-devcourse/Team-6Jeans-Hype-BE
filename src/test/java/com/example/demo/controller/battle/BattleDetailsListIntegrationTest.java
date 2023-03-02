@@ -24,6 +24,7 @@ import com.example.demo.model.post.Post;
 import com.example.demo.repository.BattleRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.VoteRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -46,6 +47,9 @@ class BattleDetailsListIntegrationTest {
 	private PostRepository postRepository;
 
 	@Autowired
+	private VoteRepository voteRepository;
+
+	@Autowired
 	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -55,6 +59,7 @@ class BattleDetailsListIntegrationTest {
 	}
 
 	private void clear() {
+		voteRepository.deleteAll();
 		battleRepository.deleteAll();
 		postRepository.deleteAll();
 		memberRepository.deleteAll();

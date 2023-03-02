@@ -34,6 +34,7 @@ import com.example.demo.model.post.Music;
 import com.example.demo.security.TokenAuthenticationFilter;
 import com.example.demo.service.BattleService;
 import com.example.demo.service.PrincipalService;
+import com.example.demo.service.VoteService;
 
 @WithMockUser
 @ExtendWith({MockitoExtension.class})
@@ -55,6 +56,9 @@ public class BattleDetailsListRestDocsTest {
 
 	@MockBean
 	private BattleService battleService;
+
+	@MockBean
+	private VoteService voteService;
 
 	@Test
 	void 성공_모든_진행중인_대결들의_상세정보_리스트를_조회할_수_있다() throws Exception {

@@ -3,6 +3,7 @@ package com.example.demo.controller.vote;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,17 +93,20 @@ class BattleVoteIntegrationTest {
 		// when
 		ResponseEntity<ApiResponse> response = restTemplate.withBasicAuth("1", "password")
 			.postForEntity("/api/v1/battles/vote", requestBody, ApiResponse.class);
+		String actualJson = mapper.writeValueAsString(response.getBody().data());
+		VoteResultResponseDto responseDto = mapper.readValue(actualJson, VoteResultResponseDto.class);
+		List<Vote> votes = voteRepository.findAll();
+		Optional<Battle> changedBattle = battleRepository.findById(battle.getId());
+
 		// then
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().success()).isTrue();
-		String actualJson = mapper.writeValueAsString(response.getBody().data());
-		VoteResultResponseDto responseDto = mapper.readValue(actualJson, VoteResultResponseDto.class);
 		assertThat(responseDto)
 			.usingRecursiveComparison()
 			.isEqualTo(expected);
-
-		List<Vote> votes = voteRepository.findAll();
 		assertThat(votes.size()).isEqualTo(1);
+		assertThat(changedBattle).isPresent();
+		assertThat(changedBattle.get().getChallengedPost().getVoteCount()).isEqualTo(1);
 	}
 
 	private Battle createBattle(Post post1, Post post2) {
