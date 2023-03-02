@@ -44,7 +44,7 @@ public class BattleController {
 		VoteResultResponseDto voteResultDto = voteService.voteBattle(member, battleId, votedPostId);
 		return ResponseEntity.ok(
 			ApiResponse.success(
-				"대결 투표 성공",
+				ResponseMessage.SUCCESS_VOTE.getMessage(),
 				voteResultDto
 			));
 	}
