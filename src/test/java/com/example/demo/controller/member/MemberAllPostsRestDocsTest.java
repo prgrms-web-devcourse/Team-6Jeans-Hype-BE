@@ -5,9 +5,11 @@ import static com.example.demo.controller.member.MemberTestUtil.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,7 @@ import com.example.demo.dto.member.MemberPostVoResponseDto;
 import com.example.demo.dto.member.MusicVoResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.PostRepository;
 import com.example.demo.security.TokenAuthenticationFilter;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.PrincipalService;
@@ -57,6 +60,9 @@ public class MemberAllPostsRestDocsTest {
 
 	@MockBean
 	MemberRepository memberRepository;
+
+	@MockBean
+	PostRepository postRepository;
 
 	@MockBean
 	PrincipalService principalService;
@@ -86,11 +92,11 @@ public class MemberAllPostsRestDocsTest {
 		MemberAllMyPostsResponseDto response = createResponse(member);
 
 		// when
-		when(memberRepository.findById(anyLong()))
-			.thenReturn(Optional.of(member));
-		when(principalService.getMemberByPrincipal(any()))
-			.thenReturn(member);
-		when(memberService.getAllPosts(member))
+		when(memberService.getAllPosts(
+			any(Principal.class),
+			any(Optional.class),
+			any(Optional.class),
+			any(Optional.class)))
 			.thenReturn(response);
 
 		var actions = mockMvc.perform(get("/api/v1/members/posts")
@@ -103,6 +109,14 @@ public class MemberAllPostsRestDocsTest {
 			.andExpect(jsonPath("data").exists())
 			.andDo(print())
 			.andDo(document("success-find-member-all-posts",
+				requestParameters(
+					parameterWithName("memberId").optional()
+						.description("유저 ID (값이 안넣으면 마이페이지, 넣으면 유저 페이지 조회)"),
+					parameterWithName("genre").optional()
+						.description("추천 게시글 장르 (값이 안넣으면 all, 넣으면 해당 장르 필터링)"),
+					parameterWithName("limit").optional()
+						.description("게시글 개수 (값이 안넣으면 전체 조회, 넣으면 해당 개수 조회)")
+				),
 				responseFields(
 					fieldWithPath("success").type(JsonFieldType.BOOLEAN)
 						.description("API 요청 성공 여부"),
@@ -159,9 +173,11 @@ public class MemberAllPostsRestDocsTest {
 		Member member = createMember();
 
 		// when
-		when(memberRepository.findById(anyLong()))
-			.thenReturn(Optional.empty());
-		when(principalService.getMemberByPrincipal(any()))
+		when(memberService.getAllPosts(
+			any(Principal.class),
+			any(Optional.class),
+			any(Optional.class),
+			any(Optional.class)))
 			.thenThrow(new EntityNotFoundException(ExceptionMessage.NOT_FOUND_MEMBER.getMessage()));
 		var actions = mockMvc.perform(get("/api/v1/members/posts")
 			.contentType(MediaType.APPLICATION_JSON)

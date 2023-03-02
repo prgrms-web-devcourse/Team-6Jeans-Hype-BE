@@ -4,6 +4,7 @@ import static com.example.demo.controller.member.MemberTestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -20,7 +22,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.common.ApiResponse;
 import com.example.demo.model.member.Member;
+import com.example.demo.model.post.Genre;
+import com.example.demo.model.post.Post;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.PostRepository;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.PrincipalService;
 
@@ -30,6 +35,9 @@ class MemberAllPostsTest {
 	@Mock
 	private MemberRepository memberRepository;
 
+	@Mock
+	private PostRepository postRepository;
+
 	PrincipalService principalService;
 	MemberService memberService;
 	MemberController memberController;
@@ -37,7 +45,7 @@ class MemberAllPostsTest {
 	@BeforeEach
 	void setUp() {
 		principalService = new PrincipalService(memberRepository);
-		memberService = new MemberService(memberRepository);
+		memberService = new MemberService(principalService, postRepository, memberRepository);
 		memberController = new MemberController(principalService, memberService);
 	}
 
@@ -50,7 +58,31 @@ class MemberAllPostsTest {
 
 		// when
 		when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
-		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberAllPosts(authentication);
+		when(postRepository.findAllByIdLimitOrderByIdDesc(anyLong(), any(Pageable.class)))
+			.thenReturn(List.of(
+				Post.create(
+					"ABCD1234",
+					"albumCoverUrl",
+					"singer",
+					"title",
+					Genre.CLASSIC,
+					"musicUrl",
+					"content",
+					true,
+					member),
+				Post.create(
+					"ABCD1235",
+					"albumCoverUrl",
+					"singer",
+					"title",
+					Genre.BALLAD,
+					"musicUrl",
+					"content",
+					true,
+					member)
+			));
+		ResponseEntity<ApiResponse> responseEntity = memberController
+			.getMemberAllPosts(authentication, Optional.of(1L), Optional.empty(), Optional.of(2));
 
 		// then
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -70,7 +102,7 @@ class MemberAllPostsTest {
 
 		// then
 		assertThatThrownBy(() -> {
-			memberController.getMemberAllPosts(authentication);
+			memberController.getMemberAllPosts(authentication, Optional.of(1L), Optional.empty(), Optional.of(2));
 		})
 			.isExactlyInstanceOf(EntityNotFoundException.class);
 	}
