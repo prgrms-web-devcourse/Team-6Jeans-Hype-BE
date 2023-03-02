@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.example.demo.common.ApiResponse;
-import com.example.demo.controller.GenreController;
 import com.example.demo.dto.genre.GenreAllResponseDto;
 import com.example.demo.model.post.Genre;
 

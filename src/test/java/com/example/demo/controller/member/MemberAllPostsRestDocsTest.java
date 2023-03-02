@@ -32,8 +32,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.common.ExceptionMessage;
-import com.example.demo.dto.common.MusicVoResponseDto;
 import com.example.demo.controller.MemberController;
+import com.example.demo.dto.common.MusicVoResponseDto;
 import com.example.demo.dto.genre.GenreVoResponseDto;
 import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.dto.member.MemberPostVoResponseDto;
