@@ -44,7 +44,7 @@ public class Vote extends BaseEntity {
 	private Member voter;
 
 	@Builder
-	private Vote(Battle battle, Post selectedPost, Member voter) {
+	public Vote(Battle battle, Post selectedPost, Member voter) {
 		checkArgument(Objects.nonNull(battle),
 			String.format("battle %s", ExceptionMessage.OBJECT_NOT_NULL.getMessage()));
 		checkArgument(Objects.nonNull(selectedPost),
@@ -65,13 +65,5 @@ public class Vote extends BaseEntity {
 		this.selectedPost = selectedPost;
 		this.voter = voter;
 
-	}
-
-	public static Vote createVote(Battle battle, Post selectedPost, Member voter) {
-		return Vote.builder()
-			.battle(battle)
-			.selectedPost(selectedPost)
-			.voter(voter)
-			.build();
 	}
 }
