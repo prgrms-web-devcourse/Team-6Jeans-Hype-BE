@@ -73,37 +73,37 @@ class BattleServiceTest {
 		verify(battleRepository).findByStatusAndUpdatedAtBetween(any(), any(), any());
 	}
 
-	@Test
-	void 실패_createBattle_배틀가능한_postId를_찾을_수_없음_EntityNotFoundException() {
-
-	}
-
-	@Test
-	void 실패_createBattle_challengingPost가_현재Member소유가_아님_IllegalArgumentException() {
-	}
-
-	@Test
-	void 실패_reateBattle_challengedPost가_현재Member소유임_IllegalArgumentException() {
-	}
-
-	@Test
-	void 실패_createBattle_두포스트의_genre가_다름_IllegalArgumentException() {
-
-	}
-
-	@Test
-	void 실패_createBattle_사용자의_대결권이_0개임_IllegalStateExceiptino() {
-
-	}
-
-	@Test
-	void 성공_createBattle_배틀을생성하는데_성공한다_Member의_countOfChallengeTicket감소_배틀생성() {
-		//given
-
-		//when
-
-		//then
-	}
+	// @Test
+	// void 실패_createBattle_배틀가능한_postId를_찾을_수_없음_EntityNotFoundException() {
+	//
+	// }
+	//
+	// @Test
+	// void 실패_createBattle_challengingPost가_현재Member소유가_아님_IllegalArgumentException() {
+	// }
+	//
+	// @Test
+	// void 실패_reateBattle_challengedPost가_현재Member소유임_IllegalArgumentException() {
+	// }
+	//
+	// @Test
+	// void 실패_createBattle_두포스트의_genre가_다름_IllegalArgumentException() {
+	//
+	// }
+	//
+	// @Test
+	// void 실패_createBattle_사용자의_대결권이_0개임_IllegalStateExceiptino() {
+	//
+	// }
+	//
+	// @Test
+	// void 성공_createBattle_배틀을생성하는데_성공한다_Member의_countOfChallengeTicket감소_배틀생성() {
+	// 	//given
+	//
+	// 	//when
+	//
+	// 	//then
+	// }
 
 	private List<Battle> getBattles() {
 		List<Battle> battles = new ArrayList<>();
