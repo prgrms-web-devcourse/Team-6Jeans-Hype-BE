@@ -6,13 +6,13 @@ import lombok.Builder;
 import reactor.util.annotation.NonNull;
 
 @Builder
-public record MemberBattlePost(
+public record MemberBattlePostVO(
 	@NonNull String title,
 	@NonNull String albumUrl,
 	@NonNull String nickname) {
 
-	public static MemberBattlePost of(Post post) {
-		return MemberBattlePost.builder()
+	public static MemberBattlePostVO of(Post post) {
+		return MemberBattlePostVO.builder()
 			.title(post.getMusic().getTitle())
 			.albumUrl(post.getMusic().getAlbumCoverUrl())
 			.nickname(post.getMember().getNickname())

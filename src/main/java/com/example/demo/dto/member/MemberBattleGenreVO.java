@@ -6,13 +6,13 @@ import lombok.Builder;
 import reactor.util.annotation.NonNull;
 
 @Builder
-public record MemberBattleGenre(
+public record MemberBattleGenreVO(
 	@NonNull Genre genreValue,
 	@NonNull String genreName
 ) {
 
-	public static MemberBattleGenre of(Genre genre) {
-		return MemberBattleGenre.builder()
+	public static MemberBattleGenreVO of(Genre genre) {
+		return MemberBattleGenreVO.builder()
 			.genreValue(genre)
 			.genreName(genre.getName())
 			.build();

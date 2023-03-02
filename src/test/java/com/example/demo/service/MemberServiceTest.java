@@ -15,8 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
-import com.example.demo.dto.member.MemberBattleGenre;
-import com.example.demo.dto.member.MemberBattlePost;
+import com.example.demo.dto.member.MemberBattleGenreVO;
+import com.example.demo.dto.member.MemberBattlePostVO;
 import com.example.demo.dto.member.MemberBattleResponseDto;
 import com.example.demo.dto.member.MemberBattlesResponseDto;
 import com.example.demo.model.battle.Battle;
@@ -222,9 +222,9 @@ class MemberServiceTest {
 			.map(battle -> {
 				return MemberBattleResponseDto.builder()
 					.battleId(battle.getId())
-					.genre(MemberBattleGenre.of(battle.getGenre()))
-					.challenged(MemberBattlePost.of(battle.getChallengedPost().getPost()))
-					.challenging(MemberBattlePost.of(battle.getChallengingPost().getPost()))
+					.genre(MemberBattleGenreVO.of(battle.getGenre()))
+					.challenged(MemberBattlePostVO.of(battle.getChallengedPost().getPost()))
+					.challenging(MemberBattlePostVO.of(battle.getChallengingPost().getPost()))
 					.battleStatus(battle.getStatus())
 					.build();
 			})
