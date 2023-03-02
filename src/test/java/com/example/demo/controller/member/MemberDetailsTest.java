@@ -1,6 +1,6 @@
 package com.example.demo.controller.member;
 
-import static com.example.demo.controller.member.MemberTestUtil.*;
+import static com.example.demo.controller.TestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.common.ApiResponse;
+import com.example.demo.controller.MemberController;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;

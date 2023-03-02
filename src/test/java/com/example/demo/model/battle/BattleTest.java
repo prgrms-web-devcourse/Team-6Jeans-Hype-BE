@@ -1,6 +1,6 @@
 package com.example.demo.model.battle;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.stream.Stream;

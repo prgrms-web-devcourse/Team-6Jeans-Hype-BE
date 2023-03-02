@@ -36,6 +36,10 @@ public class BattleInfo {
 		this.voteCount = 0;
 	}
 
+	public void plusVoteCount() {
+		voteCount++;
+	}
+
 	void plusVoteCount(int voteCount) {
 		checkArgument(voteCount > 0, "투표 수는 음수일 수 없습니다.", voteCount);
 		this.voteCount += voteCount;

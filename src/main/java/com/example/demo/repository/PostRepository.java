@@ -6,13 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
-@Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 	List<Post> findByMusic_GenreAndIsPossibleBattle(Genre genre, boolean isPossibleBattle);
 
@@ -37,4 +35,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	List<Post> findAllByIdLimitAndGenreOrderByIdDesc(@Param("memberId") Long memberId, @Param("genre") Genre genre,
 		Pageable pageable);
 
+
+	List<Post> findByMemberAndIsPossibleBattleIsTrue(Member member);
 }

@@ -1,7 +1,7 @@
 package com.example.demo.controller.member;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
-import static com.example.demo.controller.member.MemberTestUtil.*;
+import static com.example.demo.controller.TestUtil.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -31,6 +31,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.common.ExceptionMessage;
+import com.example.demo.controller.MemberController;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.security.TokenAuthenticationFilter;
