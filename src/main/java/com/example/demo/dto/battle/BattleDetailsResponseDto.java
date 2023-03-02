@@ -9,16 +9,16 @@ import lombok.Builder;
 public record BattleDetailsResponseDto(
 	Long battleId,
 	GenreVoResponseDto battleGenre,
-	BattlePostResponseDto challenged,
-	BattlePostResponseDto challenging
+	BattlePostResponseVo challenged,
+	BattlePostResponseVo challenging
 ) {
 
 	public static BattleDetailsResponseDto of(Battle battle) {
 		return BattleDetailsResponseDto.builder()
 			.battleId(battle.getId())
 			.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
-			.challenged(BattlePostResponseDto.of(battle.getChallengedPost().getPost()))
-			.challenging(BattlePostResponseDto.of(battle.getChallengingPost().getPost()))
+			.challenged(BattlePostResponseVo.of(battle.getChallengedPost().getPost()))
+			.challenging(BattlePostResponseVo.of(battle.getChallengingPost().getPost()))
 			.build();
 	}
 }

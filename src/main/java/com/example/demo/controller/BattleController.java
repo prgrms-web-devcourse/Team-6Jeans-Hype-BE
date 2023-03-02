@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.ApiResponse;
+import com.example.demo.common.ResponseMessage;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.service.BattleService;
 import com.example.demo.service.PrincipalService;
@@ -25,7 +26,7 @@ public class BattleController {
 		BattleDetailsListResponseDto responseDto = battleService.getBattleDetailsListInProgress();
 		return ResponseEntity.ok(
 			ApiResponse.success(
-				"대결 상세 정보 리스트 조회 성공",
+				ResponseMessage.SUCCESS_FIND_ALL_BATTLE_DETAILS.getMessage(),
 				responseDto
 			)
 		);

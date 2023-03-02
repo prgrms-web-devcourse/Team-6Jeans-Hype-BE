@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.example.demo.controller.BattleController;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.dto.battle.BattleDetailsResponseDto;
-import com.example.demo.dto.battle.BattlePostResponseDto;
+import com.example.demo.dto.battle.BattlePostResponseVo;
 import com.example.demo.dto.genre.GenreVoResponseDto;
 import com.example.demo.dto.member.MusicVoResponseDto;
 import com.example.demo.model.post.Genre;
@@ -138,10 +138,10 @@ public class BattleDetailsListRestDocsTest {
 	private BattleDetailsListResponseDto createResponseDto() {
 		return new BattleDetailsListResponseDto(
 			List.of(
-				new BattleDetailsResponseDto(
-					1L,
-					GenreVoResponseDto.of(Genre.CLASSIC),
-					new BattlePostResponseDto(
+				BattleDetailsResponseDto.builder()
+					.battleId(1L)
+					.battleGenre(GenreVoResponseDto.of(Genre.CLASSIC))
+					.challenged(new BattlePostResponseVo(
 						1L,
 						MusicVoResponseDto.of(
 							new Music(
@@ -153,8 +153,8 @@ public class BattleDetailsListRestDocsTest {
 								"musicUrl"
 							)
 						)
-					),
-					new BattlePostResponseDto(
+					))
+					.challenging(new BattlePostResponseVo(
 						2L,
 						MusicVoResponseDto.of(
 							new Music(
@@ -166,8 +166,8 @@ public class BattleDetailsListRestDocsTest {
 								"musicUrl2"
 							)
 						)
-					)
-				)
+					))
+					.build()
 			)
 		);
 	}
