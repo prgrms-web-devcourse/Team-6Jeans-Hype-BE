@@ -31,6 +31,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.common.ExceptionMessage;
+import com.example.demo.controller.MemberController;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.security.TokenAuthenticationFilter;

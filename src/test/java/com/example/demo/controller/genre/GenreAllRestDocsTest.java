@@ -19,6 +19,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.example.demo.controller.GenreController;
 import com.example.demo.security.TokenAuthenticationFilter;
 
 @WithMockUser
