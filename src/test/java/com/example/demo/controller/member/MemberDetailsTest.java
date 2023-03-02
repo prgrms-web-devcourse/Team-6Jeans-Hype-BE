@@ -1,6 +1,6 @@
 package com.example.demo.controller.member;
 
-import static com.example.demo.controller.member.MemberTestUtil.*;
+import static com.example.demo.controller.TestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

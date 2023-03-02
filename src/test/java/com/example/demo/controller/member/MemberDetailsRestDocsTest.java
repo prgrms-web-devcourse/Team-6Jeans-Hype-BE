@@ -1,7 +1,7 @@
 package com.example.demo.controller.member;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
-import static com.example.demo.controller.member.MemberTestUtil.*;
+import static com.example.demo.controller.TestUtil.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
