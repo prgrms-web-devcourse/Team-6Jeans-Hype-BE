@@ -33,7 +33,7 @@ public class VoteService {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ExceptionMessage.NOT_FOUND_POST.getMessage()));
 
-		BattleVotedResult battleVotedResult = battle.vote(post);
+		BattleVotedResult battleVotedResult = battle.vote(post.getId());
 		saveVote(battle, post, member);
 
 		return new VoteResultResponseDto(
@@ -45,7 +45,11 @@ public class VoteService {
 	}
 
 	private void saveVote(Battle battle, Post post, Member member) {
-		Vote vote = Vote.createVote(battle, post, member);
+		Vote vote = Vote.builder()
+			.battle(battle)
+			.selectedPost(post)
+			.voter(member)
+			.build();
 		voteRepository.save(vote);
 	}
 }

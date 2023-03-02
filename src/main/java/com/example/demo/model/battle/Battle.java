@@ -109,8 +109,7 @@ public class Battle extends BaseEntity {
 		return Math.abs(challengedPost.getVoteCount() - challengingPost.getVoteCount());
 	}
 
-	public BattleVotedResult vote(Post post) {
-		Long postId = post.getId();
+	public BattleVotedResult vote(Long postId) {
 		Long challengedPostId = challengedPost.getPost().getId();
 		Long challengingPostId = challengingPost.getPost().getId();
 
