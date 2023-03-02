@@ -109,5 +109,24 @@ public class Battle extends BaseEntity {
 		return Math.abs(challengedPost.getVoteCount() - challengingPost.getVoteCount());
 	}
 
+	public BattleVotedResult vote(Long postId) {
+		Long challengedPostId = challengedPost.getPost().getId();
+		Long challengingPostId = challengingPost.getPost().getId();
+
+		if (Objects.equals(postId, challengingPostId)) {
+			challengingPost.plusVoteCount();
+			return voteResult(challengingPost.getVoteCount(), challengedPost.getVoteCount());
+		} else if (Objects.equals(postId, challengedPostId)) {
+			challengedPost.plusVoteCount();
+			return voteResult(challengedPost.getVoteCount(), challengingPost.getVoteCount());
+		} else {
+			throw new IllegalArgumentException(ExceptionMessage.POST_NOT_CONTAIN_BATTLE.getMessage());
+		}
+	}
+
+	private BattleVotedResult voteResult(int selectedPostVoteCnt, int oppositePostVoteCnt) {
+		return new BattleVotedResult(selectedPostVoteCnt, oppositePostVoteCnt);
+	}
+
 	// TODO: 2023-02-23 battle이 특정 Post를 가지고 있는지 검증하는 메소드
 }

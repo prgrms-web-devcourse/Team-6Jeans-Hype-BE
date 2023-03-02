@@ -1,4 +1,4 @@
-package com.example.demo.dto.member;
+package com.example.demo.dto.common;
 
 import com.example.demo.dto.genre.GenreVoResponseDto;
 import com.example.demo.model.post.Music;

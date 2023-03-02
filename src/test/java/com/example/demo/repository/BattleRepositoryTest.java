@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,19 @@ class BattleRepositoryTest {
 			assertThat(battle.getUpdatedAt().isAfter(before)).isEqualTo(true);
 			assertThat(battle.getUpdatedAt().isBefore(after)).isEqualTo(true);
 		}
+	}
+
+	@Test
+	void 대결ID로_대결을_조회할_수_있다() {
+		Battle battle = createBattle();
+		battleRepository.save(battle);
+
+		Optional<Battle> result = battleRepository.findByIdPessimisticLock(battle.getId());
+
+		assertThat(result).isPresent();
+		assertThat(result.get())
+			.usingRecursiveComparison()
+			.isEqualTo(battle);
 	}
 
 	private List<Battle> getBattles() {
