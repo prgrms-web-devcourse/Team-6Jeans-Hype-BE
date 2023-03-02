@@ -28,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BattleService {
 
-	private PrincipalService principalService;
-	private BattleRepository battleRepository;
-	private PostRepository postRepository;
+	private final PrincipalService principalService;
+	private final BattleRepository battleRepository;
+	private final PostRepository postRepository;
 
 	@Transactional
 	public Long createBattle(Principal principal, BattleCreateRequestDto battleCreateRequestDto) {
