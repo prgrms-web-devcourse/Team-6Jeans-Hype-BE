@@ -142,6 +142,46 @@ class PostRepositoryTest {
 		assertThat(isExisted).isEqualTo(true);
 	}
 
+	@Test
+	void 특정_유저의_대결가능한_대결_리스트를_조회할_수_있다() {
+		// given
+		memberRepository.save(member);
+		List<Post> posts = getPosts();
+
+		posts = posts.stream().filter(Post::isPossibleBattle).toList();
+
+		// when
+		List<Post> result = postRepository.findByMemberAndIsPossibleBattleIsTrue(member);
+
+		// then
+		assertThat(result).isEqualTo(posts);
+	}
+
+	private List<Post> getPosts() {
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			Post post = createPost(member);
+			posts.add(post);
+			member.getPosts().add(post);
+			postRepository.save(post);
+		}
+		return posts;
+	}
+
+	private Post createPost(Member member) {
+		return Post.create(
+			"musicId",
+			"albumCoverUrl",
+			"hype",
+			"musicName",
+			Genre.K_POP,
+			"musicUrl",
+			"recommend",
+			true,
+			member
+		);
+	}
+
 	private Member createMember() {
 		return Member.builder()
 			.profileImageUrl("profile")
