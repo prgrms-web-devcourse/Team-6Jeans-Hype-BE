@@ -10,13 +10,15 @@ import reactor.util.annotation.NonNull;
 public record PostBattleCandidateMusicResponseDto(
 	@NonNull String musicName,
 	@NonNull String albumCoverUrl,
-	@NonNull String singer
+	@NonNull String singer,
+	@NonNull String musicUrl
 ) {
 	public static PostBattleCandidateMusicResponseDto of(Music music) {
 		return PostBattleCandidateMusicResponseDto.builder()
 			.musicName(music.getTitle())
 			.albumCoverUrl(music.getAlbumCoverUrl())
 			.singer(music.getSinger())
+			.musicUrl(music.getMusicUrl())
 			.build();
 	}
 }

@@ -17,7 +17,6 @@ jobs:
           echo "${{secrets.PROD_DB_ENV}}" > ./prod_db_info.env
           echo "${{secrets.SENSITIVE_ENV}}" > ./sensitive.env
 
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -36,11 +35,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         shell: bash
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./build/reports/jacoco/test/jacocoTestReport.xml
 
       - name: Run Checkstyle
         run: ./gradlew checkstyleMain

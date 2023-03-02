@@ -126,6 +126,28 @@ class MemberTest {
 			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
+	@Test
+	void 성공_유저의_성공_수를_1만큼_더할_수_있다() {
+		Member member = createMember(profileImageUrl, nickname, refreshToken, socialType, socialId);
+		member.plusCount();
+		assertThat(member.getVictoryCount()).isEqualTo(1);
+	}
+
+	@Test
+	void 성공_토큰을_업데이트하면_유저의_토큰이_업데이트_된다() {
+		Member member = createMember(profileImageUrl, nickname, refreshToken, socialType, socialId);
+		member.setRefreshToken("token");
+		assertThat(member.getRefreshToken()).isEqualTo("token");
+	}
+
+	@ParameterizedTest
+	@NullSource
+	void 실패_null_토큰을_업데이트하면_IllegalArgumentException_에러가_발생한다(String value) {
+		Member member = createMember(profileImageUrl, nickname, refreshToken, socialType, socialId);
+		assertThatThrownBy(() -> member.setRefreshToken(value))
+			.isExactlyInstanceOf(IllegalArgumentException.class);
+	}
+
 	@NotNull
 	private String getStringOver24Length() {
 		StringBuilder name = new StringBuilder();
@@ -134,7 +156,6 @@ class MemberTest {
 		}
 		return name.toString();
 	}
-
 
 	private Member createMember(String profileImageUrl, String nickname,
 		String refreshToken, Social socialType, String socialId) {

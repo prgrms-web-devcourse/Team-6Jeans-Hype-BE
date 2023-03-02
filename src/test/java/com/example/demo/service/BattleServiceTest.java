@@ -1,51 +1,76 @@
 package com.example.demo.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.demo.model.battle.Battle;
+import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
+import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
-import com.example.demo.repository.MemberRepository;
-import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.BattleRepository;
 
-@DataJpaTest
-@Transactional
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class BattleServiceTest {
-	@Autowired
-	BattleService battleService;
-	@Autowired
-	MemberRepository memberRepository;
-	@Autowired
-	PostRepository postRepository;
+
+	@InjectMocks
+	private BattleService battleService;
 	@Mock
-	Principal memberPrincipal;
+	private BattleRepository battleRepository;
 
-	@BeforeAll
-	void addDummyData() {
-		Member firstMember = createMember();
-		Member secondMember = createMember();
-		memberRepository.save(firstMember);
-		memberRepository.save(secondMember);
+	private final Genre genre = Genre.K_POP;
+	private final BattleStatus progressStatus = BattleStatus.PROGRESS;
+	private final Post challengedPost = createPost(createMember());
+	private final Post challengingPost = createPost(createMember());
 
-		P
+	@Test
+	void 기간이_지난_대결을_종료할_수_있다() {
+		// given
+		List<Battle> battles = getBattles();
+
+		// when
+		when(battleRepository.findByStatusAndCreatedAtIsBefore(any(), any())).thenReturn(battles);
+
+		battleService.quitBattles();
+
+		// then
+		for (Battle battle : battles) {
+			assertThat(battle.getStatus()).isEqualTo(BattleStatus.END);
+		}
+
+		verify(battleRepository).findByStatusAndCreatedAtIsBefore(any(), any());
 	}
 
-	@BeforeEach
-	void setup() {
+	@Test
+	void 승자의_승리_포인트를_업데이트할_수_있다() {
+		// given
+		List<Battle> battles = getBattles();
+		for (Battle battle : battles) {
+			battle.plusVoteCount(battle.getChallengedPost(), 10);
+		}
 
-		when(memberPrincipal.getName()).thenReturn("1");
+		// when
+		when(battleRepository.findByStatusAndUpdatedAtBetween(any(), any(), any())).thenReturn(battles);
+
+		battleService.updateWinnerPoint(7);
+
+		// then
+		for (Battle battle : battles) {
+			assertThat(battle.getChallengedPost().getPost().getMember().getMemberScore().getVictoryPoint())
+				.isEqualTo(10 * battles.size());
+		}
+
+		verify(battleRepository).findByStatusAndUpdatedAtBetween(any(), any(), any());
 	}
 
 	@Test
@@ -80,18 +105,35 @@ class BattleServiceTest {
 		//then
 	}
 
-	private Post createPost(String musicId, Member member) {
-		// PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
-		// 	.musicId(musicId)
-		// 	.musicName("musicName")
-		// 	.musicUrl("musicUrl")
-		// 	.albumCoverUrl("albumCoverUrl")
-		// 	.genre(Genre.BALLAD)
-		// 	.singer("singer")
-		// 	.isBattlePossible("isPossibleBattle")
-		// 	.content(content)
-		// 	.build();
-		// Post post = postCreateRequestDto.toEntity(member);
+	private List<Battle> getBattles() {
+		List<Battle> battles = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			battles.add(createBattle());
+		}
+		return battles;
+	}
+
+	private Battle createBattle() {
+		return Battle.builder()
+			.genre(genre)
+			.status(progressStatus)
+			.challengedPost(challengedPost)
+			.challengingPost(challengingPost)
+			.build();
+	}
+
+	private Post createPost(Member member) {
+		return Post.create(
+			"musicId",
+			"albumCoverUrl",
+			"hype",
+			"musicName",
+			genre,
+			"musicUrl",
+			"recommend",
+			true,
+			member
+		);
 	}
 
 	private Member createMember() {
@@ -103,4 +145,5 @@ class BattleServiceTest {
 			.socialId("socialId")
 			.build();
 	}
+
 }

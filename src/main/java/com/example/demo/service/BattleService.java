@@ -4,6 +4,8 @@ import static com.example.demo.common.ExceptionMessage.*;
 
 import java.security.Principal;
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -22,6 +24,7 @@ import com.example.demo.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BattleService {
 
@@ -93,5 +96,26 @@ public class BattleService {
 		if (memberByPrincipalId != challengingMemberId) {
 			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_NOT_MEMBERS_POST.getMessage());
 		}
+	}
+
+	@Transactional
+	public void quitBattles() {
+		findBattleProgress().forEach(Battle::quitBattle);
+	}
+
+	@Transactional
+	public void updateWinnerPoint(int perm) {
+		findBattlesEndWithinPerm(perm).forEach(Battle::updateWinnerPoint);
+	}
+
+	private List<Battle> findBattleProgress() {
+		LocalDateTime endDate = LocalDateTime.now().minusDays(2);
+		return battleRepository.findByStatusAndCreatedAtIsBefore(BattleStatus.PROGRESS, endDate);
+	}
+
+	private List<Battle> findBattlesEndWithinPerm(int perm) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime lastBattleDay = now.minusDays(perm - 1);
+		return battleRepository.findByStatusAndUpdatedAtBetween(BattleStatus.END, lastBattleDay, now);
 	}
 }

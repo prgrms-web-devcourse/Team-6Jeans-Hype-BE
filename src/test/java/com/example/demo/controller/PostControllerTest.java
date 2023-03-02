@@ -218,7 +218,9 @@ class PostControllerTest {
 					fieldWithPath("data.posts[].music.albumCoverUrl").type(STRING)
 						.description("조회한 공유글 음악 앨범 표지 이미지 url"),
 					fieldWithPath("data.posts[].music.singer").type(STRING).description("조회한 공유글 음악 가수명"),
-					fieldWithPath("data.posts[].music.genre").type(STRING).description("조회한 공유글 음악 장르"),
+					fieldWithPath("data.posts[].music.genre").type(OBJECT).description("조회한 공유글 음악 장르 정보"),
+					fieldWithPath("data.posts[].music.genre.genreValue").type(STRING).description("조회한 공유글 음악 장르값"),
+					fieldWithPath("data.posts[].music.genre.genreName").type(STRING).description("조회한 공유글 음악 장르명"),
 					fieldWithPath("data.posts[].likeCount").type(NUMBER).description("조회한 공유글의 좋아요 수"),
 					fieldWithPath("data.posts[].isBattlePossible").type(BOOLEAN).description("조회한 공유글 대결 가능 여부"),
 					fieldWithPath("data.posts[].nickname").type(STRING).description("조회한 공유글 작성자 이름")
@@ -337,6 +339,7 @@ class PostControllerTest {
 					fieldWithPath("data.posts[].music.musicName").type(STRING).description("대결 후보곡 노래 제목"),
 					fieldWithPath("data.posts[].music.albumCoverUrl").type(STRING)
 						.description("대결 후보곡 노래 앨범 이미지 url"),
+					fieldWithPath("data.posts[].music.musicUrl").type(STRING).description("대결 후보곡 노래 음원 url"),
 					fieldWithPath("data.posts[].music.singer").type(STRING).description("대결 후보곡 노래 가수명")
 				)
 			));
