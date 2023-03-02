@@ -17,9 +17,7 @@ import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.VoteRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class VoteService {
