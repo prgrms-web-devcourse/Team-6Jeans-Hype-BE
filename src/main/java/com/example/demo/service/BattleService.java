@@ -57,6 +57,7 @@ public class BattleService {
 		validMemberHasNotChallengedPost(challengedPost, memberByPrincipal);
 		validMemberChallengeTicket(memberByPrincipal);
 		Genre targetGenre = validGenre(challengingPost, challengedPost);
+		validSameMusic(challengingPost, challengedPost);
 		Battle newBattle = Battle.builder()
 			.challengingPost(challengingPost)
 			.challengedPost(challengedPost)
@@ -66,6 +67,14 @@ public class BattleService {
 		battleRepository.save(newBattle);
 		memberByPrincipal.subtractCountOfChallengeTicket();
 		return newBattle.getId();
+	}
+
+	private void validSameMusic(Post challengingPost, Post challengedPost) {
+		String challenedPostMusicId = challengedPost.getMusic().getMusicId();
+		String challengingPostMusicId = challengingPost.getMusic().getMusicId();
+		if (challengingPostMusicId == challenedPostMusicId) {
+			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_SAME_MUSIC.getMessage());
+		}
 	}
 
 	private Genre validGenre(Post challengingPost, Post challengedPost) {

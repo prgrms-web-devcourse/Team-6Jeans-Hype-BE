@@ -14,6 +14,7 @@ public enum ExceptionMessage {
 	CANNOT_MAKE_BATTLE_NOT_MEMBERS_POST("선택한 post가 사용자가 소유하고 있는 Post가 아닙니다."),
 	CANNOT_MAKE_BATTLE_OWN_CHALLENED_POST("사용자의 post에 배틀을 신청할 수 없습니다."),
 	CANNOT_MAKE_BATTLE_DIFFERENT_GENRE("두 post의 음악 장르가 다릅니다."),
+	CANNOT_MAKE_BATTLE_SAME_MUSIC("도 Post가 같은 음악입니다."),
 	//IllegalStateException
 	CANNOT_MAKE_BATTLE_NOT_ENOUGH_CHALLENGE_TICKET("사용자의 대결권이 부족합니다.");
 
