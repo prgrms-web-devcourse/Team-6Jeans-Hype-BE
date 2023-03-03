@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,8 @@ class PostRepositoryTest {
 		List<Post> posts = getPosts(genre, isPossibleBattle);
 		memberRepository.save(member);
 		postRepository.saveAll(posts);
+
+		Collections.reverse(posts);
 
 		// when
 		List<Post> actual = postRepository
