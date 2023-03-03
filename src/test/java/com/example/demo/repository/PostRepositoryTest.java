@@ -39,8 +39,6 @@ class PostRepositoryTest {
 		memberRepository.save(member);
 		postRepository.saveAll(posts);
 
-		Collections.reverse(posts);
-
 		// when
 		List<Post> actual = postRepository
 			.findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -172,6 +170,9 @@ class PostRepositoryTest {
 			member.getPosts().add(post);
 			postRepository.save(post);
 		}
+
+		Collections.reverse(posts);
+
 		return posts;
 	}
 
