@@ -6,6 +6,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -65,9 +66,9 @@ public class BattleDetailsListRestDocsTest {
 		// given
 		BattleDetailsListResponseDto expected = createResponseDto();
 		// when
-		when(battleService.getBattleDetailsListInProgress())
+		when(battleService.getBattleDetailsListInProgress(any(Principal.class)))
 			.thenReturn(expected);
-		ResultActions actions = mockMvc.perform(get("/api/v1/battles")
+		ResultActions actions = mockMvc.perform(get("/api/v1/battles/details")
 			.contentType(MediaType.APPLICATION_JSON));
 		// then
 		actions
