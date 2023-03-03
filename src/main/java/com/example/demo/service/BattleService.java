@@ -72,13 +72,13 @@ public class BattleService {
 	private void validSameMusic(Post challengingPost, Post challengedPost) {
 		String challenedPostMusicId = challengedPost.getMusic().getMusicId();
 		String challengingPostMusicId = challengingPost.getMusic().getMusicId();
-		if (challengingPostMusicId == challenedPostMusicId) {
+		if (challengingPostMusicId.equals(challenedPostMusicId)) {
 			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_SAME_MUSIC.getMessage());
 		}
 	}
 
 	private Genre validGenre(Post challengingPost, Post challengedPost) {
-		if (challengingPost.getMusic().getGenre() != challengedPost.getMusic().getGenre()) {
+		if (!challengingPost.getMusic().getGenre().equals(challengedPost.getMusic().getGenre())) {
 			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_DIFFERENT_GENRE.getMessage());
 		} else {
 			return challengedPost.getMusic().getGenre();
