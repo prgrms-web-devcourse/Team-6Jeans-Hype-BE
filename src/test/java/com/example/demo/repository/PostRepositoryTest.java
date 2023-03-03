@@ -4,12 +4,14 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
@@ -182,6 +184,30 @@ class PostRepositoryTest {
 			true,
 			member
 		);
+	}
+
+	@Test
+	@Transactional
+	void 성공_게시글ID와_Battle가능여부로_Post를_가져올_수_있다() {
+		String musicId = "123456789";
+		Post post = Post.create(musicId, "album", "singer", "title", genre,
+			"url", "content", isPossibleBattle, member);
+		memberRepository.save(member);
+		postRepository.save(post);
+		List<Post> posts = postRepository.findAll();
+		for (Post exsistPost : posts) {
+			Long exsistPostId = exsistPost.getId();
+			Optional<Post> postByIdAndIsPossibleBattle = postRepository.findPostByIdAndIsPossibleBattle(exsistPostId,
+				true);
+			assertThat(postByIdAndIsPossibleBattle.get())
+				.usingRecursiveComparison().ignoringFields("id")
+				.isEqualTo(post);
+			Optional<Post> optionalPost = postRepository.findPostByIdAndIsPossibleBattle(exsistPostId,
+				false);
+			assertThat(optionalPost.isEmpty()).isEqualTo(true);
+
+		}
+
 	}
 
 	private Member createMember() {

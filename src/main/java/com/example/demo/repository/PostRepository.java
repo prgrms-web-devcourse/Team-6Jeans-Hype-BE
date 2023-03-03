@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	List<Post> findByMusic_Genre(Genre genre, Sort sort);
 
 	List<Post> findByIsPossibleBattle(boolean isPossibleBattle, Sort sort);
+
+	Optional<Post> findPostByIdAndIsPossibleBattle(Long id, boolean isPossibleBattle);
 
 	List<Post> findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(Member member, Genre genre);
 
