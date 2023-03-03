@@ -8,15 +8,17 @@ import reactor.util.annotation.NonNull;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record PostBattleCandidateMusicResponseDto(
-	@NonNull String musicName,
+	@NonNull String title,
 	@NonNull String albumCoverUrl,
-	@NonNull String singer
+	@NonNull String singer,
+	@NonNull String musicUrl
 ) {
 	public static PostBattleCandidateMusicResponseDto of(Music music) {
 		return PostBattleCandidateMusicResponseDto.builder()
-			.musicName(music.getTitle())
+			.title(music.getTitle())
 			.albumCoverUrl(music.getAlbumCoverUrl())
 			.singer(music.getSinger())
+			.musicUrl(music.getMusicUrl())
 			.build();
 	}
 }

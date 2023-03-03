@@ -1,6 +1,6 @@
 package com.example.demo.controller.member;
 
-import static com.example.demo.controller.member.MemberTestUtil.*;
+import static com.example.demo.controller.TestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -19,8 +19,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.common.ApiResponse;
+import com.example.demo.controller.MemberController;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.PostRepository;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.PrincipalService;
 
@@ -30,6 +32,9 @@ public class MemberDetailsTest {
 	@Mock
 	private MemberRepository memberRepository;
 
+	@Mock
+	private PostRepository postRepository;
+
 	private PrincipalService principalService;
 	private MemberService memberService;
 	private MemberController memberController;
@@ -37,8 +42,26 @@ public class MemberDetailsTest {
 	@BeforeEach
 	void setUp() {
 		principalService = new PrincipalService(memberRepository);
-		memberService = new MemberService(memberRepository);
+		memberService = new MemberService(principalService, postRepository, memberRepository);
 		memberController = new MemberController(principalService, memberService);
+	}
+
+	@Test
+	public void 성공_나의_세부정보를_조회할_수_있다() {
+		// given
+		Member member = createMember();
+		UserDetails userDetails = createValidUserDetails();
+		TestAuthentication authentication = new TestAuthentication(userDetails);
+
+		// when
+		when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication,
+			Optional.of(1L));
+
+		// then
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(responseEntity.getBody().success()).isTrue();
+		assertThat(responseEntity.getBody().data()).isNotNull();
 	}
 
 	@Test
@@ -50,7 +73,8 @@ public class MemberDetailsTest {
 
 		// when
 		when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
-		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication);
+		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication,
+			Optional.of(2L));
 
 		// then
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -70,7 +94,7 @@ public class MemberDetailsTest {
 
 		// then
 		assertThatThrownBy(() -> {
-			memberController.getMemberProfile(authentication);
+			memberController.getMemberProfile(authentication, Optional.of(1L));
 		})
 			.isExactlyInstanceOf(EntityNotFoundException.class);
 	}

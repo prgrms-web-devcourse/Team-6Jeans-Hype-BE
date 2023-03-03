@@ -1,5 +1,6 @@
 package com.example.demo.dto.member;
 
+import com.example.demo.dto.common.MusicVoResponseDto;
 import com.example.demo.model.post.Post;
 
 import lombok.Builder;

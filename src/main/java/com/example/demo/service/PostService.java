@@ -41,6 +41,11 @@ public class PostService {
 
 		Post post = postRequestDto.toEntity(member);
 		postRepository.save(post);
+
+		if (post.isPossibleBattle()) {
+			member.addOneChallengeTicket();
+		}
+
 		return post.getId();
 	}
 

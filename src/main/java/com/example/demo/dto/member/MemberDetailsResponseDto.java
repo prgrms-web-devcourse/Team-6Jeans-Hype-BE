@@ -10,8 +10,7 @@ public record MemberDetailsResponseDto(
 	String profileImageUrl,
 	int ranking,
 	int victoryPoint,
-	int victoryCount,
-	int countOfChanllenge
+	int victoryCount
 ) {
 	public static MemberDetailsResponseDto of(Member member) {
 		return MemberDetailsResponseDto.builder()
@@ -20,7 +19,6 @@ public record MemberDetailsResponseDto(
 			.ranking(member.getRanking())
 			.victoryPoint(member.getVictoryPoint())
 			.victoryCount(member.getVictoryCount())
-			.countOfChanllenge(member.getCountOfChallengeTicket())
 			.build();
 	}
 }

@@ -3,7 +3,6 @@ name: deploy
 on:
   push:
     branches: [ develop ]
-
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -32,11 +31,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         shell: bash
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./build/reports/jacoco/test/jacocoTestReport.xml
 
       - name: Run Checkstyle
         run: ./gradlew checkstyleMain

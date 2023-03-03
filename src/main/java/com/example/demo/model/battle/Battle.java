@@ -3,6 +3,7 @@ package com.example.demo.model.battle;
 import static com.google.common.base.Preconditions.*;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.AttributeOverride;
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import com.example.demo.common.ExceptionMessage;
 import com.example.demo.model.BaseEntity;
+import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
@@ -62,11 +64,92 @@ public class Battle extends BaseEntity {
 		checkArgument(Objects.nonNull(status), errorMessageForNullPost);
 		checkArgument(Objects.nonNull(challengedPost), errorMessageForNullPost);
 		checkArgument(Objects.nonNull(challengingPost), errorMessageForNullPost);
+		setChallengedPost(challengedPost);
+		setChallengingPost(challengingPost);
 
 		this.genre = genre;
 		this.status = status;
+
+	}
+
+	private void setChallengedPost(Post challengedPost) {
+		if (this.challengedPost != null) {
+			this.challengedPost.getPost().getChallengedBattles().remove(this);
+		}
 		this.challengedPost = new BattleInfo(challengedPost);
+		challengedPost.getChallengedBattles().add(this);
+	}
+
+	private void setChallengingPost(Post challengingPost) {
+		if (this.challengingPost != null) {
+			this.challengingPost.getPost().getChallengingBattles().remove(this);
+		}
 		this.challengingPost = new BattleInfo(challengingPost);
+		challengingPost.getChallengingBattles().add(this);
+	}
+
+	public void plusVoteCount(BattleInfo battleInfo, int voteCount) {
+		battleInfo.plusVoteCount(voteCount);
+	}
+
+	public void quitBattle() {
+		this.status = BattleStatus.END;
+		updateCountOfWinner();
+	}
+
+	public void updateWinnerPoint() {
+		Optional<Member> winner = getWinner();
+		if (winner.isPresent()) {
+			int point = getPoint();
+			winner.get().plusPoint(point);
+		}
+	}
+
+	private void updateCountOfWinner() {
+		Optional<Member> winner = getWinner();
+		winner.ifPresent(Member::plusCount);
+	}
+
+	public Optional<Member> getWinner() {
+		int diff = challengedPost.getVoteCount() - challengingPost.getVoteCount();
+
+		if (diff > 0) {
+			return Optional.of(challengedPost.getPost().getMember());
+		} else if (diff < 0) {
+			return Optional.of(challengingPost.getPost().getMember());
+		}
+
+		return Optional.empty();
+	}
+
+	public int getPoint() {
+		return Math.abs(challengedPost.getVoteCount() - challengingPost.getVoteCount());
+	}
+
+	public BattleVotedResult vote(Long postId) {
+		Long challengedPostId = challengedPost.getPost().getId();
+		Long challengingPostId = challengingPost.getPost().getId();
+
+		if (Objects.equals(postId, challengingPostId)) {
+			challengingPost.plusVoteCount();
+			return voteResult(challengingPost.getVoteCount(), challengedPost.getVoteCount());
+		} else if (Objects.equals(postId, challengedPostId)) {
+			challengedPost.plusVoteCount();
+			return voteResult(challengedPost.getVoteCount(), challengingPost.getVoteCount());
+		} else {
+			throw new IllegalArgumentException(ExceptionMessage.POST_NOT_CONTAIN_BATTLE.getMessage());
+		}
+	}
+
+	private BattleVotedResult voteResult(int selectedPostVoteCnt, int oppositePostVoteCnt) {
+		return new BattleVotedResult(selectedPostVoteCnt, oppositePostVoteCnt);
+	}
+
+	public Boolean isProgress() {
+		return switch (this.status) {
+			case PROGRESS -> true;
+			case END -> false;
+		};
 	}
 
 	// TODO: 2023-02-23 battle이 특정 Post를 가지고 있는지 검증하는 메소드

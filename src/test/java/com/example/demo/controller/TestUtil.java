@@ -1,4 +1,4 @@
-package com.example.demo.controller.member;
+package com.example.demo.controller;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,9 +13,9 @@ import com.example.demo.model.member.Social;
 
 import lombok.AllArgsConstructor;
 
-class MemberTestUtil {
+public class TestUtil {
 
-	static Member createMember() {
+	public static Member createMember() {
 		return new Member("https://hype.music/images/1",
 			"nickname",
 			"refreshToken",
@@ -23,7 +23,15 @@ class MemberTestUtil {
 			"socialId");
 	}
 
-	static class TestAuthentication implements Authentication {
+	public static Member createMember(String nickname) {
+		return new Member("https://hype.music/images/1",
+			nickname,
+			"refreshToken",
+			Social.GOOGLE,
+			"socialId");
+	}
+
+	public static class TestAuthentication implements Authentication {
 		private final UserDetails userDetails;
 
 		public TestAuthentication(UserDetails userDetails) {
@@ -66,7 +74,7 @@ class MemberTestUtil {
 	}
 
 	@AllArgsConstructor
-	static class MemberDetails implements UserDetails {
+	public static class MemberDetails implements UserDetails {
 
 		String memberId;
 

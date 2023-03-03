@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class BattleInfo {
+public class BattleInfo {
 
 	@Min(value = 0)
 	private int voteCount;
@@ -34,5 +34,14 @@ class BattleInfo {
 			String.format("배틀에서 포스트 %s", ExceptionMessage.OBJECT_NOT_NULL.getMessage()));
 		this.post = post;
 		this.voteCount = 0;
+	}
+
+	public void plusVoteCount() {
+		voteCount++;
+	}
+
+	void plusVoteCount(int voteCount) {
+		checkArgument(voteCount > 0, "투표 수는 음수일 수 없습니다.", voteCount);
+		this.voteCount += voteCount;
 	}
 }
