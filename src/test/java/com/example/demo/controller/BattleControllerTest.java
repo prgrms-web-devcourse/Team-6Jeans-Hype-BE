@@ -471,8 +471,10 @@ class BattleControllerTest {
 										+ "PROGRESS || END"),
 								parameterWithName("genre")
 									.type(SimpleType.STRING)
-									.optional().description("조회하고 싶은 배틀들의 장르값을 넘겨줍니다.\n"
-										+ "값을 주지 않는다면 모든 장르의 배틀들을 조회합니다.")
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
 							).responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
 								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
@@ -534,8 +536,10 @@ class BattleControllerTest {
 										+ "PROGRESS || END"),
 								parameterWithName("genre")
 									.type(SimpleType.STRING)
-									.optional().description("조회하고 싶은 배틀들의 장르값을 넘겨줍니다.\n"
-										+ "값을 주지 않는다면 모든 장르의 배틀들을 조회합니다.")
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
 							).responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
 								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
@@ -597,8 +601,10 @@ class BattleControllerTest {
 										+ "PROGRESS || END"),
 								parameterWithName("genre")
 									.type(SimpleType.STRING)
-									.optional().description("조회하고 싶은 배틀들의 장르값을 넘겨줍니다.\n"
-										+ "값을 주지 않는다면 모든 장르의 배틀들을 조회합니다.")
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
 							).responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
 								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
@@ -661,8 +667,10 @@ class BattleControllerTest {
 										+ "PROGRESS || END"),
 								parameterWithName("genre")
 									.type(SimpleType.STRING)
-									.optional().description("조회하고 싶은 배틀들의 장르값을 넘겨줍니다.\n"
-										+ "값을 주지 않는다면 모든 장르의 배틀들을 조회합니다.")
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
 							).responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
 								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
@@ -725,8 +733,10 @@ class BattleControllerTest {
 										+ "PROGRESS || END"),
 								parameterWithName("genre")
 									.type(SimpleType.STRING)
-									.optional().description("조회하고 싶은 배틀들의 장르값을 넘겨줍니다.\n"
-										+ "값을 주지 않는다면 모든 장르의 배틀들을 조회합니다.")
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
 							).responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
 								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
@@ -790,8 +800,10 @@ class BattleControllerTest {
 										+ "PROGRESS || END"),
 								parameterWithName("genre")
 									.type(SimpleType.STRING)
-									.optional().description("조회하고 싶은 배틀들의 장르값을 넘겨줍니다.\n"
-										+ "값을 주지 않는다면 모든 장르의 배틀들을 조회합니다.")
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
 							).responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
 								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
