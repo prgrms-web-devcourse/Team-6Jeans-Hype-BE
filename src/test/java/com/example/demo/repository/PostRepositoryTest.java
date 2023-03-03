@@ -54,6 +54,9 @@ class PostRepositoryTest {
 				genre, "url", "content", isPossibleBattle, member);
 			posts.add(post);
 		}
+
+		Collections.reverse(posts);
+
 		return posts;
 	}
 
@@ -78,6 +81,9 @@ class PostRepositoryTest {
 				genre, "url", "content", isPossibleBattle, member);
 			posts.add(post);
 		}
+
+		Collections.reverse(posts);
+
 		return posts;
 	}
 
@@ -103,6 +109,9 @@ class PostRepositoryTest {
 				genre, "url", "content", isPossibleBattle, member);
 			posts.add(post);
 		}
+
+		Collections.reverse(posts);
+
 		return posts;
 	}
 
@@ -170,8 +179,6 @@ class PostRepositoryTest {
 			member.getPosts().add(post);
 			postRepository.save(post);
 		}
-
-		Collections.reverse(posts);
 
 		return posts;
 	}
