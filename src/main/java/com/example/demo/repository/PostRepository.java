@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	List<Post> findByIsPossibleBattle(boolean isPossibleBattle);
 
+	Optional<Post> findPostByIdAndIsPossibleBattle(Long id, boolean isPossibleBattle);
+
 	List<Post> findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(Member member, Genre genre);
 
 	boolean existsByMemberAndMusic_MusicId(Member member, String musicId);
@@ -34,7 +37,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 		+ "order by p.id desc")
 	List<Post> findAllByIdLimitAndGenreOrderByIdDesc(@Param("memberId") Long memberId, @Param("genre") Genre genre,
 		Pageable pageable);
-
 
 	List<Post> findByMemberAndIsPossibleBattleIsTrue(Member member);
 }
