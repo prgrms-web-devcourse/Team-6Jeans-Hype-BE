@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder
 public record BattleCreateRequestDto(
-	@NotNull long challengedPostId,
-	@NotNull long challengingPostId
+	@NotNull Long challengedPostId,
+	@NotNull Long challengingPostId
 ) {
 }
