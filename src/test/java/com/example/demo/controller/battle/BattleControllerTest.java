@@ -41,12 +41,8 @@ import com.example.demo.service.BattleService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @WithMockUser
 @ExtendWith(RestDocumentationExtension.class)
-// @WebMvcTest(value = BattleController.class)
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -93,10 +89,6 @@ class BattleControllerTest {
 			postRepository.save(secondKPopPost);
 			postRepository.save(thirdBalladPost);
 			postRepository.save(secondBalladPostSameWithFirst);
-			log.info(String.valueOf(firstBalladPost.getId()));
-			log.info(String.valueOf(secondBalladPost.getId()));
-			log.info(String.valueOf(firstKPopPost.getId()));
-			log.info(String.valueOf(secondKPopPost.getId()));
 		}
 
 		@Test
@@ -155,7 +147,7 @@ class BattleControllerTest {
 
 			BattleCreateRequestDto battleCreateRequestDto = BattleCreateRequestDto
 				.builder()
-				.challengingPostId(30)
+				.challengingPostId(30L)
 				.challengedPostId(secondBalladPost.getId())
 				.build();
 
