@@ -1,6 +1,5 @@
 ALTER TABLE battle
-DROP
-FOREIGN KEY FKfhohk3campcgr4i0738qr95n7;
+    DROP FOREIGN KEY FKfhohk3campcgr4i0738qr95n7;
 ALTER TABLE battle
-DROP
+    DROP COLUMN member_id;
 COLUMN member_id;
