@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.ApiResponse;
+import com.example.demo.common.ExceptionMessage;
 import com.example.demo.common.ResponseMessage;
 import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.dto.member.MemberBattlesResponseDto;
 import com.example.demo.dto.member.MemberDetailsResponseDto;
+import com.example.demo.dto.member.MemberMyDetailsResponseDto;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
+import com.example.demo.service.MemberFilteringCase;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.PrincipalService;
 
@@ -47,15 +50,30 @@ public class MemberController {
 	}
 
 	@GetMapping("/profile")
-	public ResponseEntity<ApiResponse> getMemberProfile(Principal principal) {
-		Member member = principalService.getMemberByPrincipal(principal);
-		MemberDetailsResponseDto memberDetailsInfo = MemberDetailsResponseDto.of(member);
+	public ResponseEntity<ApiResponse> getMemberProfile(
+		Principal principal,
+		@RequestParam Optional<Long> memberId) {
 
-		return ResponseEntity.ok(
-			ApiResponse.success(
-				"유저 상세 정보 조회 성공",
-				memberDetailsInfo)
-		);
+		Member member = principalService.getMemberByPrincipal(principal);
+		// TODO : 반환 Dto가 달라서 컨트롤러단에 분기를 둬야할듯 -> 없애려면 api 나누기, 다른 의견있다면 말해주삼.
+		switch (MemberFilteringCase.getCase(memberId, member.getId())) {
+			case MY_PAGE -> {
+				return ResponseEntity.ok(
+					ApiResponse.success(
+						ResponseMessage.SUCCESS_MY_PAGE_PROFILE.getMessage(),
+						MemberMyDetailsResponseDto.of(member))
+				);
+			}
+			case USER_PAGE -> {
+				return ResponseEntity.ok(
+					ApiResponse.success(
+						ResponseMessage.SUCCESS_USER_PAGE_PROFILE.getMessage(),
+						MemberDetailsResponseDto.of(member))
+				);
+			}
+		}
+
+		throw new IllegalStateException(ExceptionMessage.SERVER_ERROR.getMessage());
 	}
 
 	@GetMapping("/battles")
