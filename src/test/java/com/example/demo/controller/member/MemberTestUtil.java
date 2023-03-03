@@ -13,11 +13,19 @@ import com.example.demo.model.member.Social;
 
 import lombok.AllArgsConstructor;
 
-class MemberTestUtil {
+public class MemberTestUtil {
 
-	static Member createMember() {
+	public static Member createMember() {
 		return new Member("https://hype.music/images/1",
 			"nickname",
+			"refreshToken",
+			Social.GOOGLE,
+			"socialId");
+	}
+
+	public static Member createMember(String nickname) {
+		return new Member("https://hype.music/images/1",
+			nickname,
 			"refreshToken",
 			Social.GOOGLE,
 			"socialId");
