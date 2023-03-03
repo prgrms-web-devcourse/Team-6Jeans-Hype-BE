@@ -476,7 +476,7 @@ class BattleControllerTest {
 					resource(
 						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
 							.requestParameters(
-								parameterWithName("progress").optional()
+								parameterWithName("battleStatus").optional()
 									.type(SimpleType.STRING)
 									.description("배틀이 진행중인지, 아닌지 넘겨줍니다. 값을 주지 않는다면 모든 배틀들을 조회합니다.\n"
 										+ "PROGRESS || END"),
@@ -494,13 +494,19 @@ class BattleControllerTest {
 									.description("배틀의 id 입니다."),
 								fieldWithPath("data.battles[].isProgress").type(JsonFieldType.BOOLEAN)
 									.description("배틀이 현재 진행중인지를 나타냅니다"),
+								fieldWithPath("data.battles[].genre").type(OBJECT)
+									.description("배틀의 장르 정보가 담긴 객체 입니다"),
+								fieldWithPath("data.battles[].genre.genreValue").type(JsonFieldType.STRING)
+									.description("장르의 값"),
+								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
+									.description("장르의 이름"),
 								fieldWithPath("data.battles[].challenging").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
 								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 타이틀 입니다."),
 								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 가수 입니다."),
-								fieldWithPath("data.battles[].challenging.albulUrl").type(JsonFieldType.STRING)
+								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
 								fieldWithPath("data.battles[].challenged").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
