@@ -2,7 +2,10 @@ package com.example.demo.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
@@ -18,6 +21,20 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	List<Post> findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(Member member, Genre genre);
 
 	boolean existsByMemberAndMusic_MusicId(Member member, String musicId);
+
+	List<Post> findAllByMemberIdOrderByIdDesc(Long memberId);
+
+	List<Post> findAllByMemberIdAndMusic_GenreOrderByIdDesc(Long memberId, Genre genre);
+
+	@Query("select p from Post p left join fetch p.member where p.member.id = :memberId order by p.id desc")
+	List<Post> findAllByIdLimitOrderByIdDesc(@Param("memberId") Long memberId, Pageable pageable);
+
+	@Query("select p from Post p "
+		+ "left join fetch p.member where p.member.id = :memberId and p.music.genre = :genre "
+		+ "order by p.id desc")
+	List<Post> findAllByIdLimitAndGenreOrderByIdDesc(@Param("memberId") Long memberId, @Param("genre") Genre genre,
+		Pageable pageable);
+
 
 	List<Post> findByMemberAndIsPossibleBattleIsTrue(Member member);
 }

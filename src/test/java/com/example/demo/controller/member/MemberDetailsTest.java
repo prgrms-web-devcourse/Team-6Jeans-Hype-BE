@@ -31,6 +31,7 @@ public class MemberDetailsTest {
 
 	@Mock
 	private MemberRepository memberRepository;
+
 	@Mock
 	private PostRepository postRepository;
 
@@ -41,7 +42,7 @@ public class MemberDetailsTest {
 	@BeforeEach
 	void setUp() {
 		principalService = new PrincipalService(memberRepository);
-		memberService = new MemberService(memberRepository, postRepository, principalService);
+		memberService = new MemberService(principalService, postRepository, memberRepository);
 		memberController = new MemberController(principalService, memberService);
 	}
 
