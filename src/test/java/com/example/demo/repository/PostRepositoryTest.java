@@ -17,10 +17,7 @@ import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
-import lombok.extern.slf4j.Slf4j;
-
 @DataJpaTest
-@Slf4j
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PostRepositoryTest {
 
@@ -158,7 +155,6 @@ class PostRepositoryTest {
 		List<Post> posts = postRepository.findAll();
 		for (Post exsistPost : posts) {
 			Long exsistPostId = exsistPost.getId();
-			log.info(exsistPostId.toString());
 			Optional<Post> postByIdAndIsPossibleBattle = postRepository.findPostByIdAndIsPossibleBattle(exsistPostId,
 				true);
 			assertThat(postByIdAndIsPossibleBattle.get())
