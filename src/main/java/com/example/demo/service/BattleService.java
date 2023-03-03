@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
+import com.example.demo.dto.battle.BattlesResponseDto;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
@@ -134,6 +135,26 @@ public class BattleService {
 		return BattleDetailsListResponseDto.of(
 			battleListInProgress
 		);
+	}
+
+	public BattlesResponseDto getBattles() {
+		List<Battle> allBattles = battleRepository.findAll();
+		return BattlesResponseDto.of(allBattles);
+	}
+
+	public BattlesResponseDto getBattles(BattleStatus battleStatus) {
+		List<Battle> allByStatusEquals = battleRepository.findAllByStatusEquals(battleStatus);
+		return BattlesResponseDto.of(allByStatusEquals);
+	}
+
+	public BattlesResponseDto getBattles(Genre genre) {
+		List<Battle> battles = battleRepository.findAllByGenre(genre);
+		return BattlesResponseDto.of(battles);
+	}
+
+	public BattlesResponseDto getBattles(BattleStatus battleStatus, Genre genre) {
+		List<Battle> battles = battleRepository.findAllByStatusAndGenreEquals(battleStatus, genre);
+		return BattlesResponseDto.of(battles);
 	}
 }
 
