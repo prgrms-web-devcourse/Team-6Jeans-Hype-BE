@@ -52,18 +52,14 @@ public class BattleService {
 		List<Battle> battleListInProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
 		List<Vote> votes = voteRepository.findAllByVoterId(member.getId());
 
-		List<Battle> notVotedBattleListInProgress = battleListInProgress.stream()
+		List<Battle> battleListInProgressNotVotedByMember = battleListInProgress.stream()
 			.filter(battle -> votes.stream()
-				.noneMatch(vote -> checkVotedBattle(vote, battle))
+				.noneMatch(vote -> vote.hasBattle(battle.getId()))
 			)
 			.toList();
 		return BattleDetailsListResponseDto.of(
-			notVotedBattleListInProgress
+			battleListInProgressNotVotedByMember
 		);
-	}
-
-	private boolean checkVotedBattle(Vote vote, Battle battle) {
-		return vote.checkVotedBattle(battle.getId());
 	}
 }
 
