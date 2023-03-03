@@ -1,4 +1,4 @@
-package com.example.demo.controller.battle;
+package com.example.demo.dto.battle;
 
 import javax.validation.constraints.NotNull;
 

@@ -8,7 +8,7 @@ import reactor.util.annotation.NonNull;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record PostDetailFindMusicResponseDto(
-	@NonNull String musicName,
+	@NonNull String title,
 	@NonNull String musicUrl,
 	@NonNull String albumCoverUrl,
 	@NonNull String singer,
@@ -16,7 +16,7 @@ public record PostDetailFindMusicResponseDto(
 ) {
 	public static PostDetailFindMusicResponseDto of(Music music) {
 		return PostDetailFindMusicResponseDto.builder()
-			.musicName(music.getTitle())
+			.title(music.getTitle())
 			.musicUrl(music.getMusicUrl())
 			.albumCoverUrl(music.getAlbumCoverUrl())
 			.singer(music.getSinger())

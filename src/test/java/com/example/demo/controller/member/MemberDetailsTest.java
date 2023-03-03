@@ -1,6 +1,6 @@
 package com.example.demo.controller.member;
 
-import static com.example.demo.controller.member.MemberTestUtil.*;
+import static com.example.demo.controller.TestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -19,8 +19,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.common.ApiResponse;
+import com.example.demo.controller.MemberController;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.PostRepository;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.PrincipalService;
 
@@ -30,6 +32,9 @@ public class MemberDetailsTest {
 	@Mock
 	private MemberRepository memberRepository;
 
+	@Mock
+	private PostRepository postRepository;
+
 	private PrincipalService principalService;
 	private MemberService memberService;
 	private MemberController memberController;
@@ -37,7 +42,7 @@ public class MemberDetailsTest {
 	@BeforeEach
 	void setUp() {
 		principalService = new PrincipalService(memberRepository);
-		memberService = new MemberService(memberRepository);
+		memberService = new MemberService(principalService, postRepository, memberRepository);
 		memberController = new MemberController(principalService, memberService);
 	}
 

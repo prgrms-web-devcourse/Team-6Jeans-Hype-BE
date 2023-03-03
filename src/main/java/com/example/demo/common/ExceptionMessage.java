@@ -11,6 +11,9 @@ public enum ExceptionMessage {
 	CANNOT_MAKE_BATTLE_WRONG_POST_ID("대결을 생성할 수 있는 알맞는 PostId를 찾을 수 없습니다."),
 	// IllegalArgumentException
 	DUPLICATED_USER_MUSIC_URL("이미 공유한 곡입니다."),
+	SERVER_ERROR("서버 내부에 오류가 발생했습니다."),
+	NOT_FOUND_BATTLE("존재하지 않는 대결입니다."),
+	POST_NOT_CONTAIN_BATTLE("투표한 게시글이 대결에 존재하지 않습니다."),
 	CANNOT_MAKE_BATTLE_NOT_MEMBERS_POST("선택한 post가 사용자가 소유하고 있는 Post가 아닙니다."),
 	CANNOT_MAKE_BATTLE_OWN_CHALLENED_POST("자신의 post에 배틀을 신청할 수 없습니다."),
 	CANNOT_MAKE_BATTLE_DIFFERENT_GENRE("두 post의 음악 장르가 다릅니다."),

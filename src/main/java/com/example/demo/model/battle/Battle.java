@@ -64,11 +64,12 @@ public class Battle extends BaseEntity {
 		checkArgument(Objects.nonNull(status), errorMessageForNullPost);
 		checkArgument(Objects.nonNull(challengedPost), errorMessageForNullPost);
 		checkArgument(Objects.nonNull(challengingPost), errorMessageForNullPost);
+		setChallengedPost(challengedPost);
+		setChallengingPost(challengingPost);
 
 		this.genre = genre;
 		this.status = status;
-		setChallengedPost(challengedPost);
-		setChallengingPost(challengingPost);
+
 	}
 
 	private void setChallengedPost(Post challengedPost) {
@@ -83,7 +84,7 @@ public class Battle extends BaseEntity {
 		if (this.challengingPost != null) {
 			this.challengingPost.getPost().getChallengingBattles().remove(this);
 		}
-		this.challengedPost = new BattleInfo(challengingPost);
+		this.challengingPost = new BattleInfo(challengingPost);
 		challengingPost.getChallengingBattles().add(this);
 	}
 
@@ -123,6 +124,25 @@ public class Battle extends BaseEntity {
 
 	public int getPoint() {
 		return Math.abs(challengedPost.getVoteCount() - challengingPost.getVoteCount());
+	}
+
+	public BattleVotedResult vote(Long postId) {
+		Long challengedPostId = challengedPost.getPost().getId();
+		Long challengingPostId = challengingPost.getPost().getId();
+
+		if (Objects.equals(postId, challengingPostId)) {
+			challengingPost.plusVoteCount();
+			return voteResult(challengingPost.getVoteCount(), challengedPost.getVoteCount());
+		} else if (Objects.equals(postId, challengedPostId)) {
+			challengedPost.plusVoteCount();
+			return voteResult(challengedPost.getVoteCount(), challengingPost.getVoteCount());
+		} else {
+			throw new IllegalArgumentException(ExceptionMessage.POST_NOT_CONTAIN_BATTLE.getMessage());
+		}
+	}
+
+	private BattleVotedResult voteResult(int selectedPostVoteCnt, int oppositePostVoteCnt) {
+		return new BattleVotedResult(selectedPostVoteCnt, oppositePostVoteCnt);
 	}
 
 	// TODO: 2023-02-23 battle이 특정 Post를 가지고 있는지 검증하는 메소드

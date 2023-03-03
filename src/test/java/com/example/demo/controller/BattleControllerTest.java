@@ -1,7 +1,7 @@
-package com.example.demo.controller.battle;
+package com.example.demo.controller;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.*;
-import static com.example.demo.controller.member.MemberTestUtil.*;
+import static com.example.demo.controller.TestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -31,6 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
@@ -398,7 +399,7 @@ class BattleControllerTest {
 	private Post makePost(String musicId, Genre genre, boolean isBattlePossible, Member member) {
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
 			.musicId(musicId)
-			.musicName("musicName")
+			.title("musicName")
 			.musicUrl("musicUrl")
 			.albumCoverUrl("albumCoverUrl")
 			.genre(genre)
