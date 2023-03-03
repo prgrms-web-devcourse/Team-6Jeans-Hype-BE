@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import static com.example.demo.common.ResponseMessage.*;
+
+import java.net.URI;
 import java.security.Principal;
 
 import javax.validation.Valid;
@@ -10,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.common.ApiResponse;
 import com.example.demo.common.ResponseMessage;
+import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.dto.vote.BattleVoteRequestDto;
 import com.example.demo.dto.vote.VoteResultResponseDto;
@@ -31,6 +36,19 @@ public class BattleController {
 	private final PrincipalService principalService;
 	private final VoteService voteService;
 	private final BattleService battleService;
+
+	@PostMapping
+	public ResponseEntity<ApiResponse> createBattle(
+		Principal principal,
+		@RequestBody BattleCreateRequestDto battleCreateRequestDto) {
+		Long battleId = battleService.createBattle(principal, battleCreateRequestDto);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+			.path("/{battleId}")
+			.buildAndExpand(battleId)
+			.toUri();
+		ApiResponse success = ApiResponse.success(SUCCESS_CREATE_BATTLE.getMessage());
+		return ResponseEntity.created(location).body(success);
+	}
 
 	@PostMapping("/vote")
 	public ResponseEntity<ApiResponse> vote(

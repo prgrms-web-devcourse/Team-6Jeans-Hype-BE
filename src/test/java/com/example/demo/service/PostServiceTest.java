@@ -58,7 +58,7 @@ class PostServiceTest {
 		// given
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
 			.musicId(musicId)
-			.musicName(musicName)
+			.title(musicName)
 			.musicUrl(musicUrl)
 			.albumCoverUrl(albumCoverUrl)
 			.genre(genre)
@@ -86,7 +86,7 @@ class PostServiceTest {
 		// given
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
 			.musicId(musicId)
-			.musicName(musicName)
+			.title(musicName)
 			.musicUrl(musicUrl)
 			.albumCoverUrl(albumCoverUrl)
 			.genre(genre)
@@ -117,7 +117,7 @@ class PostServiceTest {
 		// given
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
 			.musicId(musicId)
-			.musicName(musicName)
+			.title(musicName)
 			.musicUrl(musicUrl)
 			.albumCoverUrl(albumCoverUrl)
 			.genre(genre)
@@ -150,7 +150,7 @@ class PostServiceTest {
 		// given
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
 			.musicId(musicId)
-			.musicName(musicName)
+			.title(musicName)
 			.musicUrl(musicUrl)
 			.albumCoverUrl(albumCoverUrl)
 			.genre(genre)

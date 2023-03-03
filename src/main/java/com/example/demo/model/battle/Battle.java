@@ -64,11 +64,28 @@ public class Battle extends BaseEntity {
 		checkArgument(Objects.nonNull(status), errorMessageForNullPost);
 		checkArgument(Objects.nonNull(challengedPost), errorMessageForNullPost);
 		checkArgument(Objects.nonNull(challengingPost), errorMessageForNullPost);
+		setChallengedPost(challengedPost);
+		setChallengingPost(challengingPost);
 
 		this.genre = genre;
 		this.status = status;
+
+	}
+
+	private void setChallengedPost(Post challengedPost) {
+		if (this.challengedPost != null) {
+			this.challengedPost.getPost().getChallengedBattles().remove(this);
+		}
 		this.challengedPost = new BattleInfo(challengedPost);
+		challengedPost.getChallengedBattles().add(this);
+	}
+
+	private void setChallengingPost(Post challengingPost) {
+		if (this.challengingPost != null) {
+			this.challengingPost.getPost().getChallengingBattles().remove(this);
+		}
 		this.challengingPost = new BattleInfo(challengingPost);
+		challengingPost.getChallengingBattles().add(this);
 	}
 
 	public void plusVoteCount(BattleInfo battleInfo, int voteCount) {

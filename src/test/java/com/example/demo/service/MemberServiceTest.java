@@ -244,7 +244,6 @@ class MemberServiceTest {
 			.challengedPost(post)
 			.challengingPost(createPost(createMember()))
 			.build();
-		post.getChallengedBattles().add(battle);
 		return battle;
 	}
 

@@ -23,6 +23,14 @@ public class TestUtil {
 			"socialId");
 	}
 
+	public static Member createMember(String nickname) {
+		return new Member("https://hype.music/images/1",
+			nickname,
+			"refreshToken",
+			Social.GOOGLE,
+			"socialId");
+	}
+
 	public static class TestAuthentication implements Authentication {
 		private final UserDetails userDetails;
 

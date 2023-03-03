@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.security.Principal;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,10 +31,14 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@GetMapping("/posts")
-	public ResponseEntity<ApiResponse> getMemberAllPosts(Principal principal) {
-		Member member = principalService.getMemberByPrincipal(principal);
-		MemberAllMyPostsResponseDto responseDto = memberService.getAllPosts(member);
+	public ResponseEntity<ApiResponse> getMemberAllPosts(
+		Principal principal,
+		@RequestParam Optional<Long> memberId,
+		@RequestParam Optional<Genre> genre,
+		@RequestParam Optional<Integer> limit) {
 
+		MemberAllMyPostsResponseDto responseDto = memberService.getAllPosts(
+			principal, memberId, genre, limit);
 		return ResponseEntity.ok(
 			ApiResponse.success(
 				"유저가 공유한 게시글 리스트 조회 성공",
