@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BattleControllerTest {
 	private static final String BATTLE_API_NAME = "Battles";
 	@Autowired
@@ -80,24 +82,60 @@ class BattleControllerTest {
 	Post firstKPopPost = makePost("3", Genre.K_POP, true, firstMember);
 	Post secondKPopPost = makePost("4", Genre.K_POP, true, secondMember);
 
+	@BeforeAll
+	void setup() {
+		memberRepository.save(firstMember);
+		memberRepository.save(secondMember);
+		memberRepository.save(thirdMember);
+
+		assertThat(firstMember.getId()).isEqualTo(1L);
+		assertThat(secondMember.getId()).isEqualTo(2L);
+		assertThat(thirdMember.getId()).isEqualTo(3L);
+
+		postRepository.save(firstBalladPost);
+		postRepository.save(firstKPopPost);
+		postRepository.save(secondBalladPost);
+		postRepository.save(secondKPopPost);
+		postRepository.save(thirdBalladPost);
+		postRepository.save(secondBalladPostSameWithFirst);
+
+		List<Battle> battles = new ArrayList<>();
+		Battle progressBalladBattle = Battle.builder()
+			.status(BattleStatus.PROGRESS)
+			.challengedPost(firstBalladPost)
+			.challengingPost(secondBalladPost)
+			.genre(Genre.BALLAD)
+			.build();
+		Battle progressBalladBattle2 = Battle.builder()
+			.status(BattleStatus.PROGRESS)
+			.challengedPost(thirdBalladPost)
+			.challengingPost(secondBalladPost)
+			.genre(Genre.BALLAD)
+			.build();
+		Battle endedBalladBattle = Battle.builder()
+			.status(BattleStatus.END)
+			.challengedPost(firstBalladPost)
+			.challengingPost(thirdBalladPost)
+			.genre(Genre.BALLAD)
+			.build();
+		Battle progressKpopBattle = Battle.builder()
+			.status(BattleStatus.PROGRESS)
+			.challengedPost(firstKPopPost)
+			.challengingPost(secondKPopPost)
+			.genre(Genre.K_POP)
+			.build();
+		battles.add(progressBalladBattle);
+		battles.add(progressBalladBattle2);
+		battles.add(endedBalladBattle);
+		battles.add(progressKpopBattle);
+
+		battleRepository.saveAll(battles);
+		assertThat(battleRepository.findAll().size()).isEqualTo(4);
+	}
+
 	@Nested
 	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 	class CreateBattle {
-		@BeforeAll
-		void setup() {
-			memberRepository.save(firstMember);
-			memberRepository.save(secondMember);
-			memberRepository.save(thirdMember);
-			assertThat(firstMember.getId()).isEqualTo(1L);
-			assertThat(secondMember.getId()).isEqualTo(2L);
-
-			postRepository.save(firstBalladPost);
-			postRepository.save(firstKPopPost);
-			postRepository.save(secondBalladPost);
-			postRepository.save(secondKPopPost);
-			postRepository.save(thirdBalladPost);
-			postRepository.save(secondBalladPostSameWithFirst);
-		}
 
 		@Test
 		@WithMockUser(username = "1")
@@ -120,7 +158,7 @@ class BattleControllerTest {
 			);
 			//then
 			resultActions.andExpect(status().isCreated())
-				.andExpect(header().string("Location", "http://localhost:8080/api/v1/battles/1"))
+				.andExpect(header().string("Location", "http://localhost:8080/api/v1/battles/5"))
 				.andDo(print())
 				.andDo(document(
 					"battle-post-success",
@@ -407,55 +445,9 @@ class BattleControllerTest {
 	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 	@WithMockUser(username = "1")
 	class GetBattles {
-		@BeforeAll
-		void setup() {
-			memberRepository.save(firstMember);
-			memberRepository.save(secondMember);
-			memberRepository.save(thirdMember);
-
-			assertThat(firstMember.getId()).isEqualTo(1L);
-			assertThat(secondMember.getId()).isEqualTo(2L);
-			assertThat(thirdMember.getId()).isEqualTo(3L);
-
-			postRepository.save(firstBalladPost);
-			postRepository.save(firstKPopPost);
-			postRepository.save(secondBalladPost);
-			postRepository.save(secondKPopPost);
-			postRepository.save(thirdBalladPost);
-			postRepository.save(secondBalladPostSameWithFirst);
-
-			List<Battle> battles = new ArrayList<>();
-			Battle progressBalladBattle = Battle.builder()
-				.status(BattleStatus.PROGRESS)
-				.challengedPost(firstBalladPost)
-				.challengingPost(secondBalladPost)
-				.genre(Genre.BALLAD)
-				.build();
-			Battle progressBalladBattle2 = Battle.builder()
-				.status(BattleStatus.PROGRESS)
-				.challengedPost(thirdBalladPost)
-				.challengingPost(secondBalladPost)
-				.genre(Genre.BALLAD)
-				.build();
-			Battle endedBalladBattle = Battle.builder()
-				.status(BattleStatus.END)
-				.challengedPost(firstBalladPost)
-				.challengingPost(thirdBalladPost)
-				.genre(Genre.BALLAD)
-				.build();
-			Battle progressKpopBattle = Battle.builder()
-				.status(BattleStatus.PROGRESS)
-				.challengedPost(firstKPopPost)
-				.challengingPost(secondKPopPost)
-				.genre(Genre.K_POP)
-				.build();
-			battles.add(progressBalladBattle);
-			battles.add(progressBalladBattle2);
-			battles.add(endedBalladBattle);
-			battles.add(progressKpopBattle);
-
-			battleRepository.saveAll(battles);
-			assertThat(battleRepository.findAll().size()).isEqualTo(4);
+		@AfterAll
+		void clean() {
+			battleRepository.deleteAll();
 		}
 
 		@Test
