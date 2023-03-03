@@ -56,7 +56,7 @@ public class MemberDetailsTest {
 		// when
 		when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
 		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication,
-			Optional.of(2L));
+			Optional.of(1L));
 
 		// then
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -74,7 +74,7 @@ public class MemberDetailsTest {
 		// when
 		when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
 		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication,
-			Optional.of(1L));
+			Optional.of(2L));
 
 		// then
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
