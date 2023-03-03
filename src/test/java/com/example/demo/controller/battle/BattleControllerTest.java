@@ -108,8 +108,7 @@ class BattleControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(battleCreateRequestDto))
 				.header("Authorization", "Bearer {AccessToken}")
-				.with(csrf()
-				)
+				.with(csrf())
 			);
 			//then
 			resultActions.andExpect(status().isCreated())
@@ -156,8 +155,7 @@ class BattleControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(battleCreateRequestDto))
 				.header("Authorization", "Bearer {AccessToken}")
-				.with(csrf()
-				)
+				.with(csrf())
 			);
 			//then
 			resultActions.andExpect(status().isNotFound())
