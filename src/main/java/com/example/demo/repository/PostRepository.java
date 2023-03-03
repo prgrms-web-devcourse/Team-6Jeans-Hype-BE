@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,11 +13,11 @@ import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-	List<Post> findByMusic_GenreAndIsPossibleBattle(Genre genre, boolean isPossibleBattle);
+	List<Post> findByMusic_GenreAndIsPossibleBattle(Genre genre, boolean isPossibleBattle, Sort sort);
 
-	List<Post> findByMusic_Genre(Genre genre);
+	List<Post> findByMusic_Genre(Genre genre, Sort sort);
 
-	List<Post> findByIsPossibleBattle(boolean isPossibleBattle);
+	List<Post> findByIsPossibleBattle(boolean isPossibleBattle, Sort sort);
 
 	List<Post> findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(Member member, Genre genre);
 
@@ -34,7 +35,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 		+ "order by p.id desc")
 	List<Post> findAllByIdLimitAndGenreOrderByIdDesc(@Param("memberId") Long memberId, @Param("genre") Genre genre,
 		Pageable pageable);
-
 
 	List<Post> findByMemberAndIsPossibleBattleIsTrue(Member member);
 }
