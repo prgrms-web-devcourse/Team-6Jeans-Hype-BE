@@ -341,9 +341,9 @@ class PostServiceTest {
 	}
 
 	private PostsFindResponseDto getPostsDto(List<Post> posts) {
-		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
-		posts.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
-		return postsDto;
+		return PostsFindResponseDto.of(posts.stream()
+			.map(PostFindResponseDto::of)
+			.toList());
 	}
 
 	private PostsBattleCandidateResponseDto getPostsBattleDto(List<Post> posts) {
