@@ -66,4 +66,8 @@ public class Vote extends BaseEntity {
 		this.voter = voter;
 
 	}
+
+	public boolean checkVotedBattle(Long battleId) {
+		return Objects.equals(battle.getId(), battleId);
+	}
 }
