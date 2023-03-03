@@ -39,6 +39,8 @@ class PostRepositoryTest {
 		memberRepository.save(member);
 		postRepository.saveAll(posts);
 
+		Collections.reverse(posts);
+
 		// when
 		List<Post> actual = postRepository
 			.findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -54,9 +56,6 @@ class PostRepositoryTest {
 				genre, "url", "content", isPossibleBattle, member);
 			posts.add(post);
 		}
-
-		Collections.reverse(posts);
-
 		return posts;
 	}
 
@@ -66,6 +65,8 @@ class PostRepositoryTest {
 		List<Post> posts = getPosts(genre);
 		memberRepository.save(member);
 		postRepository.saveAll(posts);
+
+		Collections.reverse(posts);
 
 		// when
 		List<Post> actual = postRepository.findByMusic_Genre(genre, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -82,8 +83,6 @@ class PostRepositoryTest {
 			posts.add(post);
 		}
 
-		Collections.reverse(posts);
-
 		return posts;
 	}
 
@@ -93,6 +92,8 @@ class PostRepositoryTest {
 		List<Post> posts = getPosts(isPossibleBattle);
 		memberRepository.save(member);
 		postRepository.saveAll(posts);
+
+		Collections.reverse(posts);
 
 		// when
 		List<Post> actual = postRepository.findByIsPossibleBattle(isPossibleBattle,
@@ -109,8 +110,6 @@ class PostRepositoryTest {
 				genre, "url", "content", isPossibleBattle, member);
 			posts.add(post);
 		}
-
-		Collections.reverse(posts);
 
 		return posts;
 	}
