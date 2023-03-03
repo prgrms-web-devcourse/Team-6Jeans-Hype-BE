@@ -439,14 +439,14 @@ class BattleControllerTest {
 				.build();
 			Battle endedBalladBattle = Battle.builder()
 				.status(BattleStatus.END)
-				.challengingPost(firstBalladPost)
+				.challengedPost(firstBalladPost)
 				.challengingPost(thirdBalladPost)
 				.genre(Genre.BALLAD)
 				.build();
 			Battle progressKpopBattle = Battle.builder()
 				.status(BattleStatus.PROGRESS)
-				.challengingPost(firstKPopPost)
-				.challengedPost(secondKPopPost)
+				.challengedPost(firstKPopPost)
+				.challengingPost(secondKPopPost)
 				.genre(Genre.K_POP)
 				.build();
 			battles.add(progressBalladBattle);
@@ -464,9 +464,8 @@ class BattleControllerTest {
 			Genre targetGenre;
 			BattleStatus targetBattleStatus;
 			//when
-			ResultActions resultActions = mockMvc.perform(get("/battles")
+			ResultActions resultActions = mockMvc.perform(get("/api/v1/battles")
 				.header("Authorization", "Bearer {AccessToken}")
-				.with(csrf())
 			);
 			//then
 			resultActions.andExpect(status().isOk())
