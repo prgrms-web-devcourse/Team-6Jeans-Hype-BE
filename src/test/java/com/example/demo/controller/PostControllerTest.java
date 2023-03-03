@@ -110,7 +110,7 @@ class PostControllerTest {
 			.andDo(MockMvcRestDocumentationWrapper.document("음악 공유 게시글 등록",
 				requestFields(
 					fieldWithPath("musicId").type(STRING).description("등록할 음악의 id 값"),
-					fieldWithPath("musicName").type(STRING).description("등록할 음악의 제목"),
+					fieldWithPath("title").type(STRING).description("등록할 음악의 제목"),
 					fieldWithPath("musicUrl").type(STRING).description("등록할 음악의 url"),
 					fieldWithPath("albumCoverUrl").type(STRING).description("등록할 음악의 앨범 표지 이미지 url"),
 					fieldWithPath("genre").type(STRING).description("등록할 음악의 장르 값"),
@@ -152,7 +152,7 @@ class PostControllerTest {
 			.andDo(MockMvcRestDocumentationWrapper.document("중복된 유저와 음악 url",
 				requestFields(
 					fieldWithPath("musicId").type(STRING).description("등록할 음악의 id 값"),
-					fieldWithPath("musicName").type(STRING).description("등록할 음악의 제목"),
+					fieldWithPath("title").type(STRING).description("등록할 음악의 제목"),
 					fieldWithPath("musicUrl").type(STRING).description("등록할 음악의 url"),
 					fieldWithPath("albumCoverUrl").type(STRING).description("등록할 음악의 앨범 표지 이미지 url"),
 					fieldWithPath("genre").type(STRING).description("등록할 음악의 장르 값"),
@@ -173,7 +173,7 @@ class PostControllerTest {
 	private PostCreateRequestDto getPostCreateRequestDto() {
 		return PostCreateRequestDto.builder()
 			.musicId(musicId)
-			.musicName(musicName)
+			.title(musicName)
 			.musicUrl(musicUrl)
 			.albumCoverUrl(albumCoverUrl)
 			.genre(genre)
@@ -214,7 +214,7 @@ class PostControllerTest {
 					fieldWithPath("data.posts[]").type(ARRAY).description("조회한 공유글 정보 리스트"),
 					fieldWithPath("data.posts[].postId").type(NUMBER).description("조회한 공유글 id"),
 					fieldWithPath("data.posts[].music").type(OBJECT).description("조회한 공유글 음악 정보"),
-					fieldWithPath("data.posts[].music.musicName").type(STRING).description("조회한 공유글 음악 제목"),
+					fieldWithPath("data.posts[].music.title").type(STRING).description("조회한 공유글 음악 제목"),
 					fieldWithPath("data.posts[].music.albumCoverUrl").type(STRING)
 						.description("조회한 공유글 음악 앨범 표지 이미지 url"),
 					fieldWithPath("data.posts[].music.singer").type(STRING).description("조회한 공유글 음악 가수명"),
@@ -258,7 +258,7 @@ class PostControllerTest {
 					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
 					fieldWithPath("data").type(OBJECT).description("API 요청 응답 메시지"),
 					fieldWithPath("data.music").type(OBJECT).description("조회한 공유글 음악 정보"),
-					fieldWithPath("data.music.musicName").type(STRING).description("조회한 공유글 음악 제목"),
+					fieldWithPath("data.music.title").type(STRING).description("조회한 공유글 음악 제목"),
 					fieldWithPath("data.music.musicUrl").type(STRING).description("조회한 공유글 음악 url"),
 					fieldWithPath("data.music.albumCoverUrl").type(STRING).description("조회한 공유글 음악 앨범 이미지 url"),
 					fieldWithPath("data.music.singer").type(STRING).description("조회한 공유글 음악 가수명"),
@@ -336,7 +336,7 @@ class PostControllerTest {
 					fieldWithPath("data.posts[]").type(ARRAY).description("대결 후보곡 정보 리스트"),
 					fieldWithPath("data.posts[].postId").type(NUMBER).description("대결 후보곡 id"),
 					fieldWithPath("data.posts[].music").type(OBJECT).description("대결 후보곡 노래 정보"),
-					fieldWithPath("data.posts[].music.musicName").type(STRING).description("대결 후보곡 노래 제목"),
+					fieldWithPath("data.posts[].music.title").type(STRING).description("대결 후보곡 노래 제목"),
 					fieldWithPath("data.posts[].music.albumCoverUrl").type(STRING)
 						.description("대결 후보곡 노래 앨범 이미지 url"),
 					fieldWithPath("data.posts[].music.musicUrl").type(STRING).description("대결 후보곡 노래 음원 url"),
