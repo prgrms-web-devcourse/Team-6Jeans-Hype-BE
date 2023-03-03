@@ -16,11 +16,13 @@ import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
+import com.example.demo.model.battle.Vote;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 import com.example.demo.repository.BattleRepository;
 import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.VoteRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +33,7 @@ public class BattleService {
 
 	private final PrincipalService principalService;
 	private final BattleRepository battleRepository;
+	private final VoteRepository voteRepository;
 	private final PostRepository postRepository;
 
 	@Transactional
@@ -129,10 +132,18 @@ public class BattleService {
 		return battleRepository.findByStatusAndUpdatedAtBetween(BattleStatus.END, lastBattleDay, now);
 	}
 
-	public BattleDetailsListResponseDto getBattleDetailsListInProgress() {
+	public BattleDetailsListResponseDto getBattleDetailsListInProgress(Principal principal) {
+		Member member = principalService.getMemberByPrincipal(principal);
 		List<Battle> battleListInProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
+		List<Vote> votes = voteRepository.findAllByVoterId(member.getId());
+
+		List<Battle> battleListInProgressNotVotedByMember = battleListInProgress.stream()
+			.filter(battle -> votes.stream()
+				.noneMatch(vote -> vote.hasBattle(battle.getId()))
+			)
+			.toList();
 		return BattleDetailsListResponseDto.of(
-			battleListInProgress
+			battleListInProgressNotVotedByMember
 		);
 	}
 }

@@ -25,15 +25,15 @@ public class GlobalControllerAdvice {
 		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalStateException exception) {
+		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
+		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(OAuth2AuthenticationException.class)
 	public ResponseEntity<ApiResponse> handleOAuth2AuthenticationException(OAuth2AuthenticationException exception) {
 		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
-	}
-
-	@ExceptionHandler(IllegalStateException.class)
-	public ResponseEntity<ApiResponse> handleIllegalStateException(IllegalStateException exception) {
-		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
-		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
 }

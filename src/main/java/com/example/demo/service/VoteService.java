@@ -33,6 +33,10 @@ public class VoteService {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ExceptionMessage.NOT_FOUND_POST.getMessage()));
 
+		if (voteRepository.existsByBattleAndVoter(battle, member)) {
+			throw new IllegalStateException(ExceptionMessage.DUPLICATED_USER_VOTE.getMessage());
+		}
+
 		BattleVotedResult battleVotedResult = battle.vote(post.getId());
 		saveVote(battle, post, member);
 
