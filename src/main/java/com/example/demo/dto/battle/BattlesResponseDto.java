@@ -13,8 +13,8 @@ public record BattlesResponseDto(
 	@NotNull List<BattleInfoVo> battles
 ) {
 	public static BattlesResponseDto of(List<Battle> battles) {
-		return BattlesResponseDto.builder().
-			battles(battles.stream().map(BattleInfoVo::of).toList())
+		return BattlesResponseDto.builder()
+			.battles(battles.stream().map(BattleInfoVo::of).toList())
 			.build();
 	}
 }
