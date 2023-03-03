@@ -47,6 +47,24 @@ public class MemberDetailsTest {
 	}
 
 	@Test
+	public void 성공_나의_세부정보를_조회할_수_있다() {
+		// given
+		Member member = createMember();
+		UserDetails userDetails = createValidUserDetails();
+		TestAuthentication authentication = new TestAuthentication(userDetails);
+
+		// when
+		when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication,
+			Optional.of(1L));
+
+		// then
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(responseEntity.getBody().success()).isTrue();
+		assertThat(responseEntity.getBody().data()).isNotNull();
+	}
+
+	@Test
 	public void 성공_유저_세부정보를_조회할_수_있다() {
 		// given
 		Member member = createMember();
@@ -55,7 +73,8 @@ public class MemberDetailsTest {
 
 		// when
 		when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
-		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication);
+		ResponseEntity<ApiResponse> responseEntity = memberController.getMemberProfile(authentication,
+			Optional.of(2L));
 
 		// then
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -75,7 +94,7 @@ public class MemberDetailsTest {
 
 		// then
 		assertThatThrownBy(() -> {
-			memberController.getMemberProfile(authentication);
+			memberController.getMemberProfile(authentication, Optional.of(1L));
 		})
 			.isExactlyInstanceOf(EntityNotFoundException.class);
 	}

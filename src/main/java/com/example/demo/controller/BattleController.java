@@ -93,8 +93,8 @@ public class BattleController {
 	}
 
 	@GetMapping("/details")
-	public ResponseEntity<ApiResponse> getBattleDetailsList() {
-		BattleDetailsListResponseDto responseDto = battleService.getBattleDetailsListInProgress();
+	public ResponseEntity<ApiResponse> getBattleDetailsList(Principal principal) {
+		BattleDetailsListResponseDto responseDto = battleService.getBattleDetailsListInProgress(principal);
 		return ResponseEntity.ok(
 			ApiResponse.success(
 				ResponseMessage.SUCCESS_FIND_ALL_BATTLE_DETAILS.getMessage(),
