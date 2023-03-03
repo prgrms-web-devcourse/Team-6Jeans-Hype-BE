@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import java.util.Optional;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -35,8 +33,7 @@ public class VoteService {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ExceptionMessage.NOT_FOUND_POST.getMessage()));
 
-		Optional<Vote> vote = voteRepository.findByBattleAndVoter(battle, member);
-		if (vote.isPresent()) {
+		if (voteRepository.existsByBattleAndVoter(battle, member)) {
 			throw new IllegalStateException(ExceptionMessage.DUPLICATED_USER_VOTE.getMessage());
 		}
 
