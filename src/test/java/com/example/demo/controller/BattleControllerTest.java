@@ -11,6 +11,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,14 +34,17 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.epages.restdocs.apispec.SimpleType;
 import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
+import com.example.demo.model.battle.Battle;
+import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
+import com.example.demo.repository.BattleRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
-import com.example.demo.service.BattleService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 
@@ -55,7 +61,8 @@ class BattleControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	@Autowired
-	private BattleService battleService;
+	private BattleRepository battleRepository;
+
 	@Autowired
 	private MemberRepository memberRepository;
 	@Autowired
@@ -396,6 +403,145 @@ class BattleControllerTest {
 
 	}
 
+	@Nested
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+	@WithMockUser(username = "1")
+	class GetBattles {
+		@BeforeAll
+		void setup() {
+			memberRepository.save(firstMember);
+			memberRepository.save(secondMember);
+			memberRepository.save(thirdMember);
+
+			assertThat(firstMember.getId()).isEqualTo(1L);
+			assertThat(secondMember.getId()).isEqualTo(2L);
+			assertThat(thirdMember.getId()).isEqualTo(3L);
+
+			postRepository.save(firstBalladPost);
+			postRepository.save(firstKPopPost);
+			postRepository.save(secondBalladPost);
+			postRepository.save(secondKPopPost);
+			postRepository.save(thirdBalladPost);
+			postRepository.save(secondBalladPostSameWithFirst);
+
+			List<Battle> battles = new ArrayList<>();
+			Battle progressBalladBattle = Battle.builder()
+				.status(BattleStatus.PROGRESS)
+				.challengedPost(firstBalladPost)
+				.challengingPost(secondBalladPost)
+				.genre(Genre.BALLAD)
+				.build();
+			Battle progressBalladBattle2 = Battle.builder()
+				.status(BattleStatus.PROGRESS)
+				.challengedPost(thirdBalladPost)
+				.challengingPost(secondBalladPost)
+				.genre(Genre.BALLAD)
+				.build();
+			Battle endedBalladBattle = Battle.builder()
+				.status(BattleStatus.END)
+				.challengingPost(firstBalladPost)
+				.challengingPost(thirdBalladPost)
+				.genre(Genre.BALLAD)
+				.build();
+			Battle progressKpopBattle = Battle.builder()
+				.status(BattleStatus.PROGRESS)
+				.challengingPost(firstKPopPost)
+				.challengedPost(secondKPopPost)
+				.genre(Genre.K_POP)
+				.build();
+			battles.add(progressBalladBattle);
+			battles.add(progressBalladBattle2);
+			battles.add(endedBalladBattle);
+			battles.add(progressKpopBattle);
+
+			battleRepository.saveAll(battles);
+			assertThat(battleRepository.findAll().size()).isEqualTo(4);
+		}
+
+		@Test
+		public void 성공_given_없음_then_전체배틀조회_200() throws Exception {
+			//given
+			Genre targetGenre;
+			BattleStatus targetBattleStatus;
+			//when
+			ResultActions resultActions = mockMvc.perform(get("/battles")
+				.header("Authorization", "Bearer {AccessToken}")
+				.with(csrf())
+			);
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("data.battles").isArray())
+				.andDo(document("get-battles-no-genre-no-progress",
+					resource(
+						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
+							.requestParameters(
+								parameterWithName("progress").optional()
+									.type(SimpleType.STRING)
+									.description("배틀이 진행중인지, 아닌지 넘겨줍니다. 값을 주지 않는다면 모든 배틀들을 조회합니다.\n"
+										+ "PROGRESS || END"),
+								parameterWithName("genre")
+									.type(SimpleType.STRING)
+									.optional().description("조회하고 싶은 배틀들의 장르값을 넘겨줍니다.\n"
+										+ "값을 주지 않는다면 모든 장르의 배틀들을 조회합니다.")
+							).responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(OBJECT).description("API 응답 데이터"),
+								fieldWithPath("data.battles").type(JsonFieldType.ARRAY)
+									.description("배틀들을 담고있는배열 입니다."),
+								fieldWithPath("data.battles[].battleId").type(NUMBER)
+									.description("배틀의 id 입니다."),
+								fieldWithPath("data.battles[].isProgress").type(JsonFieldType.BOOLEAN)
+									.description("배틀이 현재 진행중인지를 나타냅니다"),
+								fieldWithPath("data.battles[].challenging").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenging.albulUrl").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+							)
+							.build()
+					)
+				));
+		}
+
+		@Test
+		public void 성공_given_progess가PROGRESS_then_진행중인_전체_배틀_조회_200() throws Exception {
+
+		}
+
+		@Test
+		public void 성공_given_progess가END_then_종료된_전체_배틀_조회_200() throws Exception {
+
+		}
+
+		@Test
+		public void 성공_given_genre가BALLAD_then_발라드장르의_전체_배틀_조회_200() throws Exception {
+
+		}
+
+		@Test
+		public void 성공_given_genre가K_POP_then_K_POP장르의_배틀_조회_200() throws Exception {
+
+		}
+
+		@Test
+		public void 성공_given_progess가_end고_genre가K_POP_then_K_POP장르의_종료된_배틀_조회_200() throws Exception {
+
+		}
+	}
+
 	private Post makePost(String musicId, Genre genre, boolean isBattlePossible, Member member) {
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
 			.musicId(musicId)
@@ -409,4 +555,5 @@ class BattleControllerTest {
 			.build();
 		return postCreateRequestDto.toEntity(member);
 	}
+
 }
