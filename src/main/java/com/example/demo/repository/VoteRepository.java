@@ -11,5 +11,6 @@ import com.example.demo.model.member.Member;
 public interface VoteRepository extends JpaRepository<Vote, Long> {
 
 	List<Vote> findAllByVoterId(Long voterId);
+
 	boolean existsByBattleAndVoter(Battle battle, Member voter);
 }

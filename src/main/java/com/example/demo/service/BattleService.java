@@ -17,12 +17,12 @@ import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.battle.Vote;
-import com.example.demo.repository.VoteRepository;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 import com.example.demo.repository.BattleRepository;
 import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.VoteRepository;
 
 import lombok.RequiredArgsConstructor;
 
