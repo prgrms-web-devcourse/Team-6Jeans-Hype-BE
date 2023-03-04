@@ -6,6 +6,7 @@ import java.security.Principal;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,24 +51,36 @@ public class PostService {
 	}
 
 	public PostsFindResponseDto findAllPosts(Genre genre, Boolean possible) {
-		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
+		Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
 
 		switch (PostFilteringCase.getCase(genre, possible)) {
-			case BOTH_NOT_NULL -> postRepository
-				.findByMusic_GenreAndIsPossibleBattle(genre, possible)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
-			case GENRE_ONLY_NOT_NULL -> postRepository
-				.findByMusic_Genre(genre)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
-			case POSSIBLE_ONLY_NOT_NULL -> postRepository
-				.findByIsPossibleBattle(possible)
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
-			case BOTH_NULL -> postRepository
-				.findAll()
-				.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
+			case BOTH_NOT_NULL -> {
+				return PostsFindResponseDto.of(postRepository
+					.findByMusic_GenreAndIsPossibleBattle(genre, possible, sort)
+					.stream().map(PostFindResponseDto::of)
+					.toList());
+			}
+			case GENRE_ONLY_NOT_NULL -> {
+				return PostsFindResponseDto.of(postRepository
+					.findByMusic_Genre(genre, sort)
+					.stream().map(PostFindResponseDto::of)
+					.toList());
+			}
+			case POSSIBLE_ONLY_NOT_NULL -> {
+				return PostsFindResponseDto.of(postRepository
+					.findByIsPossibleBattle(possible, sort)
+					.stream().map(PostFindResponseDto::of)
+					.toList());
+			}
+			case BOTH_NULL -> {
+				return PostsFindResponseDto.of(postRepository
+					.findAll(sort)
+					.stream().map(PostFindResponseDto::of)
+					.toList());
+			}
 		}
 
-		return postsDto;
+		throw new IllegalArgumentException(POST_INVALID_FILTER.getMessage());
 	}
 
 	public PostDetailFindResponseDto findPostById(Long postId) {

@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.member.Member;
@@ -37,9 +39,11 @@ class PostRepositoryTest {
 		memberRepository.save(member);
 		postRepository.saveAll(posts);
 
+		Collections.reverse(posts);
+
 		// when
 		List<Post> actual = postRepository
-			.findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle);
+			.findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle, Sort.by(Sort.Direction.DESC, "createdAt"));
 
 		// then
 		assertThat(actual).isEqualTo(posts);
@@ -62,8 +66,10 @@ class PostRepositoryTest {
 		memberRepository.save(member);
 		postRepository.saveAll(posts);
 
+		Collections.reverse(posts);
+
 		// when
-		List<Post> actual = postRepository.findByMusic_Genre(genre);
+		List<Post> actual = postRepository.findByMusic_Genre(genre, Sort.by(Sort.Direction.DESC, "createdAt"));
 
 		// then
 		assertThat(actual).isEqualTo(posts);
@@ -76,6 +82,7 @@ class PostRepositoryTest {
 				genre, "url", "content", isPossibleBattle, member);
 			posts.add(post);
 		}
+
 		return posts;
 	}
 
@@ -86,8 +93,11 @@ class PostRepositoryTest {
 		memberRepository.save(member);
 		postRepository.saveAll(posts);
 
+		Collections.reverse(posts);
+
 		// when
-		List<Post> actual = postRepository.findByIsPossibleBattle(isPossibleBattle);
+		List<Post> actual = postRepository.findByIsPossibleBattle(isPossibleBattle,
+			Sort.by(Sort.Direction.DESC, "createdAt"));
 
 		// then
 		assertThat(actual).isEqualTo(posts);
@@ -100,6 +110,7 @@ class PostRepositoryTest {
 				genre, "url", "content", isPossibleBattle, member);
 			posts.add(post);
 		}
+
 		return posts;
 	}
 
@@ -167,6 +178,7 @@ class PostRepositoryTest {
 			member.getPosts().add(post);
 			postRepository.save(post);
 		}
+
 		return posts;
 	}
 

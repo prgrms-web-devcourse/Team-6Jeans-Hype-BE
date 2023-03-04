@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
@@ -174,7 +175,7 @@ class PostServiceTest {
 		List<Post> testPosts = getPosts();
 		PostsFindResponseDto expected = getPostsDto(testPosts);
 
-		when(postRepository.findAll()).thenReturn(testPosts);
+		when(postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))).thenReturn(testPosts);
 
 		// when
 		PostsFindResponseDto posts = postService.findAllPosts(null, null);
@@ -182,7 +183,7 @@ class PostServiceTest {
 		// then
 		assertThat(posts).isEqualTo(expected);
 
-		verify(postRepository).findAll();
+		verify(postRepository).findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
 	}
 
 	private List<Post> getPosts() {
@@ -201,7 +202,7 @@ class PostServiceTest {
 		List<Post> testPosts = getPosts(genre);
 		PostsFindResponseDto expected = getPostsDto(testPosts);
 
-		when(postRepository.findByMusic_Genre(genre)).thenReturn(testPosts);
+		when(postRepository.findByMusic_Genre(genre, Sort.by(Sort.Direction.DESC, "createdAt"))).thenReturn(testPosts);
 
 		// when
 		PostsFindResponseDto posts = postService.findAllPosts(genre, null);
@@ -209,7 +210,7 @@ class PostServiceTest {
 		// then
 		assertThat(posts).isEqualTo(expected);
 
-		verify(postRepository).findByMusic_Genre(genre);
+		verify(postRepository).findByMusic_Genre(genre, Sort.by(Sort.Direction.DESC, "createdAt"));
 	}
 
 	private List<Post> getPosts(Genre genre) {
@@ -228,7 +229,8 @@ class PostServiceTest {
 		List<Post> testPosts = getPosts(isPossibleBattle);
 		PostsFindResponseDto expected = getPostsDto(testPosts);
 
-		when(postRepository.findByIsPossibleBattle(isPossibleBattle)).thenReturn(testPosts);
+		when(postRepository.findByIsPossibleBattle(isPossibleBattle,
+			Sort.by(Sort.Direction.DESC, "createdAt"))).thenReturn(testPosts);
 
 		// when
 		PostsFindResponseDto posts = postService.findAllPosts(null, isPossibleBattle);
@@ -236,7 +238,7 @@ class PostServiceTest {
 		// then
 		assertThat(posts).isEqualTo(expected);
 
-		verify(postRepository).findByIsPossibleBattle(isPossibleBattle);
+		verify(postRepository).findByIsPossibleBattle(isPossibleBattle, Sort.by(Sort.Direction.DESC, "createdAt"));
 	}
 
 	private List<Post> getPosts(boolean isPossibleBattle) {
@@ -255,7 +257,8 @@ class PostServiceTest {
 		List<Post> testPosts = getPosts(genre, isPossibleBattle);
 		PostsFindResponseDto expected = getPostsDto(testPosts);
 
-		when(postRepository.findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle))
+		when(postRepository.findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle,
+			Sort.by(Sort.Direction.DESC, "createdAt")))
 			.thenReturn(testPosts);
 
 		// when
@@ -264,7 +267,8 @@ class PostServiceTest {
 		// then
 		assertThat(posts).isEqualTo(expected);
 
-		verify(postRepository).findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle);
+		verify(postRepository).findByMusic_GenreAndIsPossibleBattle(genre, isPossibleBattle,
+			Sort.by(Sort.Direction.DESC, "createdAt"));
 	}
 
 	private List<Post> getPosts(Genre genre, boolean isPossibleBattle) {
@@ -337,9 +341,9 @@ class PostServiceTest {
 	}
 
 	private PostsFindResponseDto getPostsDto(List<Post> posts) {
-		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
-		posts.forEach(post -> postsDto.posts().add(PostFindResponseDto.of(post)));
-		return postsDto;
+		return PostsFindResponseDto.of(posts.stream()
+			.map(PostFindResponseDto::of)
+			.toList());
 	}
 
 	private PostsBattleCandidateResponseDto getPostsBattleDto(List<Post> posts) {
