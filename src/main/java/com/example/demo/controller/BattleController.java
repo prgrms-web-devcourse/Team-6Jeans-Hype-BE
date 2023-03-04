@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.demo.common.ApiResponse;
 import com.example.demo.common.ResponseMessage;
 import com.example.demo.dto.battle.BattleCreateRequestDto;
+import com.example.demo.dto.battle.BattleDetailByIdResponseDto;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.dto.battle.BattlesResponseDto;
 import com.example.demo.dto.vote.BattleVoteRequestDto;
@@ -58,7 +60,7 @@ public class BattleController {
 			battlesResponseDto =
 				battleService.getBattles(battleStatus.get(), genre.get());
 		}
-		ApiResponse success = ApiResponse.success(SUCCESS_FIND_BATTLES.getMessage(), battlesResponseDto);
+		ApiResponse success = ApiResponse.success(SUCCESS_FIND_BATTLE_DETAIL_BY_ID.getMessage(), battlesResponseDto);
 		return ResponseEntity.ok(success);
 	}
 
@@ -73,6 +75,13 @@ public class BattleController {
 			.toUri();
 		ApiResponse success = ApiResponse.success(SUCCESS_CREATE_BATTLE.getMessage());
 		return ResponseEntity.created(location).body(success);
+	}
+
+	@GetMapping("/{battleId}")
+	public ResponseEntity<ApiResponse> getBattleDetailByBattleId(@PathVariable Long battleId) {
+		BattleDetailByIdResponseDto battleDetailResponseDto = battleService.getBattleDetailById(battleId);
+		ApiResponse success = ApiResponse.success("배틀 상세 조회 성공", battleDetailResponseDto);
+		return ResponseEntity.ok(success);
 	}
 
 	@PostMapping("/vote")
