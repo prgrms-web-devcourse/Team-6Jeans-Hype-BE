@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,11 +14,11 @@ import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-	List<Post> findByMusic_GenreAndIsPossibleBattle(Genre genre, boolean isPossibleBattle);
+	List<Post> findByMusic_GenreAndIsPossibleBattle(Genre genre, boolean isPossibleBattle, Sort sort);
 
-	List<Post> findByMusic_Genre(Genre genre);
+	List<Post> findByMusic_Genre(Genre genre, Sort sort);
 
-	List<Post> findByIsPossibleBattle(boolean isPossibleBattle);
+	List<Post> findByIsPossibleBattle(boolean isPossibleBattle, Sort sort);
 
 	Optional<Post> findPostByIdAndIsPossibleBattle(Long id, boolean isPossibleBattle);
 

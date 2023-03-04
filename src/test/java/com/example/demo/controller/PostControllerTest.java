@@ -378,9 +378,9 @@ class PostControllerTest {
 	}
 
 	private PostsFindResponseDto getPostsDto() {
-		PostsFindResponseDto postsDto = PostsFindResponseDto.create();
-		getPosts().forEach(post -> postsDto.posts().add(testOf(post)));
-		return postsDto;
+		return PostsFindResponseDto.of(getPosts().stream()
+			.map(this::testOf)
+			.toList());
 	}
 
 	private PostFindResponseDto testOf(Post post) {
