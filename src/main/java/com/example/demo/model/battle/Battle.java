@@ -145,5 +145,12 @@ public class Battle extends BaseEntity {
 		return new BattleVotedResult(selectedPostVoteCnt, oppositePostVoteCnt);
 	}
 
+	public Boolean isProgress() {
+		return switch (this.status) {
+			case PROGRESS -> true;
+			case END -> false;
+		};
+	}
+
 	// TODO: 2023-02-23 battle이 특정 Post를 가지고 있는지 검증하는 메소드
 }

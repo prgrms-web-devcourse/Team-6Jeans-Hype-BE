@@ -11,6 +11,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,14 +34,17 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.epages.restdocs.apispec.SimpleType;
 import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
+import com.example.demo.model.battle.Battle;
+import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
+import com.example.demo.repository.BattleRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
-import com.example.demo.service.BattleService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 
@@ -48,6 +54,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BattleControllerTest {
 	private static final String BATTLE_API_NAME = "Battles";
 	@Autowired
@@ -55,7 +62,8 @@ class BattleControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	@Autowired
-	private BattleService battleService;
+	private BattleRepository battleRepository;
+
 	@Autowired
 	private MemberRepository memberRepository;
 	@Autowired
@@ -73,24 +81,60 @@ class BattleControllerTest {
 	Post firstKPopPost = makePost("3", Genre.K_POP, true, firstMember);
 	Post secondKPopPost = makePost("4", Genre.K_POP, true, secondMember);
 
+	@BeforeAll
+	void setup() {
+		memberRepository.save(firstMember);
+		memberRepository.save(secondMember);
+		memberRepository.save(thirdMember);
+
+		assertThat(firstMember.getId()).isEqualTo(1L);
+		assertThat(secondMember.getId()).isEqualTo(2L);
+		assertThat(thirdMember.getId()).isEqualTo(3L);
+
+		postRepository.save(firstBalladPost);
+		postRepository.save(firstKPopPost);
+		postRepository.save(secondBalladPost);
+		postRepository.save(secondKPopPost);
+		postRepository.save(thirdBalladPost);
+		postRepository.save(secondBalladPostSameWithFirst);
+
+		List<Battle> battles = new ArrayList<>();
+		Battle progressBalladBattle = Battle.builder()
+			.status(BattleStatus.PROGRESS)
+			.challengedPost(firstBalladPost)
+			.challengingPost(secondBalladPost)
+			.genre(Genre.BALLAD)
+			.build();
+		Battle progressBalladBattle2 = Battle.builder()
+			.status(BattleStatus.PROGRESS)
+			.challengedPost(thirdBalladPost)
+			.challengingPost(secondBalladPost)
+			.genre(Genre.BALLAD)
+			.build();
+		Battle endedBalladBattle = Battle.builder()
+			.status(BattleStatus.END)
+			.challengedPost(firstBalladPost)
+			.challengingPost(thirdBalladPost)
+			.genre(Genre.BALLAD)
+			.build();
+		Battle progressKpopBattle = Battle.builder()
+			.status(BattleStatus.PROGRESS)
+			.challengedPost(firstKPopPost)
+			.challengingPost(secondKPopPost)
+			.genre(Genre.K_POP)
+			.build();
+		battles.add(progressBalladBattle);
+		battles.add(progressBalladBattle2);
+		battles.add(endedBalladBattle);
+		battles.add(progressKpopBattle);
+
+		battleRepository.saveAll(battles);
+		assertThat(battleRepository.findAll().size()).isEqualTo(4);
+	}
+
 	@Nested
 	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 	class CreateBattle {
-		@BeforeAll
-		void setup() {
-			memberRepository.save(firstMember);
-			memberRepository.save(secondMember);
-			memberRepository.save(thirdMember);
-			assertThat(firstMember.getId()).isEqualTo(1L);
-			assertThat(secondMember.getId()).isEqualTo(2L);
-
-			postRepository.save(firstBalladPost);
-			postRepository.save(firstKPopPost);
-			postRepository.save(secondBalladPost);
-			postRepository.save(secondKPopPost);
-			postRepository.save(thirdBalladPost);
-			postRepository.save(secondBalladPostSameWithFirst);
-		}
 
 		@Test
 		@WithMockUser(username = "1")
@@ -113,7 +157,7 @@ class BattleControllerTest {
 			);
 			//then
 			resultActions.andExpect(status().isCreated())
-				.andExpect(header().string("Location", "http://localhost:8080/api/v1/battles/1"))
+				.andExpect(header().string("Location", "http://localhost:8080/api/v1/battles/5"))
 				.andDo(print())
 				.andDo(document(
 					"battle-post-success",
@@ -396,6 +440,592 @@ class BattleControllerTest {
 
 	}
 
+	@Nested
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+	@WithMockUser(username = "1")
+	class GetBattles {
+
+		@Test
+		public void 성공_given_없음_then_전체배틀조회_200() throws Exception {
+			//given
+			//when
+			ResultActions resultActions = mockMvc.perform(get("/api/v1/battles")
+				.header("Authorization", "Bearer {AccessToken}")
+			);
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("data.battles").isArray())
+				.andDo(document("get-battles-no-genre-no-progress",
+					resource(
+						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
+							.requestParameters(
+								parameterWithName("battleStatus").optional()
+									.type(SimpleType.STRING)
+									.description("배틀이 진행중인지, 아닌지 넘겨줍니다. 값을 주지 않는다면 모든 배틀들을 조회합니다.\n"
+										+ "PROGRESS || END"),
+								parameterWithName("genre")
+									.type(SimpleType.STRING)
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
+							).responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(OBJECT).description("API 응답 데이터"),
+								fieldWithPath("data.battles").type(JsonFieldType.ARRAY)
+									.description("배틀들을 담고있는배열 입니다."),
+								fieldWithPath("data.battles[].battleId").type(NUMBER)
+									.description("배틀의 id 입니다."),
+								fieldWithPath("data.battles[].isProgress").type(JsonFieldType.BOOLEAN)
+									.description("배틀이 현재 진행중인지를 나타냅니다"),
+								fieldWithPath("data.battles[].genre").type(OBJECT)
+									.description("배틀의 장르 정보가 담긴 객체 입니다"),
+								fieldWithPath("data.battles[].genre.genreValue").type(JsonFieldType.STRING)
+									.description("장르의 값"),
+								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
+									.description("장르의 이름"),
+								fieldWithPath("data.battles[].challenging").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+							)
+							.build()
+					)
+				));
+		}
+
+		@Test
+		public void 성공_given_status가progress_then_진행중인_전체_배틀_조회_200() throws Exception {
+			//given
+			BattleStatus targetBattleStatus = BattleStatus.PROGRESS;
+			//when
+			ResultActions resultActions = mockMvc.perform(get("/api/v1/battles")
+				.queryParam("battleStatus", targetBattleStatus.name())
+				.header("Authorization", "Bearer {AccessToken}")
+			);
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("data.battles").isArray())
+				.andDo(document("get-battles-no-genre-status-progress",
+					resource(
+						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
+							.requestParameters(
+								parameterWithName("battleStatus").optional()
+									.type(SimpleType.STRING)
+									.description("배틀이 진행중인지, 아닌지 넘겨줍니다. 값을 주지 않는다면 모든 배틀들을 조회합니다.\n"
+										+ "PROGRESS || END"),
+								parameterWithName("genre")
+									.type(SimpleType.STRING)
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
+							).responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(OBJECT).description("API 응답 데이터"),
+								fieldWithPath("data.battles").type(JsonFieldType.ARRAY)
+									.description("배틀들을 담고있는배열 입니다."),
+								fieldWithPath("data.battles[].battleId").type(NUMBER)
+									.description("배틀의 id 입니다."),
+								fieldWithPath("data.battles[].isProgress").type(JsonFieldType.BOOLEAN)
+									.description("배틀이 현재 진행중인지를 나타냅니다"),
+								fieldWithPath("data.battles[].genre").type(OBJECT)
+									.description("배틀의 장르 정보가 담긴 객체 입니다"),
+								fieldWithPath("data.battles[].genre.genreValue").type(JsonFieldType.STRING)
+									.description("장르의 값"),
+								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
+									.description("장르의 이름"),
+								fieldWithPath("data.battles[].challenging").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+							)
+							.build()
+					)
+				));
+		}
+
+		@Test
+		public void 성공_given_status가end_then_종료된_전체_배틀_조회_200() throws Exception {
+			//given
+			BattleStatus targetBattleStatus = BattleStatus.END;
+			//when
+			ResultActions resultActions = mockMvc.perform(get("/api/v1/battles")
+				.queryParam("battleStatus", targetBattleStatus.name())
+				.header("Authorization", "Bearer {AccessToken}")
+			);
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("data.battles").isArray())
+				.andDo(document("get-battles-no-genre-status-end",
+					resource(
+						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
+							.requestParameters(
+								parameterWithName("battleStatus").optional()
+									.type(SimpleType.STRING)
+									.description("배틀이 진행중인지, 아닌지 넘겨줍니다. 값을 주지 않는다면 모든 배틀들을 조회합니다.\n"
+										+ "PROGRESS || END"),
+								parameterWithName("genre")
+									.type(SimpleType.STRING)
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
+							).responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(OBJECT).description("API 응답 데이터"),
+								fieldWithPath("data.battles").type(JsonFieldType.ARRAY)
+									.description("배틀들을 담고있는배열 입니다."),
+								fieldWithPath("data.battles[].battleId").type(NUMBER)
+									.description("배틀의 id 입니다."),
+								fieldWithPath("data.battles[].isProgress").type(JsonFieldType.BOOLEAN)
+									.description("배틀이 현재 진행중인지를 나타냅니다"),
+								fieldWithPath("data.battles[].genre").type(OBJECT)
+									.description("배틀의 장르 정보가 담긴 객체 입니다"),
+								fieldWithPath("data.battles[].genre.genreValue").type(JsonFieldType.STRING)
+									.description("장르의 값"),
+								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
+									.description("장르의 이름"),
+								fieldWithPath("data.battles[].challenging").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+							)
+							.build()
+					)
+				));
+
+		}
+
+		@Test
+		public void 성공_given_genre가ballad_then_발라드장르의_전체_배틀_조회_200() throws Exception {
+			//given
+			Genre targetGenre = Genre.BALLAD;
+			//when
+			ResultActions resultActions = mockMvc.perform(get("/api/v1/battles")
+				.queryParam("genre", targetGenre.name())
+				.header("Authorization", "Bearer {AccessToken}")
+			);
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("data.battles").isArray())
+				.andDo(document("get-battles-genre-ballad-no-progress",
+					resource(
+						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
+							.requestParameters(
+								parameterWithName("battleStatus").optional()
+									.type(SimpleType.STRING)
+									.description("배틀이 진행중인지, 아닌지 넘겨줍니다. 값을 주지 않는다면 모든 배틀들을 조회합니다.\n"
+										+ "PROGRESS || END"),
+								parameterWithName("genre")
+									.type(SimpleType.STRING)
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
+							).responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(OBJECT).description("API 응답 데이터"),
+								fieldWithPath("data.battles").type(JsonFieldType.ARRAY)
+									.description("배틀들을 담고있는배열 입니다."),
+								fieldWithPath("data.battles[].battleId").type(NUMBER)
+									.description("배틀의 id 입니다."),
+								fieldWithPath("data.battles[].isProgress").type(JsonFieldType.BOOLEAN)
+									.description("배틀이 현재 진행중인지를 나타냅니다"),
+								fieldWithPath("data.battles[].genre").type(OBJECT)
+									.description("배틀의 장르 정보가 담긴 객체 입니다"),
+								fieldWithPath("data.battles[].genre.genreValue").type(JsonFieldType.STRING)
+									.description("장르의 값"),
+								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
+									.description("장르의 이름"),
+								fieldWithPath("data.battles[].challenging").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+							)
+							.build()
+					)
+				));
+
+		}
+
+		@Test
+		public void 성공_given_genre가kpop_then_kpop장르의_배틀_조회_200() throws Exception {
+			//given
+			Genre targetGenre = Genre.K_POP;
+			//when
+			ResultActions resultActions = mockMvc.perform(get("/api/v1/battles")
+				.queryParam("genre", targetGenre.name())
+				.header("Authorization", "Bearer {AccessToken}")
+			);
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("data.battles").isArray())
+				.andDo(document("get-battles-genre-kpop-no-progress",
+					resource(
+						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
+							.requestParameters(
+								parameterWithName("battleStatus").optional()
+									.type(SimpleType.STRING)
+									.description("배틀이 진행중인지, 아닌지 넘겨줍니다. 값을 주지 않는다면 모든 배틀들을 조회합니다.\n"
+										+ "PROGRESS || END"),
+								parameterWithName("genre")
+									.type(SimpleType.STRING)
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
+							).responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(OBJECT).description("API 응답 데이터"),
+								fieldWithPath("data.battles").type(JsonFieldType.ARRAY)
+									.description("배틀들을 담고있는배열 입니다."),
+								fieldWithPath("data.battles[].battleId").type(NUMBER)
+									.description("배틀의 id 입니다."),
+								fieldWithPath("data.battles[].isProgress").type(JsonFieldType.BOOLEAN)
+									.description("배틀이 현재 진행중인지를 나타냅니다"),
+								fieldWithPath("data.battles[].genre").type(OBJECT)
+									.description("배틀의 장르 정보가 담긴 객체 입니다"),
+								fieldWithPath("data.battles[].genre.genreValue").type(JsonFieldType.STRING)
+									.description("장르의 값"),
+								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
+									.description("장르의 이름"),
+								fieldWithPath("data.battles[].challenging").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged").type(OBJECT)
+									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 타이틀 입니다."),
+								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 가수 입니다."),
+								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+							)
+							.build()
+					)
+				));
+		}
+
+		@Test
+		public void 성공_given_progess가_end고_genre가kpop_then_kpop장르의_종료된_배틀_조회_200() throws Exception {
+			//given
+			Genre targetGenre = Genre.K_POP;
+			BattleStatus targetBattleStatus = BattleStatus.END;
+			//when
+			ResultActions resultActions = mockMvc.perform(get("/api/v1/battles")
+				.queryParam("genre", targetGenre.name())
+				.queryParam("battleStatus", targetBattleStatus.name())
+				.header("Authorization", "Bearer {AccessToken}")
+			);
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("data.battles").isArray())
+				.andDo(document("get-battles-genre-kpop-status-end",
+					resource(
+						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
+							.requestParameters(
+								parameterWithName("battleStatus").optional()
+									.type(SimpleType.STRING)
+									.description("배틀이 진행중인지, 아닌지 넘겨줍니다. 값을 주지 않는다면 모든 배틀들을 조회합니다.\n"
+										+ "PROGRESS || END"),
+								parameterWithName("genre")
+									.type(SimpleType.STRING)
+									.optional().description("조회하고 싶은 배트들의 장르값을 넘겨줍니다. "
+										+ "비어있으면 모든 장르의 배틀을 조회합니다."
+										+ "HIPHOP_RAP||ROCK_METAL||INDIE_ACOUSTIC||BALLAD||TROT||K_POP||R_AND_B||"
+										+ "JAZZ||J_POP||CLASSIC||EDM||POP||ETC")
+							).responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(OBJECT).description("API 응답 데이터"),
+								fieldWithPath("data.battles").type(JsonFieldType.ARRAY)
+									.description("배틀들을 담고있는배열 입니다.")
+							)
+							.build()
+					)
+				));
+
+		}
+	}
+
+	@Nested
+	@WithMockUser(username = "1")
+	class GetBattleDetailById {
+		@Test
+		public void 성공_given_끝나지않은_battleId_then_그_배틀의_상세정보_200() throws Exception {
+			//given
+			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
+			Long targetBattleId = battlesStatusIsProgress.get(0).getId();
+			//when
+			ResultActions resultActions = mockMvc
+				.perform(get("/api/v1/battles/{battleId}", targetBattleId));
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andDo(document("not-ended-battle-detail",
+					resource(
+						ResourceSnippetParameters.builder()
+							.tag(BATTLE_API_NAME)
+							.pathParameters(
+								parameterWithName("battleId").type(SimpleType.NUMBER)
+									.description("배틀id 입니다"))
+							.responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+									.description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING)
+									.description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(JsonFieldType.OBJECT)
+									.description("API 요청 응답 데이터"),
+								fieldWithPath("data.battleId").type(JsonFieldType.NUMBER).description("대결 ID"),
+								fieldWithPath("data.isProgress").type(JsonFieldType.BOOLEAN).description("진행중인지 여부"),
+								fieldWithPath("data.battleGenre").type(JsonFieldType.OBJECT).description("대결의 장르"),
+								fieldWithPath("data.battleGenre.genreValue").type(JsonFieldType.STRING)
+									.description("대결의 장르 enum 값"),
+								fieldWithPath("data.battleGenre.genreName").type(JsonFieldType.STRING)
+									.description("대결의 장르명"),
+								fieldWithPath("data.challenged").type(JsonFieldType.OBJECT)
+									.description("대결 신청을 받은 게시물 대결 정보"),
+								fieldWithPath("data.challenged.postId").type(JsonFieldType.NUMBER)
+									.description("대결 신청을 받은 게시물 ID"),
+								fieldWithPath("data.challenged.voteCnt").type(NUMBER).optional()
+									.description("대결 신청 받은 게시물의 득표수 - optinal(isProgress가 true면 없음)"),
+								fieldWithPath("data.challenged.music").type(JsonFieldType.OBJECT)
+									.description("대결 신청을 받은 게시물에서 공유한 음악 정보"),
+								fieldWithPath("data.challenged.music.musicId").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 고유 번호"),
+								fieldWithPath("data.challenged.music.singer").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 가수명"),
+								fieldWithPath("data.challenged.music.title").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 제목"),
+								fieldWithPath("data.challenged.music.genre").type(JsonFieldType.OBJECT)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 장르"),
+								fieldWithPath("data.challenged.music.genre.genreValue").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 장르 enum 값"),
+								fieldWithPath("data.challenged.music.genre.genreName").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 장르명"),
+								fieldWithPath("data.challenged.music.musicUrl").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 재생 URL"),
+								fieldWithPath("data.challenged.music.albumCoverUrl").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 앨범 커버 URL"),
+
+								fieldWithPath("data.challenging").type(JsonFieldType.OBJECT)
+									.description("대결을 신청한 게시물 대결 정보"),
+								fieldWithPath("data.challenging.postId").type(JsonFieldType.NUMBER)
+									.description("대결을 신청한 게시물 ID"),
+								fieldWithPath("data.challenging.voteCnt").type(NUMBER).optional()
+									.description("대결을 신청한 게시물의 득표수 - optinal(isProgress가 true면 없음)"),
+								fieldWithPath("data.challenging.music").type(JsonFieldType.OBJECT)
+									.description("대결을 신청한 게시물에서 공유한 음악 정보"),
+								fieldWithPath("data.challenging.music.musicId").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 고유 번호"),
+								fieldWithPath("data.challenging.music.singer").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 가수명"),
+								fieldWithPath("data.challenging.music.title").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 제목"),
+								fieldWithPath("data.challenging.music.genre").type(JsonFieldType.OBJECT)
+									.description("대결을 신청한 게시물에서 공유한 음악의 장르"),
+								fieldWithPath("data.challenging.music.genre.genreValue").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 장르 enum 값"),
+								fieldWithPath("data.challenging.music.genre.genreName").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 장르명"),
+								fieldWithPath("data.challenging.music.musicUrl").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 재생 URL"),
+								fieldWithPath("data.challenging.music.albumCoverUrl").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 앨범 커버 URL")
+
+							)
+							.build()
+					)
+				));
+		}
+
+		@Test
+		public void 성공_given_이미끝난_battleId_then_그_배틀의_상세정보_및_투표수_200() throws Exception {
+			//given
+			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusEquals(BattleStatus.END);
+			Long targetBattleId = battlesStatusIsProgress.get(0).getId();
+			//when
+			ResultActions resultActions = mockMvc
+				.perform(get("/api/v1/battles/{battleId}", targetBattleId));
+			//then
+			resultActions.andExpect(status().isOk())
+				.andDo(print())
+				.andDo(document("ended-battle-detail",
+					resource(
+						ResourceSnippetParameters.builder()
+							.tag(BATTLE_API_NAME)
+							.pathParameters(
+								parameterWithName("battleId").type(SimpleType.NUMBER)
+									.description("배틀id 입니다"))
+							.responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+									.description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING)
+									.description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(JsonFieldType.OBJECT)
+									.description("API 요청 응답 데이터"),
+								fieldWithPath("data.battleId").type(JsonFieldType.NUMBER).description("대결 ID"),
+								fieldWithPath("data.isProgress").type(JsonFieldType.BOOLEAN).description("진행중인지 여부"),
+								fieldWithPath("data.battleGenre").type(JsonFieldType.OBJECT).description("대결의 장르"),
+								fieldWithPath("data.battleGenre.genreValue").type(JsonFieldType.STRING)
+									.description("대결의 장르 enum 값"),
+								fieldWithPath("data.battleGenre.genreName").type(JsonFieldType.STRING)
+									.description("대결의 장르명"),
+								fieldWithPath("data.challenged").type(JsonFieldType.OBJECT)
+									.description("대결 신청을 받은 게시물 대결 정보"),
+								fieldWithPath("data.challenged.postId").type(JsonFieldType.NUMBER)
+									.description("대결 신청을 받은 게시물 ID"),
+								fieldWithPath("data.challenged.voteCnt").type(NUMBER).optional()
+									.description("대결 신청 받은 게시물의 득표수 - optinal(isProgress가 true면 없음)"),
+								fieldWithPath("data.challenged.music").type(JsonFieldType.OBJECT)
+									.description("대결 신청을 받은 게시물에서 공유한 음악 정보"),
+								fieldWithPath("data.challenged.music.musicId").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 고유 번호"),
+								fieldWithPath("data.challenged.music.singer").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 가수명"),
+								fieldWithPath("data.challenged.music.title").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 제목"),
+								fieldWithPath("data.challenged.music.genre").type(JsonFieldType.OBJECT)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 장르"),
+								fieldWithPath("data.challenged.music.genre.genreValue").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 장르 enum 값"),
+								fieldWithPath("data.challenged.music.genre.genreName").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 장르명"),
+								fieldWithPath("data.challenged.music.musicUrl").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 재생 URL"),
+								fieldWithPath("data.challenged.music.albumCoverUrl").type(JsonFieldType.STRING)
+									.description("대결 신청을 받은 게시물에서 공유한 음악의 앨범 커버 URL"),
+
+								fieldWithPath("data.challenging").type(JsonFieldType.OBJECT)
+									.description("대결을 신청한 게시물 대결 정보"),
+								fieldWithPath("data.challenging.postId").type(JsonFieldType.NUMBER)
+									.description("대결을 신청한 게시물 ID"),
+								fieldWithPath("data.challenging.voteCnt").type(NUMBER).optional()
+									.description("대결을 신청한 게시물의 득표수 - optinal(isProgress가 true면 없음)"),
+								fieldWithPath("data.challenging.music").type(JsonFieldType.OBJECT)
+									.description("대결을 신청한 게시물에서 공유한 음악 정보"),
+								fieldWithPath("data.challenging.music.musicId").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 고유 번호"),
+								fieldWithPath("data.challenging.music.singer").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 가수명"),
+								fieldWithPath("data.challenging.music.title").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 제목"),
+								fieldWithPath("data.challenging.music.genre").type(JsonFieldType.OBJECT)
+									.description("대결을 신청한 게시물에서 공유한 음악의 장르"),
+								fieldWithPath("data.challenging.music.genre.genreValue").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 장르 enum 값"),
+								fieldWithPath("data.challenging.music.genre.genreName").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 장르명"),
+								fieldWithPath("data.challenging.music.musicUrl").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 재생 URL"),
+								fieldWithPath("data.challenging.music.albumCoverUrl").type(JsonFieldType.STRING)
+									.description("대결을 신청한 게시물에서 공유한 음악의 앨범 커버 URL")
+
+							)
+							.build()
+					)
+				));
+		}
+
+		// TODO: 23. 3. 4. 없는 battleId를_조회할 때
+		@Test
+		public void 실패_없는_battleId를_조회_404() throws Exception {
+			//given
+			Long targetBattleId = 300L;
+			//when
+			ResultActions resultActions = mockMvc
+				.perform(get("/api/v1/battles/{battleId}", targetBattleId));
+			//then
+			resultActions.andExpect(status().isNotFound())
+				.andDo(print())
+				.andDo(document("not-ended-battle-detail",
+					resource(
+						ResourceSnippetParameters.builder()
+							.tag(BATTLE_API_NAME)
+							.pathParameters(
+								parameterWithName("battleId").type(SimpleType.NUMBER)
+									.description("배틀id 입니다"))
+							.responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+									.description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING)
+									.description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(NULL)
+									.description("API 요청 응답 데이터 - null")
+
+							)
+							.build()
+					)
+				));
+		}
+
+	}
+
 	private Post makePost(String musicId, Genre genre, boolean isBattlePossible, Member member) {
 		PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
 			.musicId(musicId)
@@ -409,4 +1039,5 @@ class BattleControllerTest {
 			.build();
 		return postCreateRequestDto.toEntity(member);
 	}
+
 }

@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
+import com.example.demo.model.post.Genre;
 
 public interface BattleRepository extends JpaRepository<Battle, Long> {
 
@@ -25,4 +26,9 @@ public interface BattleRepository extends JpaRepository<Battle, Long> {
 	List<Battle> findAllByStatusEquals(BattleStatus progressStatus);
 
 	List<Battle> findByStatusAndUpdatedAtBetween(BattleStatus status, LocalDateTime startDate, LocalDateTime endDate);
+
+	List<Battle> findAllByGenre(Genre genre);
+
+	List<Battle> findAllByStatusAndGenreEquals(BattleStatus status, Genre genre);
+
 }
