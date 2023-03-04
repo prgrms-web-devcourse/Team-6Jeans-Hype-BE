@@ -815,7 +815,7 @@ class BattleControllerTest {
 
 	@Nested
 	@WithMockUser(username = "1")
-	class getBattleDetailById {
+	class GetBattleDetailById {
 		@Test
 		public void 성공_given_끝나지않은_battleId_then_그_배틀의_상세정보_200() throws Exception {
 			//given
@@ -832,8 +832,8 @@ class BattleControllerTest {
 						ResourceSnippetParameters.builder()
 							.tag(BATTLE_API_NAME)
 							.pathParameters(
-								parameterWithName("battleId").type(SimpleType.NUMBER).
-									description("배틀id 입니다"))
+								parameterWithName("battleId").type(SimpleType.NUMBER)
+									.description("배틀id 입니다"))
 							.responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
 									.description("API 요청 성공 여부"),
@@ -920,8 +920,8 @@ class BattleControllerTest {
 						ResourceSnippetParameters.builder()
 							.tag(BATTLE_API_NAME)
 							.pathParameters(
-								parameterWithName("battleId").type(SimpleType.NUMBER).
-									description("배틀id 입니다"))
+								parameterWithName("battleId").type(SimpleType.NUMBER)
+									.description("배틀id 입니다"))
 							.responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
 									.description("API 요청 성공 여부"),
@@ -1008,8 +1008,8 @@ class BattleControllerTest {
 						ResourceSnippetParameters.builder()
 							.tag(BATTLE_API_NAME)
 							.pathParameters(
-								parameterWithName("battleId").type(SimpleType.NUMBER).
-									description("배틀id 입니다"))
+								parameterWithName("battleId").type(SimpleType.NUMBER)
+									.description("배틀id 입니다"))
 							.responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
 									.description("API 요청 성공 여부"),
