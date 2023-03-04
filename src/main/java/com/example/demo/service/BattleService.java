@@ -6,6 +6,7 @@ import java.security.Principal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.battle.BattleCreateRequestDto;
+import com.example.demo.dto.battle.BattleDetailByIdResponseDto;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.dto.battle.BattlesResponseDto;
 import com.example.demo.model.battle.Battle;
@@ -166,6 +168,13 @@ public class BattleService {
 	public BattlesResponseDto getBattles(BattleStatus battleStatus, Genre genre) {
 		List<Battle> battles = battleRepository.findAllByStatusAndGenreEquals(battleStatus, genre);
 		return BattlesResponseDto.of(battles);
+	}
+
+	public BattleDetailByIdResponseDto getBattleDetailById(Long battleId) {
+		Optional<Battle> battle = battleRepository.findById(battleId);
+		return battle.map(BattleDetailByIdResponseDto::of).orElseThrow(
+			() -> new EntityNotFoundException(NOT_FOUND_BATTLE.getMessage())
+		);
 	}
 }
 
