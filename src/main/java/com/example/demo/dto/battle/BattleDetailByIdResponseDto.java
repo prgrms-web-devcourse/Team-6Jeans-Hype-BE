@@ -33,7 +33,7 @@ public record BattleDetailByIdResponseDto(
 		} else {
 			return BattleDetailByIdResponseDto.builder()
 				.battleId(battle.getId())
-				.isProgress(true)
+				.isProgress(false)
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
 				.challenging(
 					BattlePostInfoWithVoteCntResponseVo

@@ -80,7 +80,8 @@ public class BattleController {
 	@GetMapping("/{battleId}")
 	public ResponseEntity<ApiResponse> getBattleDetailByBattleId(@PathVariable Long battleId) {
 		BattleDetailByIdResponseDto battleDetailResponseDto = battleService.getBattleDetailById(battleId);
-		ApiResponse success = ApiResponse.success("배틀 상세 조회 성공", battleDetailResponseDto);
+		ApiResponse success = ApiResponse.success(SUCCESS_FIND_BATTLE_DETAIL_BY_ID.getMessage(),
+			battleDetailResponseDto);
 		return ResponseEntity.ok(success);
 	}
 
