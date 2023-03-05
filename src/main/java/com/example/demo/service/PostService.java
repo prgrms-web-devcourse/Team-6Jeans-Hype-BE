@@ -101,9 +101,14 @@ public class PostService {
 		return posts;
 	}
 
-	public PostLikeResponseDto likePost(Principal principal, Long postId) {
+	@Transactional
+	public PostLikeResponseDto updateLikePost(Principal principal, Long postId) {
 		Member member = principalService.getMemberByPrincipal(principal);
+		return likePost(member, postId);
+	}
 
+	@Transactional
+	public PostLikeResponseDto likePost(Member member, Long postId) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
 
@@ -111,9 +116,11 @@ public class PostService {
 
 		if (isExist) {
 			likeRepository.deleteByMemberAndPost(member, post);
+			post.minusLike();
 			return PostLikeResponseDto.of(false);
 		} else {
 			likeRepository.save(new Like(post, member));
+			post.plusLike();
 			return PostLikeResponseDto.of(true);
 		}
 	}
