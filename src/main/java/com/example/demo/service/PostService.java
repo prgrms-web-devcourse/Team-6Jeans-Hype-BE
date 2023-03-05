@@ -6,7 +6,6 @@ import java.security.Principal;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +34,6 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final LikeRepository likeRepository;
 	private final PrincipalService principalService;
-
-	private final RedissonClient redissonClient;
 
 	@Transactional
 	public Long createPost(Principal principal, PostCreateRequestDto postRequestDto) {
@@ -104,11 +101,6 @@ public class PostService {
 		return posts;
 	}
 
-	public PostLikeResponseDto updateLikePost(Principal principal, Long postId) {
-		Member member = principalService.getMemberByPrincipal(principal);
-		return likePost(member, postId);
-	}
-
 	@Transactional
 	public PostLikeResponseDto likePost(Member member, Long postId) {
 		Post post = postRepository.findById(postId)
@@ -126,5 +118,4 @@ public class PostService {
 			return PostLikeResponseDto.of(true);
 		}
 	}
-
 }

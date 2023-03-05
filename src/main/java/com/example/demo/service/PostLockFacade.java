@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.security.Principal;
 import java.util.concurrent.TimeUnit;
 
 import org.redisson.api.RLock;
@@ -16,7 +17,25 @@ import lombok.RequiredArgsConstructor;
 public class PostLockFacade {
 
 	private final PostService postService;
+	private final PrincipalService principalService;
 	private final RedissonClient redissonClient;
+
+	public PostLikeResponseDto likePost(Principal principal, Long postId) {
+		RLock lock = redissonClient.getLock(String.format("like:post:%d", postId));
+
+		try {
+			boolean available = lock.tryLock(10, 1, TimeUnit.SECONDS);
+			if (!available) {
+				throw new RuntimeException("Lock을 획득하지 못했습니다.");
+			}
+			Member member = principalService.getMemberByPrincipal(principal);
+			return likePost(member, postId);
+		} catch (InterruptedException error) {
+			throw new RuntimeException(error);
+		} finally {
+			lock.unlock();
+		}
+	}
 
 	public PostLikeResponseDto likePost(Member member, Long postId) {
 		RLock lock = redissonClient.getLock(String.format("like:post:%d", postId));
