@@ -77,7 +77,7 @@ public class PostController {
 
 	@PostMapping("/{postId}/like")
 	public ResponseEntity<ApiResponse> likePost(Principal principal, @PathVariable("postId") Long postId) {
-		PostLikeResponseDto result = postService.likePost(principal, postId);
+		PostLikeResponseDto result = postService.updateLikePost(principal, postId);
 
 		ApiResponse apiResponse;
 
