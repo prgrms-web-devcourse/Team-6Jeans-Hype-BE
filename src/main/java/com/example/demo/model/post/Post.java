@@ -93,5 +93,15 @@ public class Post extends BaseEntity {
 		return post;
 	}
 
+	public void plusLike() {
+		this.likeCount++;
+	}
+
+	public void minusLike() {
+		if (this.likeCount > 0) {
+			this.likeCount--;
+		}
+	}
+
 	// TODO: 2023-02-23 포스트가 특정 battle을 가지고 있는지 검증하는 메소드
 }
