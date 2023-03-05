@@ -41,6 +41,7 @@ import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindMusicResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostLikeResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
@@ -345,6 +346,41 @@ class PostControllerTest {
 			));
 
 		verify(postService).findAllBattleCandidates(any(), any());
+	}
+
+	@Test
+	void 성공_추천글을_좋아요_할_수_있다() throws Exception {
+		// given
+		PostLikeResponseDto postLikeResponseDto = PostLikeResponseDto.of(true);
+		when(postService.updateLikePost(any(), anyLong())).thenReturn(postLikeResponseDto);
+
+		Long postId = 0L;
+
+		// when
+		ResultActions resultActions = mockMvc.perform(
+			post("/api/v1/posts/{postId}/like", postId)
+				.contentType(APPLICATION_JSON)
+				.principal(principal)
+				.content(mapper.writeValueAsString(postLikeResponseDto))
+				.with(csrf())
+		);
+
+		// then
+		resultActions.andExpect(status().isOk())
+			.andDo(print())
+			.andDo(MockMvcRestDocumentationWrapper.document("추천글 좋아요",
+				pathParameters(
+					parameterWithName("postId").description("추천글 id")
+				),
+				responseFields(
+					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(OBJECT).description("API 요청 응답 메시지"),
+					fieldWithPath("data.hasLike").type(BOOLEAN).description("좋아요 여부")
+				)
+			));
+
+		verify(postService).updateLikePost(any(), anyLong());
 	}
 
 	private Member createMember() {
