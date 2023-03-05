@@ -14,11 +14,14 @@ import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostLikeResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
+import com.example.demo.model.post.Like;
 import com.example.demo.model.post.Post;
+import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.PostRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 
 	private final PostRepository postRepository;
+	private final LikeRepository likeRepository;
 	private final PrincipalService principalService;
 
 	@Transactional
@@ -95,6 +99,23 @@ public class PostService {
 		postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(member, genre)
 			.forEach(post -> posts.posts().add(PostBattleCandidateResponseDto.of(post)));
 		return posts;
+	}
+
+	public PostLikeResponseDto likePost(Principal principal, Long postId) {
+		Member member = principalService.getMemberByPrincipal(principal);
+
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
+
+		boolean isExist = likeRepository.existsByMemberAndPost(member, post);
+
+		if (isExist) {
+			likeRepository.deleteByMemberAndPost(member, post);
+			return PostLikeResponseDto.of(false);
+		} else {
+			likeRepository.save(new Like(post, member));
+			return PostLikeResponseDto.of(true);
+		}
 	}
 
 }
