@@ -21,9 +21,6 @@ import com.example.demo.model.post.Post;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class PostLikeTest {
@@ -65,8 +62,6 @@ public class PostLikeTest {
 		countDownLatch.await();
 		Post post = postRepository.findById(postId)
 			.orElseThrow();
-
-		log.info("test result => {}", post.getLikeCount());
 
 		assertThat(post.getLikeCount()).isEqualTo(10);
 	}
