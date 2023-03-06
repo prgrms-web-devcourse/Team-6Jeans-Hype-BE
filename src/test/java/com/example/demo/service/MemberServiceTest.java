@@ -223,8 +223,8 @@ class MemberServiceTest {
 				return MemberBattleResponseDto.builder()
 					.battleId(battle.getId())
 					.genre(MemberBattleGenreVO.of(battle.getGenre()))
-					.challenged(MemberBattlePostVO.of(battle.getChallengedPost().getPost()))
-					.challenging(MemberBattlePostVO.of(battle.getChallengingPost().getPost()))
+					.challenged(MemberBattlePostVO.of(battle.getChallengedPost().getPost(), false))
+					.challenging(MemberBattlePostVO.of(battle.getChallengingPost().getPost(), false))
 					.battleStatus(battle.getStatus())
 					.build();
 			})

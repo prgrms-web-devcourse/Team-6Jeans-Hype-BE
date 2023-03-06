@@ -120,11 +120,13 @@ class MemberControllerTest {
 					fieldWithPath("data.battles[].challenging.singer").type(STRING).description("음악 가수명"),
 					fieldWithPath("data.battles[].challenging.albumUrl").type(STRING).description("음악 앨범 이미지 url"),
 					fieldWithPath("data.battles[].challenging.nickname").type(STRING).description("추천글 작성자 이름"),
+					fieldWithPath("data.battles[].challenging.isWin").type(BOOLEAN).description("추천글 승리 여부"),
 					fieldWithPath("data.battles[].challenged").type(OBJECT).description("대결 신청 받은 곡 정보"),
 					fieldWithPath("data.battles[].challenged.title").type(STRING).description("음악 제목"),
 					fieldWithPath("data.battles[].challenged.singer").type(STRING).description("음악 가수명"),
 					fieldWithPath("data.battles[].challenged.albumUrl").type(STRING).description("음악 앨범 이미지 url"),
 					fieldWithPath("data.battles[].challenged.nickname").type(STRING).description("추천글 작성자 이름"),
+					fieldWithPath("data.battles[].challenged.isWin").type(BOOLEAN).description("추천글 승리 여부"),
 					fieldWithPath("data.battles[].battleStatus").type(STRING).description("대결 상태 값")
 				)
 			));
@@ -143,8 +145,8 @@ class MemberControllerTest {
 				return MemberBattleResponseDto.builder()
 					.battleId(0L)
 					.genre(MemberBattleGenreVO.of(battle.getGenre()))
-					.challenged(MemberBattlePostVO.of(battle.getChallengedPost().getPost()))
-					.challenging(MemberBattlePostVO.of(battle.getChallengingPost().getPost()))
+					.challenged(MemberBattlePostVO.of(battle.getChallengedPost().getPost(), false))
+					.challenging(MemberBattlePostVO.of(battle.getChallengingPost().getPost(), false))
 					.battleStatus(battle.getStatus())
 					.build();
 			})
