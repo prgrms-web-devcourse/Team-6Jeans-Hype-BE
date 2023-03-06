@@ -831,6 +831,9 @@ class BattleControllerTest {
 					resource(
 						ResourceSnippetParameters.builder()
 							.tag(BATTLE_API_NAME)
+							.requestHeaders(
+								headerWithName("Authorization").description("HYPE 서비스 access token")
+							)
 							.pathParameters(
 								parameterWithName("battleId").type(SimpleType.NUMBER)
 									.description("배틀id 입니다"))
@@ -843,6 +846,7 @@ class BattleControllerTest {
 									.description("API 요청 응답 데이터"),
 								fieldWithPath("data.battleId").type(JsonFieldType.NUMBER).description("대결 ID"),
 								fieldWithPath("data.isProgress").type(JsonFieldType.BOOLEAN).description("진행중인지 여부"),
+								fieldWithPath("data.isVoted").type(JsonFieldType.BOOLEAN).description("대결 투표 여부"),
 								fieldWithPath("data.battleGenre").type(JsonFieldType.OBJECT).description("대결의 장르"),
 								fieldWithPath("data.battleGenre.genreValue").type(JsonFieldType.STRING)
 									.description("대결의 장르 enum 값"),
@@ -919,6 +923,9 @@ class BattleControllerTest {
 					resource(
 						ResourceSnippetParameters.builder()
 							.tag(BATTLE_API_NAME)
+							.requestHeaders(
+								headerWithName("Authorization").description("HYPE 서비스 access token")
+							)
 							.pathParameters(
 								parameterWithName("battleId").type(SimpleType.NUMBER)
 									.description("배틀id 입니다"))
@@ -931,6 +938,7 @@ class BattleControllerTest {
 									.description("API 요청 응답 데이터"),
 								fieldWithPath("data.battleId").type(JsonFieldType.NUMBER).description("대결 ID"),
 								fieldWithPath("data.isProgress").type(JsonFieldType.BOOLEAN).description("진행중인지 여부"),
+								fieldWithPath("data.isVoted").type(JsonFieldType.BOOLEAN).description("대결 투표 여부"),
 								fieldWithPath("data.battleGenre").type(JsonFieldType.OBJECT).description("대결의 장르"),
 								fieldWithPath("data.battleGenre.genreValue").type(JsonFieldType.STRING)
 									.description("대결의 장르 enum 값"),
@@ -1007,6 +1015,9 @@ class BattleControllerTest {
 					resource(
 						ResourceSnippetParameters.builder()
 							.tag(BATTLE_API_NAME)
+							.requestHeaders(
+								headerWithName("Authorization").description("HYPE 서비스 access token")
+							)
 							.pathParameters(
 								parameterWithName("battleId").type(SimpleType.NUMBER)
 									.description("배틀id 입니다"))
