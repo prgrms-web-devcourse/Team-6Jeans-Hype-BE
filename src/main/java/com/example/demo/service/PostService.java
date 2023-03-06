@@ -3,6 +3,7 @@ package com.example.demo.service;
 import static com.example.demo.common.ExceptionMessage.*;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -117,5 +118,27 @@ public class PostService {
 			post.plusLike();
 			return PostLikeResponseDto.of(true);
 		}
+	}
+
+	public PostsFindResponseDto findTenPostsByLikeCount(Genre genre) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "likeCount");
+
+		List<PostFindResponseDto> posts;
+
+		if (genre == null) {
+			posts = postRepository.findAll(sort)
+				.stream().map(PostFindResponseDto::of)
+				.toList();
+		} else {
+			posts = postRepository.findByMusic_Genre(genre, sort)
+				.stream().map(PostFindResponseDto::of)
+				.toList();
+		}
+
+		if (posts.size() > 10) {
+			return PostsFindResponseDto.of(posts.subList(0, 10));
+		}
+
+		return PostsFindResponseDto.of(posts);
 	}
 }

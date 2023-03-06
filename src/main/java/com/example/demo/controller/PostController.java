@@ -92,4 +92,14 @@ public class PostController {
 		return ResponseEntity.ok(apiResponse);
 	}
 
+	@GetMapping("/likes/top/10")
+	public ResponseEntity<ApiResponse> findTenPostsByLikeCount(
+		@RequestParam(name = "genre", required = false) Genre genre) {
+		PostsFindResponseDto result = postService.findTenPostsByLikeCount(genre);
+
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_POST.getMessage(), result);
+
+		return ResponseEntity.ok(apiResponse);
+	}
+
 }
