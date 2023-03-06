@@ -848,6 +848,9 @@ class BattleControllerTest {
 									.description("대결의 장르 enum 값"),
 								fieldWithPath("data.battleGenre.genreName").type(JsonFieldType.STRING)
 									.description("대결의 장르명"),
+								fieldWithPath("data.battleCreatedDate").type(JsonFieldType.STRING)
+									.description("배틀이 생성된 날짜"),
+
 								fieldWithPath("data.challenged").type(JsonFieldType.OBJECT)
 									.description("대결 신청을 받은 게시물 대결 정보"),
 								fieldWithPath("data.challenged.postId").type(JsonFieldType.NUMBER)
@@ -948,6 +951,8 @@ class BattleControllerTest {
 									.description("대결의 장르 enum 값"),
 								fieldWithPath("data.battleGenre.genreName").type(JsonFieldType.STRING)
 									.description("대결의 장르명"),
+								fieldWithPath("data.battleCreatedDate").type(JsonFieldType.STRING)
+									.description("배틀이 생성된 날짜"),
 
 								fieldWithPath("data.challenged").type(JsonFieldType.OBJECT)
 									.description("대결 신청을 받은 게시물 대결 정보"),
