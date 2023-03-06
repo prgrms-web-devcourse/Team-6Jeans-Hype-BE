@@ -15,7 +15,7 @@ spring:
             scope:
               - profile
   config:
-    import: optional:file:sensitive.env[.properties]
+    import: optional:file:sensitive.env[.properties], optional:classpath:application-resource-path.yml
 
 app:
   auth:
@@ -36,6 +36,9 @@ app:
       - http://localhost:3000${FRONT_REDIRECT_PATH}
 cloud:
   aws:
+    s3:
+      bucket:
+        name: devcourse-pearls-bucket
     credentials:
       accessKey: ${ACCESS_KEY}
       secretKey: ${SECRET_KEY}
