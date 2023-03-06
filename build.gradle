@@ -42,6 +42,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter:3.1.5'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
@@ -64,9 +65,13 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.4'
     testImplementation "org.junit.jupiter:junit-jupiter-params"
+    testImplementation 'io.findify:s3mock_2.13:0.2.6'
     implementation 'com.google.guava:guava:31.1-jre'
     swaggerUI 'org.webjars:swagger-ui:4.1.3'
+
     implementation "ca.pjer:logback-awslogs-appender:1.6.0"
+    implementation 'com.amazonaws:aws-java-sdk-bom:1.12.417'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.410'
 }
 openapi3 {
     server = 'https://localhost:8080'
