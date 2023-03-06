@@ -21,7 +21,8 @@ public enum ExceptionMessage {
 	CANNOT_MAKE_BATTLE_DIFFERENT_GENRE("두 post의 음악 장르가 다릅니다."),
 	CANNOT_MAKE_BATTLE_SAME_MUSIC("두 Post가 같은 음악에 대한 Post입니다."),
 	//IllegalStateException
-	CANNOT_MAKE_BATTLE_NOT_ENOUGH_CHALLENGE_TICKET("사용자의 대결권이 부족합니다.");
+	CANNOT_MAKE_BATTLE_NOT_ENOUGH_CHALLENGE_TICKET("사용자의 대결권이 부족합니다."),
+	USER_SAME_POST_WRITER("직접 작성한 추천글은 대결신청할 수 없습니다.");
 
 	final String message;
 

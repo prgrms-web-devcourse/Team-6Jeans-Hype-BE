@@ -3,6 +3,7 @@ package com.example.demo.service;
 import static com.example.demo.common.ExceptionMessage.*;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -93,12 +94,21 @@ public class PostService {
 		return PostDetailFindResponseDto.of(post);
 	}
 
-	public PostsBattleCandidateResponseDto findAllBattleCandidates(Principal principal, Genre genre) {
+	public PostsBattleCandidateResponseDto findAllBattleCandidates(Principal principal, Long postId) {
 		Member member = principalService.getMemberByPrincipal(principal);
-		PostsBattleCandidateResponseDto posts = PostsBattleCandidateResponseDto.create();
-		postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(member, genre)
-			.forEach(post -> posts.posts().add(PostBattleCandidateResponseDto.of(post)));
-		return posts;
+
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
+
+		if (member.equals(post.getMember())) {
+			throw new IllegalArgumentException(USER_SAME_POST_WRITER.getMessage());
+		}
+
+		List<PostBattleCandidateResponseDto> posts = postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(
+				member, post.getMusic().getGenre())
+			.stream().map(PostBattleCandidateResponseDto::of).toList();
+
+		return PostsBattleCandidateResponseDto.of(posts);
 	}
 
 	@Transactional
