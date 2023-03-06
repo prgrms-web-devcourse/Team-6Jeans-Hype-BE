@@ -33,6 +33,14 @@ app:
       - http://localhost:3000${FRONT_REDIRECT_PATH}
 cloud:
   aws:
+    s3:
+      bucket:
+        name: devcourse-pearls-bucket
     credentials:
       accessKey: ${ACCESS_KEY}
       secretKey: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
