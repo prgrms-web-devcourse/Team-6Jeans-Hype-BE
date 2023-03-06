@@ -8,6 +8,7 @@ public enum ResponseMessage {
 	SUCCESS_FIND_BATTLE_BY_MEMBER("유저 참여 대결 정보 리스트 조회 성공"),
 	SUCCESS_MY_PAGE_PROFILE("마이페이지 상세정보 조회 성공"),
 	SUCCESS_USER_PAGE_PROFILE("유저페이지 상세정보 조회 성공"),
+	SUCCESS_FIND_RANKERS("랭커 리스트 조회 성공"),
 	// Post
 	SUCCESS_CREATE_POST("음악 공유 게시글 등록 성공"),
 	SUCCESS_FIND_ALL_POST("음악 공유 게시글 리스트 조회 성공"),
