@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 
 	@Value("${member.profile.image}")
-	private String BASE_DIR_PROFILE_IMG;
+	private String baseDirProfileImg;
 
 	private final PrincipalService principalService;
 	private final PostRepository postRepository;
@@ -204,7 +204,7 @@ public class MemberService {
 	public MemberUpdateResponseDto updateProfileImage(Principal principal, MultipartFile profileImage) {
 		Member member = principalService.getMemberByPrincipal(principal);
 
-		String updatedProfileImageUrl = resourceStorage.save(BASE_DIR_PROFILE_IMG, member.getId(), profileImage);
+		String updatedProfileImageUrl = resourceStorage.save(baseDirProfileImg, member.getId(), profileImage);
 		member.setProfileImageUrl(updatedProfileImageUrl);
 		return MemberUpdateResponseDto.of(member);
 	}
