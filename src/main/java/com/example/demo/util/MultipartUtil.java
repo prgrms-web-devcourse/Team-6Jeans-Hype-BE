@@ -3,11 +3,6 @@ package com.example.demo.util;
 import java.util.UUID;
 
 public final class MultipartUtil {
-	private static final String BASE_DIR = "members/profile/";
-
-	public static String getLocalHomeDirectory() {
-		return System.getProperty("user.home");
-	}
 
 	public static String getContentType(String originalName) {
 		String format = getFormat(originalName).toLowerCase();
