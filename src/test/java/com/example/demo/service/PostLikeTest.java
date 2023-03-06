@@ -63,6 +63,8 @@ public class PostLikeTest {
 		Post post = postRepository.findById(postId)
 			.orElseThrow();
 
+		System.out.println("result : " + post.getLikeCount());
+
 		assertThat(post.getLikeCount()).isEqualTo(50);
 	}
 
