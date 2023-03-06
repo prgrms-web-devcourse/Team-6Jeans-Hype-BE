@@ -15,9 +15,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.demo.util.MultipartUtil;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AmazonS3ResourceStorage implements ResourceStorage {
