@@ -9,10 +9,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
@@ -21,7 +19,6 @@ import com.example.demo.model.post.Post;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class PostLikeTest {
 
