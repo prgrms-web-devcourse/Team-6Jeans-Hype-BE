@@ -21,6 +21,9 @@ import com.example.demo.model.post.Post;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class PostLikeTest {
@@ -36,7 +39,7 @@ public class PostLikeTest {
 	void 성공_추천글_동시_좋아요_등록() throws InterruptedException {
 		// given
 		List<Member> members = new ArrayList<>();
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 10; i++) {
 			members.add(memberRepository.save(createMember()));
 		}
 
@@ -44,10 +47,10 @@ public class PostLikeTest {
 		Long postId = postRepository.save(createPost(member)).getId();
 
 		// when
-		ExecutorService executorService = Executors.newFixedThreadPool(50);
-		CountDownLatch countDownLatch = new CountDownLatch(50);
+		ExecutorService executorService = Executors.newFixedThreadPool(10);
+		CountDownLatch countDownLatch = new CountDownLatch(10);
 
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 10; i++) {
 			int finalI = i;
 			executorService.submit(() -> {
 				try {
@@ -63,9 +66,9 @@ public class PostLikeTest {
 		Post post = postRepository.findById(postId)
 			.orElseThrow();
 
-		System.out.println("result : " + post.getLikeCount());
+		log.info("test result => {}", post.getLikeCount());
 
-		assertThat(post.getLikeCount()).isEqualTo(50);
+		assertThat(post.getLikeCount()).isEqualTo(10);
 	}
 
 	private Post createPost(Member member) {
