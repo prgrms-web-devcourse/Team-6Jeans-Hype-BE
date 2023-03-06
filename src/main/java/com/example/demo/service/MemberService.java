@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.dto.member.MemberBattleResponseDto;
 import com.example.demo.dto.member.MemberBattlesResponseDto;
+import com.example.demo.dto.member.RankersResponseDto;
 import com.example.demo.exception.ServerNotActiveException;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
@@ -182,5 +183,10 @@ public class MemberService {
 		}
 
 		return battles;
+	}
+
+	public RankersResponseDto getRankerList() {
+		List<Member> rankers = memberRepository.findAllByMemberScore_RankingOrderByRankingDescGreaterThan(0);
+		return RankersResponseDto.of(rankers);
 	}
 }
