@@ -10,17 +10,19 @@ import lombok.Builder;
 public record BattleDetailByIdResponseDto(
 	Long battleId,
 	boolean isProgress,
+	boolean isVoted,
 	GenreVoResponseDto battleGenre,
 	BattlePostInfoWithVoteCntResponseVo challenged,
 	BattlePostInfoWithVoteCntResponseVo challenging
 ) {
-	public static BattleDetailByIdResponseDto of(Battle battle) {
+	public static BattleDetailByIdResponseDto of(Battle battle, boolean isVoted) {
 		BattleInfo challengedBattleInfo = battle.getChallengedPost();
 		BattleInfo challengingBattleInfo = battle.getChallengingPost();
 		if (battle.isProgress()) {
 			return BattleDetailByIdResponseDto.builder()
 				.battleId(battle.getId())
 				.isProgress(true)
+				.isVoted(isVoted)
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
 				.challenging(
 					BattlePostInfoWithVoteCntResponseVo
@@ -34,6 +36,7 @@ public record BattleDetailByIdResponseDto(
 			return BattleDetailByIdResponseDto.builder()
 				.battleId(battle.getId())
 				.isProgress(false)
+				.isVoted(isVoted)
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
 				.challenging(
 					BattlePostInfoWithVoteCntResponseVo
