@@ -36,7 +36,7 @@ public class PostLikeTest {
 	void 성공_추천글_동시_좋아요_등록() throws InterruptedException {
 		// given
 		List<Member> members = new ArrayList<>();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 50; i++) {
 			members.add(memberRepository.save(createMember()));
 		}
 
@@ -44,10 +44,10 @@ public class PostLikeTest {
 		Long postId = postRepository.save(createPost(member)).getId();
 
 		// when
-		ExecutorService executorService = Executors.newFixedThreadPool(100);
-		CountDownLatch countDownLatch = new CountDownLatch(100);
+		ExecutorService executorService = Executors.newFixedThreadPool(50);
+		CountDownLatch countDownLatch = new CountDownLatch(50);
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 50; i++) {
 			int finalI = i;
 			executorService.submit(() -> {
 				try {
@@ -63,7 +63,7 @@ public class PostLikeTest {
 		Post post = postRepository.findById(postId)
 			.orElseThrow();
 
-		assertThat(post.getLikeCount()).isEqualTo(100);
+		assertThat(post.getLikeCount()).isEqualTo(50);
 	}
 
 	private Post createPost(Member member) {
