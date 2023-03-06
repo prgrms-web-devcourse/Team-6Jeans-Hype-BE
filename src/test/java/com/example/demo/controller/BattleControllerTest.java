@@ -1003,7 +1003,7 @@ class BattleControllerTest {
 			//then
 			resultActions.andExpect(status().isNotFound())
 				.andDo(print())
-				.andDo(document("not-ended-battle-detail",
+				.andDo(document("not-found-battle-detail",
 					resource(
 						ResourceSnippetParameters.builder()
 							.tag(BATTLE_API_NAME)
