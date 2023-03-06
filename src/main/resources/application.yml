@@ -39,8 +39,3 @@ cloud:
     credentials:
       accessKey: ${ACCESS_KEY}
       secretKey: ${SECRET_KEY}
-    region:
-      static: ap-northeast-2
-      auto: false
-    stack:
-      auto: false
