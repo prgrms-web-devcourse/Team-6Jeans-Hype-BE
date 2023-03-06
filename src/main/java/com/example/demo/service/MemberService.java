@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -44,7 +45,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberService {
 
-	private static final String BASE_DIR_PROFILE_IMG = "members/profile/";
+	@Value("${member.profile.image}")
+	private String BASE_DIR_PROFILE_IMG;
 
 	private final PrincipalService principalService;
 	private final PostRepository postRepository;

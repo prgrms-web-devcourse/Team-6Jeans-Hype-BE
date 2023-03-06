@@ -12,7 +12,7 @@ spring:
             scope:
               - profile
   config:
-    import: optional:file:sensitive.env[.properties]
+    import: optional:file:sensitive.env[.properties], optional:classpath:application-resource-path.yml
 
 app:
   auth:
