@@ -823,7 +823,8 @@ class BattleControllerTest {
 			Long targetBattleId = battlesStatusIsProgress.get(0).getId();
 			//when
 			ResultActions resultActions = mockMvc
-				.perform(get("/api/v1/battles/{battleId}", targetBattleId));
+				.perform(get("/api/v1/battles/{battleId}", targetBattleId)
+					.header("Authorization", "Bearer accessToken"));
 			//then
 			resultActions.andExpect(status().isOk())
 				.andDo(print())
@@ -915,7 +916,8 @@ class BattleControllerTest {
 			Long targetBattleId = battlesStatusIsProgress.get(0).getId();
 			//when
 			ResultActions resultActions = mockMvc
-				.perform(get("/api/v1/battles/{battleId}", targetBattleId));
+				.perform(get("/api/v1/battles/{battleId}", targetBattleId)
+					.header("Authorization", "Bearer accessToken"));
 			//then
 			resultActions.andExpect(status().isOk())
 				.andDo(print())
@@ -1007,7 +1009,8 @@ class BattleControllerTest {
 			Long targetBattleId = 300L;
 			//when
 			ResultActions resultActions = mockMvc
-				.perform(get("/api/v1/battles/{battleId}", targetBattleId));
+				.perform(get("/api/v1/battles/{battleId}", targetBattleId)
+					.header("Authorization", "Bearer accessToken"));
 			//then
 			resultActions.andExpect(status().isNotFound())
 				.andDo(print())
