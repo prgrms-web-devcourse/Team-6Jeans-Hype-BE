@@ -6,7 +6,6 @@ import java.security.Principal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -170,11 +169,13 @@ public class BattleService {
 		return BattlesResponseDto.of(battles);
 	}
 
-	public BattleDetailByIdResponseDto getBattleDetailById(Long battleId) {
-		Optional<Battle> battle = battleRepository.findById(battleId);
-		return battle.map(BattleDetailByIdResponseDto::of).orElseThrow(
-			() -> new EntityNotFoundException(NOT_FOUND_BATTLE.getMessage())
-		);
+	public BattleDetailByIdResponseDto getBattleDetailById(Principal principal, Long battleId) {
+		Member member = principalService.getMemberByPrincipal(principal);
+		Battle battle = battleRepository.findById(battleId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_BATTLE.getMessage()));
+		return voteRepository.existsByBattleAndVoter(battle, member)
+			? BattleDetailByIdResponseDto.of(battle, true)
+			: BattleDetailByIdResponseDto.of(battle, false);
 	}
 }
 
