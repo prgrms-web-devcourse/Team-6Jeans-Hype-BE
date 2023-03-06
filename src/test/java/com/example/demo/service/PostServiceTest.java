@@ -21,12 +21,14 @@ import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostLikeResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
+import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 
@@ -39,6 +41,8 @@ class PostServiceTest {
 	private PostRepository postRepository;
 	@Mock
 	private MemberRepository memberRepository;
+	@Mock
+	private LikeRepository likeRepository;
 	@Mock
 	private PrincipalService principalService;
 	@Mock
@@ -328,6 +332,45 @@ class PostServiceTest {
 		assertThat(postsDto).isEqualTo(expected);
 
 		verify(postRepository).findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any());
+	}
+
+	@Test
+	void 성공_추천글_좋아요_등록() {
+		// given
+		Post post = getPosts().get(0);
+
+		// when
+		when(postRepository.findById(0L)).thenReturn(Optional.of(post));
+		when(likeRepository.existsByMemberAndPost(member, post)).thenReturn(false);
+
+		PostLikeResponseDto result = postService.likePost(member, 0L);
+
+		// then
+		assertThat(result.hasLike()).isEqualTo(true);
+		assertThat(post.getLikeCount()).isEqualTo(1);
+
+		verify(postRepository).findById(0L);
+		verify(likeRepository).existsByMemberAndPost(member, post);
+	}
+
+	@Test
+	void 성공_추천글_좋아요_해제() {
+		// given
+		Post post = getPosts().get(0);
+		post.plusLike();
+
+		// when
+		when(postRepository.findById(0L)).thenReturn(Optional.of(post));
+		when(likeRepository.existsByMemberAndPost(member, post)).thenReturn(true);
+
+		PostLikeResponseDto result = postService.likePost(member, 0L);
+
+		// then
+		assertThat(result.hasLike()).isEqualTo(false);
+		assertThat(post.getLikeCount()).isEqualTo(0);
+
+		verify(postRepository).findById(0L);
+		verify(likeRepository).existsByMemberAndPost(member, post);
 	}
 
 	private List<Post> getPosts(Member member, Genre genre) {
