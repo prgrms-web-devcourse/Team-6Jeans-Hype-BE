@@ -1,5 +1,6 @@
 package com.example.demo.dto.battle;
 
+
 import java.time.LocalDate;
 
 import com.example.demo.dto.genre.GenreVoResponseDto;
@@ -27,11 +28,9 @@ public record BattleDetailByIdResponseDto(
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
 				.battleCreatedDate(battle.getCreatedAt().toLocalDate())
 				.challenging(
-					com.example.demo.dto.battle.BattlePostInfoWithVoteCntResponseVo
-						.ofWithoutVoteCnt(challengingBattleInfo.getPost()))
+					BattlePostInfoWithVoteCntResponseVo.ofWithoutVoteCnt(challengingBattleInfo.getPost()))
 				.challenged(
-					com.example.demo.dto.battle.BattlePostInfoWithVoteCntResponseVo
-						.ofWithoutVoteCnt(challengedBattleInfo.getPost()))
+					BattlePostInfoWithVoteCntResponseVo.ofWithoutVoteCnt(challengedBattleInfo.getPost()))
 				.build();
 
 		} else {
@@ -41,11 +40,11 @@ public record BattleDetailByIdResponseDto(
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
 				.battleCreatedDate(battle.getCreatedAt().toLocalDate())
 				.challenging(
-					com.example.demo.dto.battle.BattlePostInfoWithVoteCntResponseVo
-						.ofWithVoteCnt(challengingBattleInfo.getPost(), challengingBattleInfo.getVoteCount()))
+					BattlePostInfoWithVoteCntResponseVo.ofWithVoteCnt(challengingBattleInfo.getPost(),
+						challengingBattleInfo.getVoteCount()))
 				.challenged(
-					com.example.demo.dto.battle.BattlePostInfoWithVoteCntResponseVo
-						.ofWithVoteCnt(challengedBattleInfo.getPost(), challengedBattleInfo.getVoteCount()))
+					BattlePostInfoWithVoteCntResponseVo.ofWithVoteCnt(challengedBattleInfo.getPost(),
+						challengedBattleInfo.getVoteCount()))
 				.build();
 		}
 	}
