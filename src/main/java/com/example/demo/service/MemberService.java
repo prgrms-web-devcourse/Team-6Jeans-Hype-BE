@@ -185,7 +185,7 @@ public class MemberService {
 		return battles;
 	}
 
-	public RankersResponseDto getRankerList() {
+	public RankersResponseDto getTop100RankerList() {
 		List<Member> rankers = memberRepository.findByMemberScore_RankingBetweenOrderByMemberScore_RankingAsc(1, 100);
 		return RankersResponseDto.of(rankers);
 	}

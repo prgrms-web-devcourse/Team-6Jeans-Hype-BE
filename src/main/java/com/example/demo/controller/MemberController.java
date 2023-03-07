@@ -94,7 +94,7 @@ public class MemberController {
 
 	@GetMapping("/ranking")
 	public ResponseEntity<ApiResponse> getRanking() {
-		RankersResponseDto rankersResponseDto = memberService.getRankerList();
+		RankersResponseDto rankersResponseDto = memberService.getTop100RankerList();
 		ApiResponse apiResponse = ApiResponse.success(
 			ResponseMessage.SUCCESS_FIND_POST.getMessage(), rankersResponseDto
 		);
