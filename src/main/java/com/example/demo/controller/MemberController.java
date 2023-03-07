@@ -131,10 +131,19 @@ public class MemberController {
 	}
 
 	@GetMapping("/ranking")
-	public ResponseEntity<ApiResponse> getRanking() {
-		RankersResponseDto rankersResponseDto = memberService.getTop100RankerList();
+	public ResponseEntity<ApiResponse> getTop100Ranking() {
+		RankersResponseDto rankersResponseDto = memberService.getRankerListBetween(1, 100);
 		ApiResponse apiResponse = ApiResponse.success(
-			ResponseMessage.SUCCESS_FIND_POST.getMessage(), rankersResponseDto
+			ResponseMessage.SUCCESS_FIND_RANKERS.getMessage(), rankersResponseDto
+		);
+		return ResponseEntity.ok(apiResponse);
+	}
+
+	@GetMapping("/ranking/preview")
+	public ResponseEntity<ApiResponse> getRankingPreview() {
+		RankersResponseDto rankersResponseDto = memberService.getRankerListBetween(1, 5);
+		ApiResponse apiResponse = ApiResponse.success(
+			ResponseMessage.SUCCESS_FIND_RANKERS.getMessage(), rankersResponseDto
 		);
 		return ResponseEntity.ok(apiResponse);
 	}
