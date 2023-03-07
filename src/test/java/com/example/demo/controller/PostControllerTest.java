@@ -409,7 +409,7 @@ class PostControllerTest {
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
-			get("/api/v1/posts/likes/top/10")
+			get("/api/v1/posts/likes/top")
 				.contentType(APPLICATION_JSON)
 				.params(queries)
 		);
