@@ -11,6 +11,6 @@ import com.example.demo.model.member.Social;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	Optional<Member> findBySocialInfo_SocialTypeAndSocialInfo_SocialId(Social socialType, String socialId);
 
-	List<Member> findAllByMemberScore_RankingOrderByRankingDescGreaterThan(int ranking);
+	List<Member> findByMemberScore_RankingBetweenOrderByMemberScore_RankingAsc(int startRanking, int endRanking);
 
 }

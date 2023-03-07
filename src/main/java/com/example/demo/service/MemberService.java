@@ -186,7 +186,7 @@ public class MemberService {
 	}
 
 	public RankersResponseDto getRankerList() {
-		List<Member> rankers = memberRepository.findAllByMemberScore_RankingOrderByRankingDescGreaterThan(0);
+		List<Member> rankers = memberRepository.findByMemberScore_RankingBetweenOrderByMemberScore_RankingAsc(1, 100);
 		return RankersResponseDto.of(rankers);
 	}
 }
