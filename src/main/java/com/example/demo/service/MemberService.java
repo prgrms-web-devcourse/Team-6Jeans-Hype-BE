@@ -186,7 +186,9 @@ public class MemberService {
 		}
 
 		if (Objects.nonNull(limit)) {
-			return new ArrayList<>(battles.subList(0, limit));
+			if (battles.size() > limit) {
+				return new ArrayList<>(battles.subList(0, limit));
+			}
 		}
 
 		return battles;
