@@ -16,7 +16,7 @@ import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.dto.member.MemberBattlesResponseDto;
 import com.example.demo.dto.member.MemberDetailsResponseDto;
 import com.example.demo.dto.member.MemberMyDetailsResponseDto;
-import com.example.demo.dto.member.RankersResponseDto;
+import com.example.demo.dto.ranking.RankersResponseDto;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;

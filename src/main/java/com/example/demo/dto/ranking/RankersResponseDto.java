@@ -1,8 +1,7 @@
-package com.example.demo.dto.member;
+package com.example.demo.dto.ranking;
 
 import java.util.List;
 
-import com.example.demo.dto.ranking.DateInfoForRankingVo;
 import com.example.demo.model.member.Member;
 
 import lombok.AccessLevel;

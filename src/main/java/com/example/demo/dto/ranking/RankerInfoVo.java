@@ -1,4 +1,4 @@
-package com.example.demo.dto.member;
+package com.example.demo.dto.ranking;
 
 import com.example.demo.model.member.Member;
 
