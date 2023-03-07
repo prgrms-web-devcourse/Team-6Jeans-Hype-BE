@@ -174,8 +174,8 @@ public class BattleService {
 		Battle battle = battleRepository.findById(battleId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_BATTLE.getMessage()));
 		return voteRepository.existsByBattleAndVoter(battle, member)
-			? BattleDetailByIdResponseDto.of(battle, true)
-			: BattleDetailByIdResponseDto.of(battle, false);
+			? BattleDetailByIdResponseDto.ofVotedBattleDetail(battle)
+			: BattleDetailByIdResponseDto.ofNotVotedBattleDetail(battle);
 	}
 }
 

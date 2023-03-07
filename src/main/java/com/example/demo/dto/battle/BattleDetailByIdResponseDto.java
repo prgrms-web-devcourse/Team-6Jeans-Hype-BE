@@ -15,14 +15,14 @@ public record BattleDetailByIdResponseDto(
 	BattlePostInfoWithVoteCntResponseVo challenged,
 	BattlePostInfoWithVoteCntResponseVo challenging
 ) {
-	public static BattleDetailByIdResponseDto of(Battle battle, boolean isVoted) {
+	public static BattleDetailByIdResponseDto ofVotedBattleDetail(Battle battle) {
 		BattleInfo challengedBattleInfo = battle.getChallengedPost();
 		BattleInfo challengingBattleInfo = battle.getChallengingPost();
 		if (battle.isProgress()) {
 			return BattleDetailByIdResponseDto.builder()
 				.battleId(battle.getId())
 				.isProgress(true)
-				.isVoted(isVoted)
+				.isVoted(true)
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
 				.challenging(
 					BattlePostInfoWithVoteCntResponseVo
@@ -36,7 +36,40 @@ public record BattleDetailByIdResponseDto(
 			return BattleDetailByIdResponseDto.builder()
 				.battleId(battle.getId())
 				.isProgress(false)
-				.isVoted(isVoted)
+				.isVoted(true)
+				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
+				.challenging(
+					BattlePostInfoWithVoteCntResponseVo
+						.ofWithVoteCnt(challengingBattleInfo.getPost(), challengingBattleInfo.getVoteCount()))
+				.challenged(
+					BattlePostInfoWithVoteCntResponseVo
+						.ofWithVoteCnt(challengedBattleInfo.getPost(), challengedBattleInfo.getVoteCount()))
+				.build();
+		}
+	}
+
+	public static BattleDetailByIdResponseDto ofNotVotedBattleDetail(Battle battle) {
+		BattleInfo challengedBattleInfo = battle.getChallengedPost();
+		BattleInfo challengingBattleInfo = battle.getChallengingPost();
+		if (battle.isProgress()) {
+			return BattleDetailByIdResponseDto.builder()
+				.battleId(battle.getId())
+				.isProgress(true)
+				.isVoted(false)
+				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
+				.challenging(
+					BattlePostInfoWithVoteCntResponseVo
+						.ofWithoutVoteCnt(challengingBattleInfo.getPost()))
+				.challenged(
+					BattlePostInfoWithVoteCntResponseVo
+						.ofWithoutVoteCnt(challengedBattleInfo.getPost()))
+				.build();
+
+		} else {
+			return BattleDetailByIdResponseDto.builder()
+				.battleId(battle.getId())
+				.isProgress(false)
+				.isVoted(false)
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
 				.challenging(
 					BattlePostInfoWithVoteCntResponseVo
