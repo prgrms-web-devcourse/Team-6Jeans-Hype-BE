@@ -3,11 +3,16 @@ package com.example.demo.controller;
 import java.security.Principal;
 import java.util.Optional;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.common.ApiResponse;
 import com.example.demo.common.ExceptionMessage;
@@ -16,6 +21,9 @@ import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.dto.member.MemberBattlesResponseDto;
 import com.example.demo.dto.member.MemberDetailsResponseDto;
 import com.example.demo.dto.member.MemberMyDetailsResponseDto;
+import com.example.demo.dto.member.MemberNicknameUpdateRequestDto;
+import com.example.demo.dto.member.MemberUpdateResponseDto;
+import com.example.demo.exception.ServerNotActiveException;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
@@ -73,7 +81,37 @@ public class MemberController {
 			}
 		}
 
-		throw new IllegalStateException(ExceptionMessage.SERVER_ERROR.getMessage());
+		throw new ServerNotActiveException(ExceptionMessage.SERVER_ERROR.getMessage());
+	}
+
+	@PostMapping("/profile/nickname")
+	public ResponseEntity<ApiResponse> updateNickname(
+		Principal principal,
+		@RequestBody MemberNicknameUpdateRequestDto requestDto
+	) {
+
+		MemberUpdateResponseDto response = memberService.updateNickname(principal, requestDto.nickname());
+		return ResponseEntity.ok(
+			ApiResponse.success(
+				ResponseMessage.SUCCESS_USER_UPDATE.getMessage(),
+				response
+			)
+		);
+	}
+
+	@PostMapping("/profile/image")
+	public ResponseEntity<ApiResponse> updateProfileImage(
+		Principal principal,
+		@NotNull @RequestParam MultipartFile profileImage
+	) {
+
+		MemberUpdateResponseDto response = memberService.updateProfileImage(principal, profileImage);
+		return ResponseEntity.ok(
+			ApiResponse.success(
+				ResponseMessage.SUCCESS_USER_UPDATE.getMessage(),
+				response
+			)
+		);
 	}
 
 	@GetMapping("/battles")

@@ -11,15 +11,19 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.common.ResourceStorage;
 import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.dto.member.MemberBattleResponseDto;
 import com.example.demo.dto.member.MemberBattlesResponseDto;
+import com.example.demo.dto.member.MemberUpdateResponseDto;
 import com.example.demo.exception.ServerNotActiveException;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
@@ -41,9 +45,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberService {
 
+	@Value("${member.profile.image}")
+	private String baseDirProfileImg;
+
 	private final PrincipalService principalService;
 	private final PostRepository postRepository;
 	private final MemberRepository memberRepository;
+	private final ResourceStorage resourceStorage;
 
 	@Transactional
 	public long join(OAuth2User oauth2User, String socialName) {
@@ -182,5 +190,22 @@ public class MemberService {
 		}
 
 		return battles;
+	}
+
+	@Transactional
+	public MemberUpdateResponseDto updateNickname(Principal principal, String nickname) {
+		Member member = principalService.getMemberByPrincipal(principal);
+
+		member.setNickname(nickname);
+		return MemberUpdateResponseDto.of(member);
+	}
+
+	@Transactional
+	public MemberUpdateResponseDto updateProfileImage(Principal principal, MultipartFile profileImage) {
+		Member member = principalService.getMemberByPrincipal(principal);
+
+		String updatedProfileImageUrl = resourceStorage.save(baseDirProfileImg, member.getId(), profileImage);
+		member.setProfileImageUrl(updatedProfileImageUrl);
+		return MemberUpdateResponseDto.of(member);
 	}
 }
