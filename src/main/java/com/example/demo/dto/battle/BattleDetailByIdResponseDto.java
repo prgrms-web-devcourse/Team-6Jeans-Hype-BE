@@ -1,6 +1,5 @@
 package com.example.demo.dto.battle;
 
-
 import java.time.LocalDate;
 
 import com.example.demo.dto.genre.GenreVoResponseDto;
@@ -41,6 +40,7 @@ public record BattleDetailByIdResponseDto(
 				.isProgress(false)
 				.isVoted(true)
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
+				.battleCreatedDate(battle.getCreatedAt().toLocalDate())
 				.challenging(
 					BattlePostInfoWithVoteCntResponseVo
 						.ofWithVoteCnt(challengingBattleInfo.getPost(), challengingBattleInfo.getVoteCount()))
@@ -60,6 +60,7 @@ public record BattleDetailByIdResponseDto(
 				.isProgress(true)
 				.isVoted(false)
 				.battleGenre(GenreVoResponseDto.of(battle.getGenre()))
+				.battleCreatedDate(battle.getCreatedAt().toLocalDate())
 				.challenging(
 					BattlePostInfoWithVoteCntResponseVo
 						.ofWithoutVoteCnt(challengingBattleInfo.getPost()))

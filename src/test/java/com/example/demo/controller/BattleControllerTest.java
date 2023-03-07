@@ -837,7 +837,8 @@ class BattleControllerTest {
 							)
 							.pathParameters(
 								parameterWithName("battleId").type(SimpleType.NUMBER)
-									.description("대결 ID"))
+									.description("대결 ID")
+							)
 							.responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
 									.description("API 요청 성공 여부"),
@@ -853,6 +854,9 @@ class BattleControllerTest {
 									.description("대결의 장르 enum 값"),
 								fieldWithPath("data.battleGenre.genreName").type(JsonFieldType.STRING)
 									.description("대결의 장르명"),
+								fieldWithPath("data.battleCreatedDate").type(JsonFieldType.STRING)
+									.description("배틀이 생성된 날짜"),
+
 								fieldWithPath("data.challenged").type(JsonFieldType.OBJECT)
 									.description("대결 신청을 받은 게시물 대결 정보"),
 								fieldWithPath("data.challenged.postId").type(JsonFieldType.NUMBER)
@@ -877,6 +881,12 @@ class BattleControllerTest {
 									.description("대결 신청을 받은 게시물에서 공유한 음악의 재생 URL"),
 								fieldWithPath("data.challenged.music.albumCoverUrl").type(JsonFieldType.STRING)
 									.description("대결 신청을 받은 게시물에서 공유한 음악의 앨범 커버 URL"),
+								fieldWithPath("data.challenged.postWriter").type(OBJECT)
+									.description("challenged post 작성 멤버"),
+								fieldWithPath("data.challenged.postWriter.memberId").type(NUMBER)
+									.description("challenged post 작성 멤버 id"),
+								fieldWithPath("data.challenged.postWriter.nickname").type(JsonFieldType.STRING)
+									.description("challenged post 작성 멤버 nickname"),
 
 								fieldWithPath("data.challenging").type(JsonFieldType.OBJECT)
 									.description("대결을 신청한 게시물 대결 정보"),
@@ -901,7 +911,13 @@ class BattleControllerTest {
 								fieldWithPath("data.challenging.music.musicUrl").type(JsonFieldType.STRING)
 									.description("대결을 신청한 게시물에서 공유한 음악의 재생 URL"),
 								fieldWithPath("data.challenging.music.albumCoverUrl").type(JsonFieldType.STRING)
-									.description("대결을 신청한 게시물에서 공유한 음악의 앨범 커버 URL")
+									.description("대결을 신청한 게시물에서 공유한 음악의 앨범 커버 URL"),
+								fieldWithPath("data.challenging.postWriter").type(OBJECT)
+									.description("challenged post 작성 멤버"),
+								fieldWithPath("data.challenging.postWriter.memberId").type(NUMBER)
+									.description("challenged post 작성 멤버 id"),
+								fieldWithPath("data.challenging.postWriter.nickname").type(JsonFieldType.STRING)
+									.description("challenged post 작성 멤버 nickname")
 
 							)
 							.build()
