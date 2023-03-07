@@ -857,7 +857,7 @@ class BattleControllerTest {
 									.description("대결 신청을 받은 게시물 대결 정보"),
 								fieldWithPath("data.challenged.postId").type(JsonFieldType.NUMBER)
 									.description("대결 신청을 받은 게시물 ID"),
-								fieldWithPath("data.challenged.voteCnt").type(NUMBER).optional()
+								fieldWithPath("data.challenged.voteCnt").type(JsonFieldType.NUMBER).optional()
 									.description("대결 신청 받은 게시물의 득표수 - optinal(isProgress가 true면 없음)"),
 								fieldWithPath("data.challenged.music").type(JsonFieldType.OBJECT)
 									.description("대결 신청을 받은 게시물에서 공유한 음악 정보"),
@@ -882,7 +882,7 @@ class BattleControllerTest {
 									.description("대결을 신청한 게시물 대결 정보"),
 								fieldWithPath("data.challenging.postId").type(JsonFieldType.NUMBER)
 									.description("대결을 신청한 게시물 ID"),
-								fieldWithPath("data.challenging.voteCnt").type(NUMBER).optional()
+								fieldWithPath("data.challenging.voteCnt").type(JsonFieldType.NUMBER).optional()
 									.description("대결을 신청한 게시물의 득표수 - optinal(isProgress가 true면 없음)"),
 								fieldWithPath("data.challenging.music").type(JsonFieldType.OBJECT)
 									.description("대결을 신청한 게시물에서 공유한 음악 정보"),
