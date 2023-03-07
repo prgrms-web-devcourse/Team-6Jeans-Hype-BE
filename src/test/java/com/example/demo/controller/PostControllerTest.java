@@ -313,25 +313,25 @@ class PostControllerTest {
 	@Test
 	void 성공_음악_배틀_후보곡_리스트를_조회할_수_있다() throws Exception {
 		// given
-		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
-		queries.add("genre", genre.toString());
+		Long postId = 0L;
+		PostsBattleCandidateResponseDto postsBattleDto = getPostsBattleDto(genre);
 
-		when(postService.findAllBattleCandidates(any(), any())).thenReturn(getPostsBattleDto(genre));
+		when(postService.findAllBattleCandidates(any(), any())).thenReturn(postsBattleDto);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
-			get("/api/v1/posts/battle/candidates")
+			get("/api/v1/posts/battle/{postId}/candidates", postId)
 				.contentType(APPLICATION_JSON)
 				.principal(principal)
-				.params(queries)
+				.content(mapper.writeValueAsString(postsBattleDto))
 		);
 
 		// then
 		resultActions.andExpect(status().isOk())
 			.andDo(print())
 			.andDo(MockMvcRestDocumentationWrapper.document("대결 곡 후보 리스트 조회",
-				requestParameters(
-					parameterWithName("genre").description("배틀곡 장르 값")
+				pathParameters(
+					parameterWithName("postId").description("대결 신청할 추천글 id")
 				),
 				responseFields(
 					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
@@ -345,6 +345,41 @@ class PostControllerTest {
 						.description("대결 후보곡 노래 앨범 이미지 url"),
 					fieldWithPath("data.posts[].music.musicUrl").type(STRING).description("대결 후보곡 노래 음원 url"),
 					fieldWithPath("data.posts[].music.singer").type(STRING).description("대결 후보곡 노래 가수명")
+				)
+			));
+
+		verify(postService).findAllBattleCandidates(any(), any());
+	}
+
+	@Test
+	void 실패_로그온_유저와_대결신청한_추천글_작성자가_같으면_400_반환() throws Exception {
+		// given
+		Long postId = 0L;
+		PostsBattleCandidateResponseDto postsBattleDto = getPostsBattleDto(genre);
+
+		doThrow(new IllegalArgumentException(ExceptionMessage.USER_SAME_POST_WRITER.getMessage()))
+			.when(postService).findAllBattleCandidates(any(), any());
+
+		// when
+		ResultActions resultActions = mockMvc.perform(
+			get("/api/v1/posts/battle/{postId}/candidates", postId)
+				.contentType(APPLICATION_JSON)
+				.principal(principal)
+				.content(mapper.writeValueAsString(postsBattleDto))
+				.with(csrf())
+		);
+
+		// then
+		resultActions.andExpect(status().isBadRequest())
+			.andDo(print())
+			.andDo(MockMvcRestDocumentationWrapper.document("직접 작성한 추천글은 대결 신청할 수 없습니다.",
+				pathParameters(
+					parameterWithName("postId").description("대결 신청할 추천글 id")
+				),
+				responseFields(
+					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(NULL).description("API 요청 응답 메시지 - Null")
 				)
 			));
 
@@ -384,6 +419,64 @@ class PostControllerTest {
 			));
 
 		verify(postLockFacade).likePost((Principal)any(), anyLong());
+	}
+
+	@Test
+	void 성공_추천글을_좋아요_상위_10개를_가져올_수_있다() throws Exception {
+		// given
+		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
+		queries.add("genre", genre.toString());
+
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			for (int j = 0; j < 10 - i; j++) {
+				post.plusLike();
+			}
+			posts.add(post);
+		}
+
+		PostsFindResponseDto postsFindResponseDto = PostsFindResponseDto.of(
+			posts.stream().map(this::testOf).toList());
+
+		when(postService.findTenPostsByLikeCount(genre)).thenReturn(postsFindResponseDto);
+
+		// when
+		ResultActions resultActions = mockMvc.perform(
+			get("/api/v1/posts/likes/top")
+				.contentType(APPLICATION_JSON)
+				.params(queries)
+		);
+
+		// then
+		resultActions.andExpect(status().isOk())
+			.andDo(print())
+			.andDo(MockMvcRestDocumentationWrapper.document("추천글 좋아요 상위 10개 조회",
+				requestParameters(
+					parameterWithName("genre").optional().description("필터링 할 장르 값 (null 가능)")
+				),
+				responseFields(
+					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(OBJECT).description("API 요청 응답 데이터"),
+					fieldWithPath("data.posts[]").type(ARRAY).description("조회한 공유글 정보 리스트"),
+					fieldWithPath("data.posts[].postId").type(NUMBER).description("조회한 공유글 id"),
+					fieldWithPath("data.posts[].music").type(OBJECT).description("조회한 공유글 음악 정보"),
+					fieldWithPath("data.posts[].music.title").type(STRING).description("조회한 공유글 음악 제목"),
+					fieldWithPath("data.posts[].music.albumCoverUrl").type(STRING)
+						.description("조회한 공유글 음악 앨범 표지 이미지 url"),
+					fieldWithPath("data.posts[].music.singer").type(STRING).description("조회한 공유글 음악 가수명"),
+					fieldWithPath("data.posts[].music.genre").type(OBJECT).description("조회한 공유글 음악 장르 정보"),
+					fieldWithPath("data.posts[].music.genre.genreValue").type(STRING).description("조회한 공유글 음악 장르값"),
+					fieldWithPath("data.posts[].music.genre.genreName").type(STRING).description("조회한 공유글 음악 장르명"),
+					fieldWithPath("data.posts[].likeCount").type(NUMBER).description("조회한 공유글의 좋아요 수"),
+					fieldWithPath("data.posts[].isBattlePossible").type(BOOLEAN).description("조회한 공유글 대결 가능 여부"),
+					fieldWithPath("data.posts[].nickname").type(STRING).description("조회한 공유글 작성자 이름")
+				)
+			));
+
+		verify(postService).findTenPostsByLikeCount(genre);
 	}
 
 	private Member createMember() {

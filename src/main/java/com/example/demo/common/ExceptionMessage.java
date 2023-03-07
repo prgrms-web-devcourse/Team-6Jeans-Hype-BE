@@ -27,6 +27,7 @@ public enum ExceptionMessage {
 	// IllegalStateException
 	FAIL_UPLOAD_FILE_S3("저장소에 파일 업로드가 실패했습니다."),
 	CANNOT_MAKE_BATTLE_NOT_ENOUGH_CHALLENGE_TICKET("사용자의 대결권이 부족합니다."),
+	USER_SAME_POST_WRITER("직접 작성한 추천글은 대결신청할 수 없습니다."),
 
 	// MethodArgumentNotValidException
 	CANNOT_ALL_REQUEST_FIELDS_NULL("적어도 하나의 필드(닉네임 또는 프로필 이미지 URL)를 제공해야합니다."),
