@@ -220,6 +220,58 @@ class PostRepositoryTest {
 
 	}
 
+	@Test
+	@Transactional
+	void 성공_추천글을_좋아요_수_상위_10개를_가져올_수_있다() {
+		// given
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			Post post = Post.create("1234", "album", "singer", "title", genre,
+				"url", "content", isPossibleBattle, member);
+			for (int j = 0; j < i; j++) {
+				post.plusLike();
+			}
+			posts.add(post);
+		}
+
+		memberRepository.save(member);
+		postRepository.saveAll(posts);
+
+		Collections.reverse(posts);
+
+		// when
+		List<Post> result = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount"));
+
+		// then
+		assertThat(result).isEqualTo(posts);
+	}
+
+	@Test
+	@Transactional
+	void 성공_추천글을_장르별_좋아요_수_상위_10개를_가져올_수_있다() {
+		// given
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			Post post = Post.create("1234", "album", "singer", "title", genre,
+				"url", "content", isPossibleBattle, member);
+			for (int j = 0; j < i; j++) {
+				post.plusLike();
+			}
+			posts.add(post);
+		}
+
+		memberRepository.save(member);
+		postRepository.saveAll(posts);
+
+		Collections.reverse(posts);
+
+		// when
+		List<Post> result = postRepository.findByMusic_Genre(genre, Sort.by(Sort.Direction.DESC, "likeCount"));
+
+		// then
+		assertThat(result).isEqualTo(posts);
+	}
+
 	private Member createMember() {
 		return Member.builder()
 			.profileImageUrl("profile")

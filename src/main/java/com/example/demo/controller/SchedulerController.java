@@ -17,7 +17,7 @@ public class SchedulerController {
 	private final BattleService battleService;
 	private final MemberService memberService;
 
-	private final int rankingTerm = 7;
+	private final int rankingTerm = 1;
 
 	@Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
 	public void updateBattleResult() {

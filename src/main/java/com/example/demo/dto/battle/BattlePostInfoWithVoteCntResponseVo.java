@@ -1,6 +1,7 @@
 package com.example.demo.dto.battle;
 
 import com.example.demo.dto.common.MusicVoResponseDto;
+import com.example.demo.dto.member.SimpleMemberVo;
 import com.example.demo.model.post.Post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -12,12 +13,14 @@ import lombok.Builder;
 public record BattlePostInfoWithVoteCntResponseVo(
 	Long postId,
 	Integer voteCnt,
-	MusicVoResponseDto music
+	MusicVoResponseDto music,
+	SimpleMemberVo postWriter
 ) {
 	public static BattlePostInfoWithVoteCntResponseVo ofWithoutVoteCnt(Post post) {
 		return BattlePostInfoWithVoteCntResponseVo.builder()
 			.postId(post.getId())
 			.music(MusicVoResponseDto.of(post.getMusic()))
+			.postWriter(SimpleMemberVo.of(post.getMember()))
 			.build();
 	}
 
@@ -26,6 +29,7 @@ public record BattlePostInfoWithVoteCntResponseVo(
 			.postId(post.getId())
 			.voteCnt(voteCnt)
 			.music(MusicVoResponseDto.of(post.getMusic()))
+			.postWriter(SimpleMemberVo.of(post.getMember()))
 			.build();
 	}
 }
