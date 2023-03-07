@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.service.BattleService;
@@ -17,9 +18,10 @@ public class SchedulerController {
 	private final BattleService battleService;
 	private final MemberService memberService;
 
-	private final int rankingTerm = 1;
+	private final int rankingTerm = 7;
 
 	@Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+	@Transactional
 	public void updateBattleResult() {
 		battleService.quitBattles();
 		memberService.resetAllRankingAndPoint();
