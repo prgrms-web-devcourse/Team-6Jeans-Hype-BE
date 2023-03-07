@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -95,9 +94,9 @@ public class MemberAllPostsRestDocsTest {
 		// when
 		when(memberService.getAllPosts(
 			any(Principal.class),
-			any(Optional.class),
-			any(Optional.class),
-			any(Optional.class)))
+			any(),
+			any(),
+			any()))
 			.thenReturn(response);
 
 		var actions = mockMvc.perform(get("/api/v1/members/posts")
@@ -176,9 +175,9 @@ public class MemberAllPostsRestDocsTest {
 		// when
 		when(memberService.getAllPosts(
 			any(Principal.class),
-			any(Optional.class),
-			any(Optional.class),
-			any(Optional.class)))
+			any(),
+			any(),
+			any()))
 			.thenThrow(new EntityNotFoundException(ExceptionMessage.NOT_FOUND_MEMBER.getMessage()));
 		var actions = mockMvc.perform(get("/api/v1/members/posts")
 			.contentType(MediaType.APPLICATION_JSON)
