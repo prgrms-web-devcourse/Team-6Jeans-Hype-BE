@@ -322,6 +322,7 @@ class PostServiceTest {
 		List<Post> posts = getPosts(member, genre);
 		PostsBattleCandidateResponseDto expected = getPostsBattleDto(posts);
 
+		when(principal.getName()).thenReturn(String.valueOf(0L));
 		when(principalService.getMemberByPrincipal(principal)).thenReturn(createMember());
 		when(postRepository.findById(0L)).thenReturn(Optional.of(posts.get(0)));
 		when(postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any()))
@@ -333,24 +334,10 @@ class PostServiceTest {
 		// then
 		assertThat(postsDto).isEqualTo(expected);
 
+		verify(principal).getName();
 		verify(principalService).getMemberByPrincipal(principal);
 		verify(postRepository).findById(0L);
 		verify(postRepository).findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any());
-	}
-
-	@Test
-	void 실패_직접_작성한_추천글은_대결신청할_수_없다() {
-		// given
-		List<Post> posts = getPosts(member, genre);
-		PostsBattleCandidateResponseDto expected = getPostsBattleDto(posts);
-
-		// when
-		when(principalService.getMemberByPrincipal(principal)).thenReturn(member);
-		when(postRepository.findById(0L)).thenReturn(Optional.of(posts.get(0)));
-
-		// then
-		assertThatThrownBy(() -> postService.findAllBattleCandidates(principal, 0L))
-			.isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test

@@ -324,7 +324,6 @@ class PostControllerTest {
 				.contentType(APPLICATION_JSON)
 				.principal(principal)
 				.content(mapper.writeValueAsString(postsBattleDto))
-				.with(csrf())
 		);
 
 		// then

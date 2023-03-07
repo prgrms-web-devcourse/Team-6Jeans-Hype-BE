@@ -100,7 +100,8 @@ public class PostService {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
 
-		if (member.equals(post.getMember())) {
+		Long memberId = Long.valueOf(principal.getName());
+		if (memberId.equals(post.getMember().getId())) {
 			throw new IllegalArgumentException(USER_SAME_POST_WRITER.getMessage());
 		}
 
