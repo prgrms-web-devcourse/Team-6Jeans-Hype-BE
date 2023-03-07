@@ -930,7 +930,7 @@ class BattleControllerTest {
 							)
 							.pathParameters(
 								parameterWithName("battleId").type(SimpleType.NUMBER)
-									.description("배틀id 입니다"))
+									.description("대결 ID"))
 							.responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
 									.description("API 요청 성공 여부"),
