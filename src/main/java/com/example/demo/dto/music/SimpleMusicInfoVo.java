@@ -12,13 +12,15 @@ import lombok.Builder;
 public record SimpleMusicInfoVo(
 	@NotBlank String title,
 	@NotBlank String singer,
-	@URL String albumUrl
+	@URL String albumUrl,
+	boolean isWin
 ) {
-	public static SimpleMusicInfoVo of(Music music) {
+	public static SimpleMusicInfoVo of(Music music, boolean isWin) {
 		return SimpleMusicInfoVo.builder()
 			.title(music.getTitle())
 			.singer(music.getSinger())
 			.albumUrl(music.getAlbumCoverUrl())
+			.isWin(isWin)
 			.build();
 	}
 }
