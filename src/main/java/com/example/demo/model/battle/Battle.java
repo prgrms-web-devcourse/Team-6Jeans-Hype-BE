@@ -111,12 +111,17 @@ public class Battle extends BaseEntity {
 	}
 
 	public Optional<Member> getWinner() {
+		Optional<Post> wonPost = getWonPost();
+		return wonPost.map(Post::getMember);
+	}
+
+	public Optional<Post> getWonPost() {
 		int diff = challengedPost.getVoteCount() - challengingPost.getVoteCount();
 
 		if (diff > 0) {
-			return Optional.of(challengedPost.getPost().getMember());
+			return Optional.of(challengedPost.getPost());
 		} else if (diff < 0) {
-			return Optional.of(challengingPost.getPost().getMember());
+			return Optional.of(challengingPost.getPost());
 		}
 
 		return Optional.empty();

@@ -486,7 +486,9 @@ class BattleControllerTest {
 									.description("장르의 값"),
 								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
 									.description("장르의 이름"),
+
 								fieldWithPath("data.battles[].challenging").type(OBJECT)
+
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
 								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 타이틀 입니다."),
@@ -494,6 +496,9 @@ class BattleControllerTest {
 									.description("도전 신청한 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenging.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다"),
+
 								fieldWithPath("data.battles[].challenged").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
 								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
@@ -501,7 +506,9 @@ class BattleControllerTest {
 								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
 									.description("도전 신청받은 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
-									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다")
 							)
 							.build()
 					)
@@ -551,14 +558,19 @@ class BattleControllerTest {
 									.description("장르의 값"),
 								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
 									.description("장르의 이름"),
+
 								fieldWithPath("data.battles[].challenging").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+
 								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 타이틀 입니다."),
 								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenging.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다"),
+
 								fieldWithPath("data.battles[].challenged").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
 								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
@@ -566,7 +578,9 @@ class BattleControllerTest {
 								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
 									.description("도전 신청받은 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
-									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다")
 							)
 							.build()
 					)
@@ -616,14 +630,19 @@ class BattleControllerTest {
 									.description("장르의 값"),
 								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
 									.description("장르의 이름"),
+
 								fieldWithPath("data.battles[].challenging").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+
 								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 타이틀 입니다."),
 								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenging.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다"),
+
 								fieldWithPath("data.battles[].challenged").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
 								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
@@ -631,7 +650,9 @@ class BattleControllerTest {
 								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
 									.description("도전 신청받은 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
-									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다")
 							)
 							.build()
 					)
@@ -682,14 +703,19 @@ class BattleControllerTest {
 									.description("장르의 값"),
 								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
 									.description("장르의 이름"),
+
 								fieldWithPath("data.battles[].challenging").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+
 								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 타이틀 입니다."),
 								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenging.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다"),
+
 								fieldWithPath("data.battles[].challenged").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
 								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
@@ -697,7 +723,9 @@ class BattleControllerTest {
 								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
 									.description("도전 신청받은 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
-									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다")
 							)
 							.build()
 					)
@@ -748,14 +776,19 @@ class BattleControllerTest {
 									.description("장르의 값"),
 								fieldWithPath("data.battles[].genre.genreName").type(JsonFieldType.STRING)
 									.description("장르의 이름"),
+
 								fieldWithPath("data.battles[].challenging").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
+
 								fieldWithPath("data.battles[].challenging.title").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 타이틀 입니다."),
 								fieldWithPath("data.battles[].challenging.singer").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenging.albumUrl").type(JsonFieldType.STRING)
 									.description("도전 신청한 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenging.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다"),
+
 								fieldWithPath("data.battles[].challenged").type(OBJECT)
 									.description("도전 신청한 곡의 정보를 담고 있습니다."),
 								fieldWithPath("data.battles[].challenged.title").type(JsonFieldType.STRING)
@@ -763,7 +796,9 @@ class BattleControllerTest {
 								fieldWithPath("data.battles[].challenged.singer").type(JsonFieldType.STRING)
 									.description("도전 신청받은 곡의 가수 입니다."),
 								fieldWithPath("data.battles[].challenged.albumUrl").type(JsonFieldType.STRING)
-									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다.")
+									.description("도전 신청받은 곡의 앨범 커버 이미지 입니다."),
+								fieldWithPath("data.battles[].challenged.isWin").type(JsonFieldType.BOOLEAN)
+									.description("해당 곡의 승리 여부를 나타냅니다. 아직 진행중이거나 비겼다면 양쪽 모두 false 입니다")
 							)
 							.build()
 					)
@@ -848,6 +883,9 @@ class BattleControllerTest {
 									.description("대결의 장르 enum 값"),
 								fieldWithPath("data.battleGenre.genreName").type(JsonFieldType.STRING)
 									.description("대결의 장르명"),
+								fieldWithPath("data.battleCreatedDate").type(JsonFieldType.STRING)
+									.description("배틀이 생성된 날짜"),
+
 								fieldWithPath("data.challenged").type(JsonFieldType.OBJECT)
 									.description("대결 신청을 받은 게시물 대결 정보"),
 								fieldWithPath("data.challenged.postId").type(JsonFieldType.NUMBER)
@@ -872,6 +910,12 @@ class BattleControllerTest {
 									.description("대결 신청을 받은 게시물에서 공유한 음악의 재생 URL"),
 								fieldWithPath("data.challenged.music.albumCoverUrl").type(JsonFieldType.STRING)
 									.description("대결 신청을 받은 게시물에서 공유한 음악의 앨범 커버 URL"),
+								fieldWithPath("data.challenged.postWriter").type(OBJECT)
+									.description("challenged post 작성 멤버"),
+								fieldWithPath("data.challenged.postWriter.memberId").type(NUMBER)
+									.description("challenged post 작성 멤버 id"),
+								fieldWithPath("data.challenged.postWriter.nickname").type(JsonFieldType.STRING)
+									.description("challenged post 작성 멤버 nickname"),
 
 								fieldWithPath("data.challenging").type(JsonFieldType.OBJECT)
 									.description("대결을 신청한 게시물 대결 정보"),
@@ -896,7 +940,13 @@ class BattleControllerTest {
 								fieldWithPath("data.challenging.music.musicUrl").type(JsonFieldType.STRING)
 									.description("대결을 신청한 게시물에서 공유한 음악의 재생 URL"),
 								fieldWithPath("data.challenging.music.albumCoverUrl").type(JsonFieldType.STRING)
-									.description("대결을 신청한 게시물에서 공유한 음악의 앨범 커버 URL")
+									.description("대결을 신청한 게시물에서 공유한 음악의 앨범 커버 URL"),
+								fieldWithPath("data.challenging.postWriter").type(OBJECT)
+									.description("challenged post 작성 멤버"),
+								fieldWithPath("data.challenging.postWriter.memberId").type(NUMBER)
+									.description("challenged post 작성 멤버 id"),
+								fieldWithPath("data.challenging.postWriter.nickname").type(JsonFieldType.STRING)
+									.description("challenged post 작성 멤버 nickname")
 
 							)
 							.build()
@@ -936,6 +986,9 @@ class BattleControllerTest {
 									.description("대결의 장르 enum 값"),
 								fieldWithPath("data.battleGenre.genreName").type(JsonFieldType.STRING)
 									.description("대결의 장르명"),
+								fieldWithPath("data.battleCreatedDate").type(JsonFieldType.STRING)
+									.description("배틀이 생성된 날짜"),
+
 								fieldWithPath("data.challenged").type(JsonFieldType.OBJECT)
 									.description("대결 신청을 받은 게시물 대결 정보"),
 								fieldWithPath("data.challenged.postId").type(JsonFieldType.NUMBER)
@@ -960,6 +1013,12 @@ class BattleControllerTest {
 									.description("대결 신청을 받은 게시물에서 공유한 음악의 재생 URL"),
 								fieldWithPath("data.challenged.music.albumCoverUrl").type(JsonFieldType.STRING)
 									.description("대결 신청을 받은 게시물에서 공유한 음악의 앨범 커버 URL"),
+								fieldWithPath("data.challenged.postWriter").type(OBJECT)
+									.description("challenged post 작성 멤버"),
+								fieldWithPath("data.challenged.postWriter.memberId").type(NUMBER)
+									.description("challenged post 작성 멤버 id"),
+								fieldWithPath("data.challenged.postWriter.nickname").type(JsonFieldType.STRING)
+									.description("challenged post 작성 멤버 nickname"),
 
 								fieldWithPath("data.challenging").type(JsonFieldType.OBJECT)
 									.description("대결을 신청한 게시물 대결 정보"),
@@ -984,8 +1043,13 @@ class BattleControllerTest {
 								fieldWithPath("data.challenging.music.musicUrl").type(JsonFieldType.STRING)
 									.description("대결을 신청한 게시물에서 공유한 음악의 재생 URL"),
 								fieldWithPath("data.challenging.music.albumCoverUrl").type(JsonFieldType.STRING)
-									.description("대결을 신청한 게시물에서 공유한 음악의 앨범 커버 URL")
-
+									.description("대결을 신청한 게시물에서 공유한 음악의 앨범 커버 URL"),
+								fieldWithPath("data.challenging.postWriter").type(OBJECT)
+									.description("challenged post 작성 멤버"),
+								fieldWithPath("data.challenging.postWriter.memberId").type(NUMBER)
+									.description("challenged post 작성 멤버 id"),
+								fieldWithPath("data.challenging.postWriter.nickname").type(JsonFieldType.STRING)
+									.description("challenged post 작성 멤버 nickname")
 							)
 							.build()
 					)
@@ -1003,7 +1067,7 @@ class BattleControllerTest {
 			//then
 			resultActions.andExpect(status().isNotFound())
 				.andDo(print())
-				.andDo(document("not-ended-battle-detail",
+				.andDo(document("not-found-battle-detail",
 					resource(
 						ResourceSnippetParameters.builder()
 							.tag(BATTLE_API_NAME)

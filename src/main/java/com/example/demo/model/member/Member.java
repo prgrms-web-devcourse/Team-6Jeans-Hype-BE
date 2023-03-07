@@ -73,6 +73,21 @@ public class Member extends BaseEntity {
 		this.socialInfo = new SocialInfo(socialType, socialId);
 	}
 
+	private void validateMember(String profileImageUrl, String nickname) {
+		checkArgument(Objects.nonNull(profileImageUrl),
+			"프로필 이미지 URL 이 Null 일 수 없습니다.", profileImageUrl);
+		checkArgument(!profileImageUrl.isBlank(),
+			"프로필 이미지 URL 이 공백일 수 없습니다.", profileImageUrl);
+		checkArgument(profileImageUrl.length() <= 2000,
+			"프로필 이미지 URL 이 2000자보다 더 길 수 없습니다.", profileImageUrl);
+		checkArgument(Objects.nonNull(nickname),
+			"닉네임이 Null 일 수 없습니다.", nickname);
+		checkArgument(!nickname.isBlank(),
+			"닉네임이 공백일 수 없습니다.", nickname);
+		checkArgument(nickname.length() <= 24,
+			"닉네임의 길이는 24보다 더 길 수 없습니다.", nickname);
+	}
+
 	public int getRanking() {
 		return memberScore.getRanking();
 	}
@@ -105,25 +120,20 @@ public class Member extends BaseEntity {
 		this.memberScore.updateRanking(ranking);
 	}
 
-	private void validateMember(String profileImageUrl, String nickname) {
-		checkArgument(Objects.nonNull(profileImageUrl),
-			"프로필 이미지 URL 이 Null 일 수 없습니다.", profileImageUrl);
-		checkArgument(!profileImageUrl.isBlank(),
-			"프로필 이미지 URL 이 공백일 수 없습니다.", profileImageUrl);
-		checkArgument(profileImageUrl.length() <= 2000,
-			"프로필 이미지 URL 이 2000자보다 더 길 수 없습니다.", profileImageUrl);
-		checkArgument(Objects.nonNull(nickname),
-			"닉네임이 Null 일 수 없습니다.", nickname);
-		checkArgument(!nickname.isBlank(),
-			"닉네임이 공백일 수 없습니다.", nickname);
-		checkArgument(nickname.length() <= 24,
-			"닉네임의 길이는 24보다 더 길 수 없습니다.", nickname);
-	}
-
 	public void setRefreshToken(String refreshToken) {
 		checkArgument(Objects.nonNull(refreshToken),
 			"Refresh Token 은 Null 일 수 없습니다.", refreshToken);
 		this.refreshToken = refreshToken;
+	}
+
+	public void setProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+	}
+
+	public void setNickname(String nickname) {
+		checkArgument(nickname.length() <= 24,
+			"닉네임의 길이는 24보다 더 길 수 없습니다.", nickname);
+		this.nickname = nickname;
 	}
 
 	public void addOneChallengeTicket() {

@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.common.ApiResponse;
+import com.example.demo.common.ResourceStorage;
 import com.example.demo.controller.MemberController;
 import com.example.demo.model.member.Member;
 import com.example.demo.repository.MemberRepository;
@@ -28,6 +29,9 @@ import com.example.demo.service.PrincipalService;
 
 @ExtendWith(MockitoExtension.class)
 public class MemberDetailsTest {
+
+	@Mock
+	ResourceStorage resourceStorage;
 
 	@Mock
 	private MemberRepository memberRepository;
@@ -42,7 +46,7 @@ public class MemberDetailsTest {
 	@BeforeEach
 	void setUp() {
 		principalService = new PrincipalService(memberRepository);
-		memberService = new MemberService(principalService, postRepository, memberRepository);
+		memberService = new MemberService(principalService, postRepository, memberRepository, resourceStorage);
 		memberController = new MemberController(principalService, memberService);
 	}
 

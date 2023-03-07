@@ -18,9 +18,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.demo.common.ApiResponse;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
+import com.example.demo.dto.post.PostLikeResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.post.Genre;
+import com.example.demo.service.PostLockFacade;
 import com.example.demo.service.PostService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class PostController {
 
 	private final PostService postService;
+	private final PostLockFacade postLockFacade;
 
 	@PostMapping
 	public ResponseEntity<ApiResponse> createPost(
@@ -65,12 +68,37 @@ public class PostController {
 		return ResponseEntity.ok(apiResponse);
 	}
 
-	@GetMapping("/battle/candidates")
+	@GetMapping("/battle/{postId}/candidates")
 	public ResponseEntity<ApiResponse> findAllBattleCandidates(
-		Principal principal, @RequestParam(name = "genre") Genre genre) {
-		PostsBattleCandidateResponseDto posts = postService.findAllBattleCandidates(principal, genre);
+		Principal principal, @PathVariable("postId") Long postId) {
+		PostsBattleCandidateResponseDto posts = postService.findAllBattleCandidates(principal, postId);
 
 		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_CANDIDATE_POST.getMessage(), posts);
+		return ResponseEntity.ok(apiResponse);
+	}
+
+	@PostMapping("/{postId}/like")
+	public ResponseEntity<ApiResponse> likePost(Principal principal, @PathVariable("postId") Long postId) {
+		PostLikeResponseDto result = postLockFacade.likePost(principal, postId);
+
+		ApiResponse apiResponse;
+
+		if (result.hasLike()) {
+			apiResponse = ApiResponse.success(SUCCESS_LIKE_POST.getMessage(), result);
+		} else {
+			apiResponse = ApiResponse.success(SUCCESS_UNLIKE_POST.getMessage(), result);
+		}
+
+		return ResponseEntity.ok(apiResponse);
+	}
+
+	@GetMapping("/likes/top")
+	public ResponseEntity<ApiResponse> findTenPostsByLikeCount(
+		@RequestParam(name = "genre", required = false) Genre genre) {
+		PostsFindResponseDto result = postService.findTenPostsByLikeCount(genre);
+
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_POST.getMessage(), result);
+
 		return ResponseEntity.ok(apiResponse);
 	}
 
