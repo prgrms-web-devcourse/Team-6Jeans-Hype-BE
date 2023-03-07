@@ -379,6 +379,68 @@ class PostServiceTest {
 		verify(likeRepository).existsByMemberAndPost(member, post);
 	}
 
+	@Test
+	void 성공_전체_좋아요_상위_10개_추천글_조회() {
+		// given
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			for (int j = 0; j < 10 - i; j++) {
+				post.plusLike();
+			}
+			posts.add(post);
+		}
+
+		PostsFindResponseDto postsFindResponseDto = PostsFindResponseDto.of(
+			posts.stream().map(PostFindResponseDto::of).toList()
+		);
+
+		Sort sort = Sort.by(Sort.Direction.DESC, "likeCount");
+
+		// when
+		when(postRepository.findAll(sort)).thenReturn(posts);
+
+		PostsFindResponseDto result = postService.findTenPostsByLikeCount(null);
+
+		// then
+		assertThat(result).isEqualTo(postsFindResponseDto);
+
+		verify(postRepository).findAll(sort);
+	}
+
+	@Test
+	void 성공_장르별_좋아요_상위_10개_추천글_조회() {
+		// given
+		List<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 11; i++) {
+			Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+				content, isPossibleBattle, member);
+			for (int j = 0; j < 11 - i; j++) {
+				post.plusLike();
+			}
+			posts.add(post);
+		}
+
+		Sort sort = Sort.by(Sort.Direction.DESC, "likeCount");
+
+		// when
+		when(postRepository.findByMusic_Genre(genre, sort)).thenReturn(posts);
+
+		PostsFindResponseDto result = postService.findTenPostsByLikeCount(genre);
+
+		posts.remove(posts.size() - 1);
+		PostsFindResponseDto postsFindResponseDto = PostsFindResponseDto.of(
+			posts.stream().map(PostFindResponseDto::of).toList()
+		);
+
+		// then
+		assertThat(result.posts().size()).isEqualTo(10);
+		assertThat(result).isEqualTo(postsFindResponseDto);
+
+		verify(postRepository).findByMusic_Genre(genre, sort);
+	}
+
 	private List<Post> getPosts(Member member, Genre genre) {
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
