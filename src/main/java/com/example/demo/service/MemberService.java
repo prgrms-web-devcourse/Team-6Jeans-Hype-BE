@@ -195,9 +195,12 @@ public class MemberService {
 		return battles;
 	}
 
-	public RankersResponseDto getRankerListBetween(int start, int end) {
-		List<Member> rankers = memberRepository.findByMemberScore_RankingBetweenOrderByMemberScore_RankingAsc(1, 100);
-		List<Member> cuttedRankers = rankers.subList(start - 1, end);
+	public RankersResponseDto getRankerListFirstTo(int end) {
+		List<Member> rankers = memberRepository.findByMemberScore_RankingBetweenOrderByMemberScore_RankingAsc(1, end);
+		if (rankers.size() < end) {
+			end = rankers.size();
+		}
+		List<Member> cuttedRankers = rankers.subList(0, end);
 		return RankersResponseDto.of(cuttedRankers);
 	}
 

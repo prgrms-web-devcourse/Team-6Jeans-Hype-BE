@@ -132,7 +132,7 @@ public class MemberController {
 
 	@GetMapping("/ranking")
 	public ResponseEntity<ApiResponse> getTop100Ranking() {
-		RankersResponseDto rankersResponseDto = memberService.getRankerListBetween(1, 100);
+		RankersResponseDto rankersResponseDto = memberService.getRankerListFirstTo(100);
 		ApiResponse apiResponse = ApiResponse.success(
 			ResponseMessage.SUCCESS_FIND_RANKERS.getMessage(), rankersResponseDto
 		);
@@ -141,7 +141,7 @@ public class MemberController {
 
 	@GetMapping("/ranking/preview")
 	public ResponseEntity<ApiResponse> getRankingPreview() {
-		RankersResponseDto rankersResponseDto = memberService.getRankerListBetween(1, 5);
+		RankersResponseDto rankersResponseDto = memberService.getRankerListFirstTo(5);
 		ApiResponse apiResponse = ApiResponse.success(
 			ResponseMessage.SUCCESS_FIND_RANKERS.getMessage(), rankersResponseDto
 		);
