@@ -313,25 +313,25 @@ class PostControllerTest {
 	@Test
 	void 성공_음악_배틀_후보곡_리스트를_조회할_수_있다() throws Exception {
 		// given
-		MultiValueMap<String, String> queries = new LinkedMultiValueMap<>();
-		queries.add("genre", genre.toString());
+		Long postId = 0L;
+		PostsBattleCandidateResponseDto postsBattleDto = getPostsBattleDto(genre);
 
-		when(postService.findAllBattleCandidates(any(), any())).thenReturn(getPostsBattleDto(genre));
+		when(postService.findAllBattleCandidates(any(), any())).thenReturn(postsBattleDto);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(
-			get("/api/v1/posts/battle/candidates")
+			get("/api/v1/posts/battle/{postId}/candidates", postId)
 				.contentType(APPLICATION_JSON)
 				.principal(principal)
-				.params(queries)
+				.content(mapper.writeValueAsString(postsBattleDto))
 		);
 
 		// then
 		resultActions.andExpect(status().isOk())
 			.andDo(print())
 			.andDo(MockMvcRestDocumentationWrapper.document("대결 곡 후보 리스트 조회",
-				requestParameters(
-					parameterWithName("genre").description("배틀곡 장르 값")
+				pathParameters(
+					parameterWithName("postId").description("대결 신청할 추천글 id")
 				),
 				responseFields(
 					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
@@ -345,6 +345,41 @@ class PostControllerTest {
 						.description("대결 후보곡 노래 앨범 이미지 url"),
 					fieldWithPath("data.posts[].music.musicUrl").type(STRING).description("대결 후보곡 노래 음원 url"),
 					fieldWithPath("data.posts[].music.singer").type(STRING).description("대결 후보곡 노래 가수명")
+				)
+			));
+
+		verify(postService).findAllBattleCandidates(any(), any());
+	}
+
+	@Test
+	void 실패_로그온_유저와_대결신청한_추천글_작성자가_같으면_400_반환() throws Exception {
+		// given
+		Long postId = 0L;
+		PostsBattleCandidateResponseDto postsBattleDto = getPostsBattleDto(genre);
+
+		doThrow(new IllegalArgumentException(ExceptionMessage.USER_SAME_POST_WRITER.getMessage()))
+			.when(postService).findAllBattleCandidates(any(), any());
+
+		// when
+		ResultActions resultActions = mockMvc.perform(
+			get("/api/v1/posts/battle/{postId}/candidates", postId)
+				.contentType(APPLICATION_JSON)
+				.principal(principal)
+				.content(mapper.writeValueAsString(postsBattleDto))
+				.with(csrf())
+		);
+
+		// then
+		resultActions.andExpect(status().isBadRequest())
+			.andDo(print())
+			.andDo(MockMvcRestDocumentationWrapper.document("직접 작성한 추천글은 대결 신청할 수 없습니다.",
+				pathParameters(
+					parameterWithName("postId").description("대결 신청할 추천글 id")
+				),
+				responseFields(
+					fieldWithPath("success").type(BOOLEAN).description("API 요청 성공 여부"),
+					fieldWithPath("message").type(STRING).description("API 요청 응답 메시지"),
+					fieldWithPath("data").type(NULL).description("API 요청 응답 메시지 - Null")
 				)
 			));
 

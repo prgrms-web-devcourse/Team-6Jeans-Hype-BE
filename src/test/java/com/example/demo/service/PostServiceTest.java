@@ -322,15 +322,21 @@ class PostServiceTest {
 		List<Post> posts = getPosts(member, genre);
 		PostsBattleCandidateResponseDto expected = getPostsBattleDto(posts);
 
+		when(principal.getName()).thenReturn(String.valueOf(0L));
+		when(principalService.getMemberByPrincipal(principal)).thenReturn(createMember());
+		when(postRepository.findById(0L)).thenReturn(Optional.of(posts.get(0)));
 		when(postRepository.findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any()))
 			.thenReturn(posts);
 
 		// when
-		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(principal, genre);
+		PostsBattleCandidateResponseDto postsDto = postService.findAllBattleCandidates(principal, 0L);
 
 		// then
 		assertThat(postsDto).isEqualTo(expected);
 
+		verify(principal).getName();
+		verify(principalService).getMemberByPrincipal(principal);
+		verify(postRepository).findById(0L);
 		verify(postRepository).findByMemberAndMusic_GenreAndIsPossibleBattleIsTrue(any(), any());
 	}
 
