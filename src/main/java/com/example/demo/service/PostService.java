@@ -36,6 +36,8 @@ public class PostService {
 	private final LikeRepository likeRepository;
 	private final PrincipalService principalService;
 
+	private final int topLimit = 10;
+
 	@Transactional
 	public Long createPost(Principal principal, PostCreateRequestDto postRequestDto) {
 		Member member = principalService.getMemberByPrincipal(principal);
@@ -135,8 +137,8 @@ public class PostService {
 				.toList();
 		}
 
-		if (posts.size() > 10) {
-			return PostsFindResponseDto.of(posts.subList(0, 10));
+		if (posts.size() > topLimit) {
+			return PostsFindResponseDto.of(posts.subList(0, topLimit));
 		}
 
 		return PostsFindResponseDto.of(posts);
