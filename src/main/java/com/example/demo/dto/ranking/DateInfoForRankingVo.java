@@ -12,11 +12,11 @@ public record DateInfoForRankingVo(LocalDate from, LocalDate to) {
 	private static final int term = RankingConstant.RANKING_TERM;
 
 	public static DateInfoForRankingVo getDateInfoForRankingFromNow() {
-		LocalDate now = LocalDate.now();
-		LocalDate fromDate = now.minusDays(term - 1);
+		LocalDate toDate = LocalDate.now().minusDays(1);
+		LocalDate fromDate = toDate.minusDays(term);
 		return DateInfoForRankingVo.builder()
 			.from(fromDate)
-			.to(now)
+			.to(toDate)
 			.build();
 	}
 }
