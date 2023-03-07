@@ -20,7 +20,7 @@ public class SchedulerController {
 
 	private final int rankingTerm = 7;
 
-	@Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
 	@Transactional
 	public void updateBattleResult() {
 		battleService.quitBattles();
