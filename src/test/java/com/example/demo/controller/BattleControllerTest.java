@@ -817,7 +817,7 @@ class BattleControllerTest {
 	@WithMockUser(username = "1")
 	class GetBattleDetailById {
 		@Test
-		public void 성공_given_끝나지않은_battleId_then_그_배틀의_상세정보_200() throws Exception {
+		public void 성공_given_끝나지않은_battleId_then_배틀의_상세정보_200() throws Exception {
 			//given
 			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
 			Long targetBattleId = battlesStatusIsProgress.get(0).getId();
@@ -837,7 +837,7 @@ class BattleControllerTest {
 							)
 							.pathParameters(
 								parameterWithName("battleId").type(SimpleType.NUMBER)
-									.description("배틀id 입니다"))
+									.description("대결 ID"))
 							.responseFields(
 								fieldWithPath("success").type(JsonFieldType.BOOLEAN)
 									.description("API 요청 성공 여부"),
@@ -847,7 +847,7 @@ class BattleControllerTest {
 									.description("API 요청 응답 데이터"),
 								fieldWithPath("data.battleId").type(JsonFieldType.NUMBER).description("대결 ID"),
 								fieldWithPath("data.isProgress").type(JsonFieldType.BOOLEAN).description("진행중인지 여부"),
-								fieldWithPath("data.isVoted").type(JsonFieldType.BOOLEAN).description("대결 투표 여부"),
+								fieldWithPath("data.isVoted").type(JsonFieldType.STRING).description("대결 투표 여부"),
 								fieldWithPath("data.battleGenre").type(JsonFieldType.OBJECT).description("대결의 장르"),
 								fieldWithPath("data.battleGenre.genreValue").type(JsonFieldType.STRING)
 									.description("대결의 장르 enum 값"),
