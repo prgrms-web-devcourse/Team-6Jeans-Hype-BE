@@ -240,19 +240,30 @@ public class MemberService {
 		if (genre.isPresent()) {
 			if (limit.isPresent()) {
 				likes = likeRepository
-					.findAllByMemberAndGenreLimitOrderByIdDesc(member.getId(), genre.get(),
-						PageRequest.of(0, limit.get()));
+					.findAllByMemberAndGenreLimitOrderByIdDesc(
+						member.getId(),
+						genre.get(),
+						PageRequest.of(0, limit.get())
+					);
 			} else {
 				likes = likeRepository
-					.findAllByMemberIdAndPost_Music_GenreOrderByIdDesc(member.getId(), genre.get());
+					.findAllByMemberIdAndPost_Music_GenreOrderByIdDesc(
+						member.getId(),
+						genre.get()
+					);
 			}
 		} else {
 			if (limit.isPresent()) {
 				likes = likeRepository
-					.findAllByMemberLimitOrderByIdDesc(member.getId(), PageRequest.of(0, limit.get()));
+					.findAllByMemberLimitOrderByIdDesc(
+						member.getId(),
+						PageRequest.of(0, limit.get())
+					);
 			} else {
 				likes = likeRepository
-					.findAllByMemberIdOrderByIdDesc(member.getId());
+					.findAllByMemberIdOrderByIdDesc(
+						member.getId()
+					);
 			}
 		}
 
