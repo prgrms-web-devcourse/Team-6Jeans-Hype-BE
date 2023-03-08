@@ -125,8 +125,8 @@ public class BattleService {
 	}
 
 	private List<Battle> findBattleProgress() {
-		LocalDateTime endDate = LocalDateTime.now().minusDays(1);
-		return battleRepository.findByStatusAndCreatedAtIsBefore(BattleStatus.PROGRESS, endDate);
+		LocalDateTime now = LocalDateTime.now();
+		return battleRepository.findByStatusAndCreatedAtIsBefore(BattleStatus.PROGRESS, now);
 	}
 
 	private List<Battle> findBattlesEndWithinPerm(int term) {
