@@ -78,21 +78,22 @@ public class BattleService {
 	}
 
 	private void validAlreadyExsistBattles(Post challengingPost, Post challengedPost) {
-		boolean alreadyExsistBattle = false;
-		alreadyExsistBattle =
+		boolean isAlreadyExsistBattle = false;
+		boolean isAlreadyExsistReverseBattle = false;
+		isAlreadyExsistBattle =
 			battleRepository.existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
 				challengedPost,
 				challengingPost,
 				BattleStatus.PROGRESS
 			);
 
-		alreadyExsistBattle =
+		isAlreadyExsistReverseBattle =
 			battleRepository.existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
 				challengingPost,
 				challengedPost,
 				BattleStatus.PROGRESS
-			) || alreadyExsistBattle;
-		if (alreadyExsistBattle) {
+			);
+		if (isAlreadyExsistBattle || isAlreadyExsistReverseBattle) {
 			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_ALREADY_EXIST_PROGRESS_BATTLE.getMessage());
 		}
 	}
