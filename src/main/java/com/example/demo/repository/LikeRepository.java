@@ -20,12 +20,21 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 	@Query("select l from Like l left join fetch l.post "
 		+ "where l.member.id = :memberId and l.post.music.genre = :genre order by l.id desc ")
 	List<Like> findAllByMemberAndGenreLimitOrderByIdDesc(
-		@Param("memberId") Long memberId, @Param("genre") Genre genre, Pageable pageable);
+		@Param("memberId") Long memberId,
+		@Param("genre") Genre genre,
+		Pageable pageable);
 
-	List<Like> findAllByMemberIdAndPost_Music_GenreOrderByIdDesc(Long memberId, Genre genre);
+	@Query("select l from Like l left join fetch l.post "
+		+ "where l.member.id = :memberId and l.post.music.genre = :genre order by l.id desc ")
+	List<Like> findAllByMemberIdAndPost_Music_GenreOrderByIdDesc(
+		@Param("memberId") Long memberId,
+		@Param("genre") Genre genre);
 
-	@Query("select l from Like l  where l.member.id = :memberId order by l.id desc ")
-	List<Like> findAllByMemberLimitOrderByIdDesc(@Param("memberId") Long memberId, Pageable pageable);
+	@Query("select l from Like l left join fetch l.post where l.member.id = :memberId order by l.id desc ")
+	List<Like> findAllByMemberLimitOrderByIdDesc(
+		@Param("memberId") Long memberId,
+		Pageable pageable);
 
-	List<Like> findAllByMemberIdOrderByIdDesc(Long memberId);
+	@Query("select l from Like l left join fetch l.post where l.member.id = :memberId order by l.id desc ")
+	List<Like> findAllByMemberIdOrderByIdDesc(@Param("memberId") Long memberId);
 }
