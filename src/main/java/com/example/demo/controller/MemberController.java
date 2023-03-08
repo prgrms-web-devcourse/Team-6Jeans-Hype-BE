@@ -23,7 +23,7 @@ import com.example.demo.dto.member.MemberDetailsResponseDto;
 import com.example.demo.dto.member.MemberMyDetailsResponseDto;
 import com.example.demo.dto.member.MemberNicknameUpdateRequestDto;
 import com.example.demo.dto.member.MemberUpdateResponseDto;
-import com.example.demo.exception.ServerNotActiveException;
+import com.example.demo.exception.ServerNotExecuteException;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
@@ -81,7 +81,7 @@ public class MemberController {
 			}
 		}
 
-		throw new ServerNotActiveException(ExceptionMessage.SERVER_ERROR.getMessage());
+		throw new ServerNotExecuteException(ExceptionMessage.SERVER_ERROR.getMessage());
 	}
 
 	@PostMapping("/profile/nickname")
@@ -127,5 +127,20 @@ public class MemberController {
 			ResponseMessage.SUCCESS_FIND_BATTLE_BY_MEMBER.getMessage(), battles);
 
 		return ResponseEntity.ok(apiResponse);
+	}
+
+	@GetMapping("/likes")
+	public ResponseEntity<ApiResponse> getLikePosts(
+		Principal principal,
+		@RequestParam Optional<Genre> genre,
+		@RequestParam Optional<Integer> limit) {
+
+		MemberAllMyPostsResponseDto likePosts = memberService.getLikePosts(principal, genre, limit);
+		return ResponseEntity.ok(
+			ApiResponse.success(
+				ResponseMessage.SUCCESS_USER_LIKE_POSTS.getMessage(),
+				likePosts
+			)
+		);
 	}
 }
