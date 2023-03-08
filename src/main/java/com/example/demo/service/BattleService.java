@@ -85,12 +85,12 @@ public class BattleService {
 				BattleStatus.PROGRESS
 			);
 
-		alreadyExsistBattle = alreadyExsistBattle ||
+		alreadyExsistBattle =
 			battleRepository.existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
 				challengingPost,
 				challengedPost,
 				BattleStatus.PROGRESS
-			);
+			) || alreadyExsistBattle;
 		if (alreadyExsistBattle) {
 			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_ALREADY_EXIST_PROGRESS_BATTLE.getMessage());
 		}

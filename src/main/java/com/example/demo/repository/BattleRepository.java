@@ -32,6 +32,7 @@ public interface BattleRepository extends JpaRepository<Battle, Long> {
 
 	List<Battle> findAllByStatusAndGenreEquals(BattleStatus status, Genre genre);
 
-	boolean existsByChallengedPost_PostAndChallengingPost_PostAndStatus
-		(Post challengedPost, Post challengingPost, BattleStatus battleStatus);
+	boolean existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
+		Post challengedPost, Post challengingPost, BattleStatus battleStatus
+	);
 }
