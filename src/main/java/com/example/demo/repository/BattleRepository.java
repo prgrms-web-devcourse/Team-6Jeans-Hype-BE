@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.post.Genre;
+import com.example.demo.model.post.Post;
 
 public interface BattleRepository extends JpaRepository<Battle, Long> {
 
@@ -31,4 +32,7 @@ public interface BattleRepository extends JpaRepository<Battle, Long> {
 
 	List<Battle> findAllByStatusAndGenreEquals(BattleStatus status, Genre genre);
 
+	boolean existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
+		Post challengedPost, Post challengingPost, BattleStatus battleStatus
+	);
 }

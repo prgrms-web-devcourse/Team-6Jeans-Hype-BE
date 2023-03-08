@@ -41,6 +41,7 @@ public class MemberControllerRankingTest {
 	MockMvc mockMvc;
 	List<Member> dummyMembers = new ArrayList<>();
 	int countOfDummyMember = 8;
+
 	@BeforeAll
 	void setUpDummyMembers() {
 		for (int i = 0; i < countOfDummyMember; i++) {

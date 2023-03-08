@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.JpaAuditingConfig;
 import com.example.demo.model.battle.Battle;
@@ -92,6 +93,26 @@ class BattleRepositoryTest {
 		assertThat(result.get())
 			.usingRecursiveComparison()
 			.isEqualTo(battle);
+	}
+
+	@Test
+	@Transactional
+	void battleStatus_challengingPost_challengedPost로_대결의_존재여부를_확인할_수_있다() {
+		//given
+		Battle battle = createBattle();
+		Post challenginPost = battle.getChallengingPost().getPost();
+		Post challengedPost = battle.getChallengedPost().getPost();
+		battleRepository.save(battle);
+		//when
+		boolean shouldTrue = battleRepository.existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
+			challengedPost,
+			challenginPost, status);
+		boolean shouldFalse = battleRepository.existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
+			challenginPost,
+			challengedPost, status);
+		//than
+		assertThat(shouldTrue).isTrue();
+		assertThat(shouldFalse).isFalse();
 	}
 
 	private List<Battle> getBattles() {

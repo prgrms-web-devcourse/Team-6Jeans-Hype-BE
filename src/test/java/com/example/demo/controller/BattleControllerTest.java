@@ -35,6 +35,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.SimpleType;
+import com.example.demo.common.ExceptionMessage;
 import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.model.battle.Battle;
@@ -140,6 +141,7 @@ class BattleControllerTest {
 		@WithMockUser(username = "1")
 		public void 성공_배틀생성_정상적으로_배틀생성_201() throws Exception {
 			//given
+			battleRepository.deleteAll();
 			Member member = memberRepository.findById(firstMember.getId()).get();
 			int startCountOfChallengedTicket = member.getCountOfChallengeTicket();
 			BattleCreateRequestDto battleCreateRequestDto = BattleCreateRequestDto
@@ -438,6 +440,49 @@ class BattleControllerTest {
 				));
 		}
 
+		@Test
+		@WithMockUser(username = "1")
+		void 실패_배틀생성_선택한_두_post에대한_진행중인_battle이_이미_존재_400() throws Exception {
+			//given
+			BattleCreateRequestDto battleCreateRequestDto = BattleCreateRequestDto
+				.builder()
+				.challengingPostId(firstBalladPost.getId())
+				.challengedPostId(secondBalladPost.getId())
+				.build();
+
+			//when
+			ResultActions resultActions = mockMvc.perform(post("/api/v1/battles")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(battleCreateRequestDto))
+				.header("Authorization", "Bearer {AccessToken}")
+				.with(csrf())
+			);
+			//then
+			resultActions.andExpect(status().isBadRequest())
+				.andDo(print())
+				.andDo(document(
+					"already-exsist-progress-battle-about-selected-posts",
+					resource(
+						ResourceSnippetParameters.builder().tag(BATTLE_API_NAME)
+							.description("배틀 신청 API입니다.")
+							.requestFields(
+								fieldWithPath("challengedPostId").type(NUMBER).description("도전받는 post의 id"),
+								fieldWithPath("challengingPostId").type(NUMBER).description("도전하는 post의 id")
+							)
+							.requestHeaders(
+								headerWithName("Authorization").description("Hype 서비스 Access Token")
+							).responseFields(
+								fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("API 요청 성공 여부"),
+								fieldWithPath("message").type(JsonFieldType.STRING).description("API 요청 응답 메시지"),
+								fieldWithPath("data").type(JsonFieldType.NULL).description("API 요청 응답 메시지 - Null")
+							)
+							.build()
+					)
+				))
+				.andExpect(jsonPath("$.message")
+					.value(ExceptionMessage.CANNOT_MAKE_BATTLE_ALREADY_EXIST_PROGRESS_BATTLE.getMessage())
+				);
+		}
 	}
 
 	@Nested
