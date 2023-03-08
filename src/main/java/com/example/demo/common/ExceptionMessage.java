@@ -22,6 +22,7 @@ public enum ExceptionMessage {
 	CANNOT_MAKE_BATTLE_OWN_CHALLENED_POST("자신의 post에 배틀을 신청할 수 없습니다."),
 	CANNOT_MAKE_BATTLE_DIFFERENT_GENRE("두 post의 음악 장르가 다릅니다."),
 	CANNOT_MAKE_BATTLE_SAME_MUSIC("두 Post가 같은 음악에 대한 Post입니다."),
+	CANNOT_MAKE_BATTLE_ALREADY_EXIST_BATTLE("해당 post들에 대한 진행중인 battle이 이미 존재합니다."),
 	NOT_ALLOWED_FILE_FORMAT("허용되지 않는 파일 형식입니다."),
 
 	// IllegalStateException

@@ -59,7 +59,7 @@ public class BattleService {
 			));
 
 		Member memberByPrincipal = principalService.getMemberByPrincipal(principal);
-
+		validAlreadyExsistBattles(challengingPost, challengedPost);
 		validMemberHasChallengingPost(challengingPost, memberByPrincipal);
 		validMemberHasNotChallengedPost(challengedPost, memberByPrincipal);
 		validMemberChallengeTicket(memberByPrincipal);
@@ -74,6 +74,26 @@ public class BattleService {
 		battleRepository.save(newBattle);
 		memberByPrincipal.subtractCountOfChallengeTicket();
 		return newBattle.getId();
+	}
+
+	private void validAlreadyExsistBattles(Post challengingPost, Post challengedPost) {
+		boolean alreadyExsistBattle = false;
+		alreadyExsistBattle =
+			battleRepository.existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
+				challengedPost,
+				challengingPost,
+				BattleStatus.PROGRESS
+			);
+
+		alreadyExsistBattle = alreadyExsistBattle ||
+			battleRepository.existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
+				challengingPost,
+				challengedPost,
+				BattleStatus.PROGRESS
+			);
+		if (alreadyExsistBattle) {
+			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_ALREADY_EXIST_BATTLE.getMessage());
+		}
 	}
 
 	private void validSameMusic(Post challengingPost, Post challengedPost) {
