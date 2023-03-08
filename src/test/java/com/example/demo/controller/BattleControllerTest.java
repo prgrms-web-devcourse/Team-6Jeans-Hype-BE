@@ -141,6 +141,7 @@ class BattleControllerTest {
 		@WithMockUser(username = "1")
 		public void 성공_배틀생성_정상적으로_배틀생성_201() throws Exception {
 			//given
+			battleRepository.deleteAll();
 			Member member = memberRepository.findById(firstMember.getId()).get();
 			int startCountOfChallengedTicket = member.getCountOfChallengeTicket();
 			BattleCreateRequestDto battleCreateRequestDto = BattleCreateRequestDto
@@ -443,13 +444,6 @@ class BattleControllerTest {
 		@WithMockUser(username = "1")
 		void 실패_배틀생성_선택한_두_post에대한_진행중인_battle이_이미_존재_400() throws Exception {
 			//given
-			Battle testBattle = Battle.builder()
-				.status(BattleStatus.PROGRESS)
-				.genre(Genre.BALLAD)
-				.challengingPost(secondBalladPost)
-				.challengedPost(firstBalladPost)
-				.build();
-			battleRepository.save(testBattle);
 			BattleCreateRequestDto battleCreateRequestDto = BattleCreateRequestDto
 				.builder()
 				.challengingPostId(firstBalladPost.getId())

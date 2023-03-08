@@ -59,12 +59,13 @@ public class BattleService {
 			));
 
 		Member memberByPrincipal = principalService.getMemberByPrincipal(principal);
-		validAlreadyExsistBattles(challengingPost, challengedPost);
 		validMemberHasChallengingPost(challengingPost, memberByPrincipal);
 		validMemberHasNotChallengedPost(challengedPost, memberByPrincipal);
 		validMemberChallengeTicket(memberByPrincipal);
 		Genre targetGenre = validGenre(challengingPost, challengedPost);
 		validSameMusic(challengingPost, challengedPost);
+		validAlreadyExsistBattles(challengingPost, challengedPost);
+
 		Battle newBattle = Battle.builder()
 			.challengingPost(challengingPost)
 			.challengedPost(challengedPost)
