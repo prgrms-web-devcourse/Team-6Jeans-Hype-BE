@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.common.ExceptionMessage;
@@ -19,7 +20,13 @@ public class PrincipalService {
 	private final MemberRepository memberRepository;
 
 	public Member getMemberByPrincipal(Principal principal) {
-		return memberRepository.findById(Long.valueOf(principal.getName()))
-			.orElseThrow(() -> new EntityNotFoundException(ExceptionMessage.NOT_FOUND_MEMBER.getMessage()));
+		try {
+			Long id = Long.valueOf(principal.getName());
+			return memberRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(ExceptionMessage.NOT_FOUND_MEMBER.getMessage()));
+		} catch (NumberFormatException | NullPointerException exception) {
+			throw new AuthenticationCredentialsNotFoundException(ExceptionMessage.CANNOT_ACCESS_ANONYMOUS.getMessage());
+		}
+
 	}
 }
