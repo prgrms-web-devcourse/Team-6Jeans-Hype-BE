@@ -17,7 +17,8 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
 	void deleteByMemberAndPost(Member member, Post post);
 
-	@Query("select l from Like l left join fetch l.post where l.member.id = :memberId and l.post.music.genre = :genre order by l.id desc ")
+	@Query("select l from Like l left join fetch l.post "
+		+ "where l.member.id = :memberId and l.post.music.genre = :genre order by l.id desc ")
 	List<Like> findAllByMemberAndGenreLimitOrderByIdDesc(
 		@Param("memberId") Long memberId, @Param("genre") Genre genre, Pageable pageable);
 

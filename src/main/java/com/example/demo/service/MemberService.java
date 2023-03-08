@@ -103,7 +103,8 @@ public class MemberService {
 							postRepository.findAllByMemberIdAndMusic_GenreOrderByIdDesc(member.getId(), value)))
 					)
 					.orElseGet(() -> limit.map(integer -> MemberAllMyPostsResponseDto
-							.of(postRepository.findAllByIdLimitOrderByIdDesc(member.getId(), PageRequest.of(0, integer))))
+							.of(postRepository.findAllByIdLimitOrderByIdDesc(
+								member.getId(), PageRequest.of(0, integer))))
 						.orElseGet(() -> MemberAllMyPostsResponseDto.of(
 							postRepository.findAllByMemberIdOrderByIdDesc(member.getId())))
 					);
@@ -116,7 +117,8 @@ public class MemberService {
 							postRepository.findAllByMemberIdAndMusic_GenreOrderByIdDesc(memberId.get(), value)))
 					)
 					.orElseGet(() -> limit.map(integer -> MemberAllMyPostsResponseDto
-							.of(postRepository.findAllByIdLimitOrderByIdDesc(memberId.get(), PageRequest.of(0, integer))))
+							.of(postRepository.findAllByIdLimitOrderByIdDesc(
+								memberId.get(), PageRequest.of(0, integer))))
 						.orElseGet(() -> MemberAllMyPostsResponseDto.of(
 							postRepository.findAllByMemberIdOrderByIdDesc(memberId.get())))
 					);

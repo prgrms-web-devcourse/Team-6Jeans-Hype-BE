@@ -114,7 +114,8 @@ class MemberLikePostsTest {
 	@Test
 	void 성공_유저가_좋아요한_특정_개수의_게시글들을_조회할_수_있다() throws JsonProcessingException {
 		// given
-		int loop = 5, expectedSize = 2;
+		int loop = 5;
+		int expectedSize = 2;
 		List<Post> expectedPosts = new ArrayList<>();
 		Member liker = createMember();
 		Member poster = createMember();
