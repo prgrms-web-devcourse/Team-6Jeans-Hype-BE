@@ -26,6 +26,7 @@ import com.example.demo.controller.MemberController;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
+import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.service.MemberService;
@@ -43,6 +44,9 @@ class MemberAllPostsTest {
 	@Mock
 	private PostRepository postRepository;
 
+	@Mock
+	private LikeRepository likeRepository;
+
 	PrincipalService principalService;
 	MemberService memberService;
 	MemberController memberController;
@@ -50,7 +54,8 @@ class MemberAllPostsTest {
 	@BeforeEach
 	void setUp() {
 		principalService = new PrincipalService(memberRepository);
-		memberService = new MemberService(principalService, postRepository, memberRepository, resourceStorage);
+		memberService = new MemberService(principalService, postRepository, memberRepository, resourceStorage,
+			likeRepository);
 		memberController = new MemberController(principalService, memberService);
 	}
 
