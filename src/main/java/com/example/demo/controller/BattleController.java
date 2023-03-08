@@ -78,8 +78,11 @@ public class BattleController {
 	}
 
 	@GetMapping("/{battleId}")
-	public ResponseEntity<ApiResponse> getBattleDetailByBattleId(@PathVariable Long battleId) {
-		BattleDetailByIdResponseDto battleDetailResponseDto = battleService.getBattleDetailById(battleId);
+	public ResponseEntity<ApiResponse> getBattleDetailByBattleId(
+		Principal principal,
+		@PathVariable Long battleId
+	) {
+		BattleDetailByIdResponseDto battleDetailResponseDto = battleService.getBattleDetailById(principal, battleId);
 		ApiResponse success = ApiResponse.success(SUCCESS_FIND_BATTLE_DETAIL_BY_ID.getMessage(),
 			battleDetailResponseDto);
 		return ResponseEntity.ok(success);

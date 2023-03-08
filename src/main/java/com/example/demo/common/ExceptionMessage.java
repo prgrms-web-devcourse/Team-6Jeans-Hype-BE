@@ -34,7 +34,10 @@ public enum ExceptionMessage {
 	CANNOT_ALL_REQUEST_FIELDS_NULL("적어도 하나의 필드(닉네임 또는 프로필 이미지 URL)를 제공해야합니다."),
 	CANNOT_NICKNAME_LENGTH_OVER_24("닉네임은 24자를 초과할 수 없습니다."),
 	NOT_EXIST_FILE_NAME("파일명이 존재하지 않습니다."),
-	CANNOT_NICKNAME_BLANK("닉네임은 공백만으로 이루어 질 수 없습니다.");
+	CANNOT_NICKNAME_BLANK("닉네임은 공백만으로 이루어 질 수 없습니다."),
+
+	//NumberFormatException
+	CANNOT_ACCESS_ANONYMOUS("로그인 하지 않은 사용자는 접근할 수 없습니다.");
 
 	final String message;
 

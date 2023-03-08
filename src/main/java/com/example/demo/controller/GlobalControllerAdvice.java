@@ -4,6 +4,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,6 +34,13 @@ public class GlobalControllerAdvice {
 
 	@ExceptionHandler(OAuth2AuthenticationException.class)
 	public ResponseEntity<ApiResponse> handleOAuth2AuthenticationException(OAuth2AuthenticationException exception) {
+		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
+		return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+	}
+
+	@ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+	public ResponseEntity<ApiResponse> handleAuthenticationCredentialsNotFoundException(
+		AuthenticationCredentialsNotFoundException exception) {
 		ApiResponse apiResponse = ApiResponse.fail(exception.getMessage());
 		return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
 	}
