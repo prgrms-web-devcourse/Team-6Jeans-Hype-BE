@@ -6,6 +6,7 @@ import java.security.Principal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -173,9 +174,16 @@ public class BattleService {
 		Member member = principalService.getMemberByPrincipal(principal);
 		Battle battle = battleRepository.findById(battleId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_BATTLE.getMessage()));
-		return voteRepository.existsByBattleAndVoter(battle, member)
-			? BattleDetailByIdResponseDto.ofVotedBattleDetail(battle)
-			: BattleDetailByIdResponseDto.ofNotVotedBattleDetail(battle);
+		Optional<Long> selectedPostId = voteRepository.findByBattleAndVoter(battle, member)//투표한 적 있다면?
+			.map(element -> Optional.of(element.getSelectedPost().getId()))
+			.orElse(Optional.empty());
+		if (selectedPostId.isEmpty()) {
+			//투표를 안했다
+			return BattleDetailByIdResponseDto.ofNotVoted(battle);
+		} else {
+			//투표를 했다.
+			return BattleDetailByIdResponseDto.ofVoted(battle, selectedPostId.get());
+		}
 	}
 }
 
