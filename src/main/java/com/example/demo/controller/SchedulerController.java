@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import static com.example.demo.constant.RankingConstant.*;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ public class SchedulerController {
 
 	private final BattleService battleService;
 	private final MemberService memberService;
+	private final EntityManager entityManager;
 
 	private final int rankingTerm = RANKING_TERM;
 
@@ -27,7 +30,15 @@ public class SchedulerController {
 	public void updateBattleResult() {
 		battleService.quitBattles();
 		memberService.resetAllRankingAndPoint();
+
+		entityManager.flush();
+		entityManager.clear();
+
 		battleService.updateWinnerPoint(rankingTerm);
+
+		entityManager.flush();
+		entityManager.clear();
+
 		memberService.updateAllMemberRanking();
 	}
 }
