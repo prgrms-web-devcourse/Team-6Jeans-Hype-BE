@@ -120,18 +120,18 @@ public class BattleService {
 	}
 
 	@Transactional
-	public void updateWinnerPoint(int perm) {
-		findBattlesEndWithinPerm(perm).forEach(Battle::updateWinnerPoint);
+	public void updateWinnerPoint(int term) {
+		findBattlesEndWithinPerm(term).forEach(Battle::updateWinnerPoint);
 	}
 
 	private List<Battle> findBattleProgress() {
-		LocalDateTime endDate = LocalDateTime.now().minusDays(2);
+		LocalDateTime endDate = LocalDateTime.now().minusDays(1);
 		return battleRepository.findByStatusAndCreatedAtIsBefore(BattleStatus.PROGRESS, endDate);
 	}
 
-	private List<Battle> findBattlesEndWithinPerm(int perm) {
+	private List<Battle> findBattlesEndWithinPerm(int term) {
 		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime lastBattleDay = now.minusDays(perm - 1);
+		LocalDateTime lastBattleDay = now.minusDays(term);
 		return battleRepository.findByStatusAndUpdatedAtBetween(BattleStatus.END, lastBattleDay, now);
 	}
 

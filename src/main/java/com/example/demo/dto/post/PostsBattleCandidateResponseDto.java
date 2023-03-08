@@ -11,6 +11,12 @@ import reactor.util.annotation.NonNull;
 public record PostsBattleCandidateResponseDto(
 	@NonNull List<PostBattleCandidateResponseDto> posts
 ) {
+	public static PostsBattleCandidateResponseDto of(List<PostBattleCandidateResponseDto> posts) {
+		return PostsBattleCandidateResponseDto.builder()
+			.posts(posts)
+			.build();
+	}
+
 	public static PostsBattleCandidateResponseDto create() {
 		return PostsBattleCandidateResponseDto.builder()
 			.posts(new ArrayList<>())

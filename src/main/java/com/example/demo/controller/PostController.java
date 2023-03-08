@@ -68,10 +68,10 @@ public class PostController {
 		return ResponseEntity.ok(apiResponse);
 	}
 
-	@GetMapping("/battle/candidates")
+	@GetMapping("/battle/{postId}/candidates")
 	public ResponseEntity<ApiResponse> findAllBattleCandidates(
-		Principal principal, @RequestParam(name = "genre") Genre genre) {
-		PostsBattleCandidateResponseDto posts = postService.findAllBattleCandidates(principal, genre);
+		Principal principal, @PathVariable("postId") Long postId) {
+		PostsBattleCandidateResponseDto posts = postService.findAllBattleCandidates(principal, postId);
 
 		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_CANDIDATE_POST.getMessage(), posts);
 		return ResponseEntity.ok(apiResponse);
@@ -88,6 +88,16 @@ public class PostController {
 		} else {
 			apiResponse = ApiResponse.success(SUCCESS_UNLIKE_POST.getMessage(), result);
 		}
+
+		return ResponseEntity.ok(apiResponse);
+	}
+
+	@GetMapping("/likes/top")
+	public ResponseEntity<ApiResponse> findTenPostsByLikeCount(
+		@RequestParam(name = "genre", required = false) Genre genre) {
+		PostsFindResponseDto result = postService.findTenPostsByLikeCount(genre);
+
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_POST.getMessage(), result);
 
 		return ResponseEntity.ok(apiResponse);
 	}

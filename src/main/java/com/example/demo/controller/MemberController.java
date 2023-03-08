@@ -23,6 +23,7 @@ import com.example.demo.dto.member.MemberDetailsResponseDto;
 import com.example.demo.dto.member.MemberMyDetailsResponseDto;
 import com.example.demo.dto.member.MemberNicknameUpdateRequestDto;
 import com.example.demo.dto.member.MemberUpdateResponseDto;
+import com.example.demo.dto.ranking.RankersResponseDto;
 import com.example.demo.exception.ServerNotExecuteException;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
@@ -142,5 +143,23 @@ public class MemberController {
 				likePosts
 			)
 		);
+  }
+  
+	@GetMapping("/ranking")
+	public ResponseEntity<ApiResponse> getTop100Ranking() {
+		RankersResponseDto rankersResponseDto = memberService.getRankerListFirstTo(100);
+		ApiResponse apiResponse = ApiResponse.success(
+			ResponseMessage.SUCCESS_FIND_RANKERS.getMessage(), rankersResponseDto
+		);
+		return ResponseEntity.ok(apiResponse);
+	}
+
+	@GetMapping("/ranking/preview")
+	public ResponseEntity<ApiResponse> getRankingPreview() {
+		RankersResponseDto rankersResponseDto = memberService.getRankerListFirstTo(5);
+		ApiResponse apiResponse = ApiResponse.success(
+			ResponseMessage.SUCCESS_FIND_RANKERS.getMessage(), rankersResponseDto
+		);
+		return ResponseEntity.ok(apiResponse);
 	}
 }

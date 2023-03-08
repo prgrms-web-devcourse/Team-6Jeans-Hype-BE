@@ -24,6 +24,7 @@ import com.example.demo.dto.member.MemberAllMyPostsResponseDto;
 import com.example.demo.dto.member.MemberBattleResponseDto;
 import com.example.demo.dto.member.MemberBattlesResponseDto;
 import com.example.demo.dto.member.MemberUpdateResponseDto;
+import com.example.demo.dto.ranking.RankersResponseDto;
 import com.example.demo.exception.ServerNotExecuteException;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
@@ -194,10 +195,21 @@ public class MemberService {
 		}
 
 		if (Objects.nonNull(limit)) {
-			return new ArrayList<>(battles.subList(0, limit));
+			if (battles.size() > limit) {
+				return new ArrayList<>(battles.subList(0, limit));
+			}
 		}
 
 		return battles;
+	}
+
+	public RankersResponseDto getRankerListFirstTo(int end) {
+		List<Member> rankers = memberRepository.findByMemberScore_RankingBetweenOrderByMemberScore_RankingAsc(1, end);
+		if (rankers.size() < end) {
+			end = rankers.size();
+		}
+		List<Member> cuttedRankers = rankers.subList(0, end);
+		return RankersResponseDto.of(cuttedRankers);
 	}
 
 	@Transactional

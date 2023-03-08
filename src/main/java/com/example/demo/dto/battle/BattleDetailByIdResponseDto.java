@@ -1,6 +1,5 @@
 package com.example.demo.dto.battle;
 
-
 import java.time.LocalDate;
 
 import com.example.demo.dto.genre.GenreVoResponseDto;
