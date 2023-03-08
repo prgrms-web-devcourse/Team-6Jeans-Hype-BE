@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import static com.example.demo.constant.RankingConstant.*;
+
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,7 @@ public class SchedulerController {
 	private final BattleService battleService;
 	private final MemberService memberService;
 
-	private final int rankingTerm = 7;
+	private final int rankingTerm = RANKING_TERM;
 
 	@Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
 	@Transactional
