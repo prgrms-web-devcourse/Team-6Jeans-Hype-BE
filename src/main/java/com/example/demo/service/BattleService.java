@@ -92,7 +92,7 @@ public class BattleService {
 				BattleStatus.PROGRESS
 			);
 		if (alreadyExsistBattle) {
-			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_ALREADY_EXIST_BATTLE.getMessage());
+			throw new IllegalArgumentException(CANNOT_MAKE_BATTLE_ALREADY_EXIST_PROGRESS_BATTLE.getMessage());
 		}
 	}
 
