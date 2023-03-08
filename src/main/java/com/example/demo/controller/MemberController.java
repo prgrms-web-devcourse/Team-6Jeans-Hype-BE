@@ -143,8 +143,8 @@ public class MemberController {
 				likePosts
 			)
 		);
-  }
-  
+	}
+
 	@GetMapping("/ranking")
 	public ResponseEntity<ApiResponse> getTop100Ranking() {
 		RankersResponseDto rankersResponseDto = memberService.getRankerListFirstTo(100);
