@@ -22,6 +22,7 @@ import com.example.demo.common.ApiResponse;
 import com.example.demo.common.ResourceStorage;
 import com.example.demo.controller.MemberController;
 import com.example.demo.model.member.Member;
+import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.service.MemberService;
@@ -39,6 +40,9 @@ public class MemberDetailsTest {
 	@Mock
 	private PostRepository postRepository;
 
+	@Mock
+	private LikeRepository likeRepository;
+
 	private PrincipalService principalService;
 	private MemberService memberService;
 	private MemberController memberController;
@@ -46,7 +50,8 @@ public class MemberDetailsTest {
 	@BeforeEach
 	void setUp() {
 		principalService = new PrincipalService(memberRepository);
-		memberService = new MemberService(principalService, postRepository, memberRepository, resourceStorage);
+		memberService = new MemberService(principalService, postRepository, memberRepository, resourceStorage,
+			likeRepository);
 		memberController = new MemberController(principalService, memberService);
 	}
 

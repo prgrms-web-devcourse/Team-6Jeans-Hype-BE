@@ -2,7 +2,7 @@ package com.example.demo.util;
 
 import java.util.UUID;
 
-public final class MultipartUtil {
+public final class MultipartUtils {
 
 	public static String getContentType(String originalName) {
 		String format = getFormat(originalName).toLowerCase();

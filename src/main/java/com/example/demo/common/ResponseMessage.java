@@ -9,6 +9,7 @@ public enum ResponseMessage {
 	SUCCESS_MY_PAGE_PROFILE("마이페이지 상세정보 조회 성공"),
 	SUCCESS_USER_PAGE_PROFILE("유저페이지 상세정보 조회 성공"),
 	SUCCESS_USER_UPDATE("유저 프로필 정보 수정 성공"),
+	SUCCESS_USER_LIKE_POSTS("유저 좋아요한 게시글 리스트 조회 성공"),
 	SUCCESS_FIND_RANKERS("랭커 리스트 조회 성공"),
 	// Post
 	SUCCESS_CREATE_POST("음악 공유 게시글 등록 성공"),
