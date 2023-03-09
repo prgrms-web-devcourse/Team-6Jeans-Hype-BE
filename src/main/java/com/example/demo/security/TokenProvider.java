@@ -83,10 +83,10 @@ public class TokenProvider {
 		try {
 			Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
 			return false;
+		} catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+			return false;
 		} catch (ExpiredJwtException e) {
 			return true;
-		} catch (Exception e) {
-			return false;
 		}
 	}
 }
