@@ -12,8 +12,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
 @Service
@@ -21,7 +19,7 @@ public class TokenProvider {
 
 	private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
-	private AppProperties appProperties;
+	private final AppProperties appProperties;
 
 	public TokenProvider(AppProperties appProperties) {
 		this.appProperties = appProperties;
@@ -36,7 +34,7 @@ public class TokenProvider {
 			.setSubject(Long.toString(memberId))
 			.setIssuedAt(new Date())
 			.setExpiration(expiryDate)
-			.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+			.signWith(appProperties.getAuth().getTokenSecret())
 			.compact();
 	}
 
@@ -47,13 +45,14 @@ public class TokenProvider {
 			.setSubject(Long.toString(memberId))
 			.setIssuedAt(new Date())
 			.setExpiration(expiryDate)
-			.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getRefreshTokenSecret())
+			.signWith(appProperties.getAuth().getRefreshTokenSecret())
 			.compact();
 	}
 
 	public Long getUserIdFromToken(String token) {
-		Claims claims = Jwts.parser()
+		Claims claims = Jwts.parserBuilder()
 			.setSigningKey(appProperties.getAuth().getTokenSecret())
+			.build()
 			.parseClaimsJws(token)
 			.getBody();
 
@@ -62,9 +61,12 @@ public class TokenProvider {
 
 	public boolean validateToken(String authToken) {
 		try {
-			Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+			Jwts.parserBuilder()
+				.setSigningKey(appProperties.getAuth().getTokenSecret())
+				.build()
+				.parseClaimsJws(authToken);
 			return true;
-		} catch (SignatureException ex) {
+		} catch (SecurityException ex) {
 			logger.error("Invalid JWT signature");
 		} catch (MalformedJwtException ex) {
 			logger.error("Invalid JWT token");
@@ -81,12 +83,30 @@ public class TokenProvider {
 	public boolean isExpiredToken(String authToken) {
 
 		try {
-			Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+			Jwts.parserBuilder()
+				.setSigningKey(appProperties.getAuth().getTokenSecret())
+				.build()
+				.parseClaimsJws(authToken);
 			return false;
-		} catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+		} catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
 			return false;
 		} catch (ExpiredJwtException e) {
 			return true;
+		}
+	}
+
+	public boolean isWillExpiredInThreeDays(String token) {
+		int threeDayMesc = 259200000; //1000 * 60 * 60 * 24 * 3
+		Date expiration = Jwts.parserBuilder()
+			.build()
+			.parseClaimsJws(token)
+			.getBody().getExpiration();
+
+		long timeToExpired = expiration.getTime() - new Date().getTime();
+		if (timeToExpired < threeDayMesc) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

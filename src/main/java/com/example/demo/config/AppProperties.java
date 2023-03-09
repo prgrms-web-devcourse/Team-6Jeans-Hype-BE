@@ -1,10 +1,14 @@
 package com.example.demo.config;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Configuration
 @ConfigurationProperties(prefix = "app")
@@ -16,8 +20,9 @@ public class AppProperties {
 		private String tokenSecret;
 		private long tokenExpirationMsec;
 
-		public String getRefreshTokenSecret() {
-			return refreshTokenSecret;
+		public Key getRefreshTokenSecret() {
+			byte[] decodedRefreshTokenSecret = Decoders.BASE64.decode(refreshTokenSecret);
+			return Keys.hmacShaKeyFor(decodedRefreshTokenSecret);
 		}
 
 		public void setRefreshTokenSecret(String refreshTokenSecret) {
@@ -35,8 +40,10 @@ public class AppProperties {
 		private String refreshTokenSecret;
 		private long refreshTokenExpirationMsec;
 
-		public String getTokenSecret() {
-			return tokenSecret;
+		public Key getTokenSecret() {
+
+			byte[] decodedTokenSecret = Decoders.BASE64.decode(tokenSecret);
+			return Keys.hmacShaKeyFor(decodedTokenSecret);
 		}
 
 		public void setTokenSecret(String tokenSecret) {
