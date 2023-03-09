@@ -42,7 +42,7 @@ public class TokenProvider {
 
 	public String createRefrshToken(Long memberId) {
 		Date now = new Date();
-		Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+		Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getRefreshTokenExpirationMsec());
 		return Jwts.builder()
 			.setSubject(Long.toString(memberId))
 			.setIssuedAt(new Date())
