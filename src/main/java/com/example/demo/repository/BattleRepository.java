@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.persistence.LockModeType;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -35,4 +36,8 @@ public interface BattleRepository extends JpaRepository<Battle, Long> {
 	boolean existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
 		Post challengedPost, Post challengingPost, BattleStatus battleStatus
 	);
+
+	@Query("SELECT b FROM Battle b WHERE b.id >= :id and b.status = :status ORDER BY b.id asc")
+	List<Battle> findRandomBattle(
+		@Param("id") Long id, @Param("status") BattleStatus status, Pageable pageable);
 }
