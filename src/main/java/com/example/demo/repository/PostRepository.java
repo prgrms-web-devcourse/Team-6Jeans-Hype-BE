@@ -40,4 +40,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 		Pageable pageable);
 
 	List<Post> findByMemberAndIsPossibleBattleIsTrue(Member member);
+
+	List<Post> findTop10ByOrderByLikeCountDesc();
+
+	List<Post> findTop10AndByMusic_GenreOrderByLikeCountDesc(Genre genre);
 }

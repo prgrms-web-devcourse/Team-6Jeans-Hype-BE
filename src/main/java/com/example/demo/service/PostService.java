@@ -36,8 +36,6 @@ public class PostService {
 	private final LikeRepository likeRepository;
 	private final PrincipalService principalService;
 
-	private final int topLimit = 10;
-
 	@Transactional
 	public Long createPost(Principal principal, PostCreateRequestDto postRequestDto) {
 		Member member = principalService.getMemberByPrincipal(principal);
@@ -133,24 +131,14 @@ public class PostService {
 	}
 
 	public PostsFindResponseDto findTenPostsByLikeCount(Genre genre) {
-		Sort sort = Sort.by(Sort.Direction.DESC, "likeCount");
-
-		List<PostFindResponseDto> posts;
-
 		if (genre == null) {
-			posts = postRepository.findAll(sort)
+			return PostsFindResponseDto.of(postRepository.findTop10ByOrderByLikeCountDesc()
 				.stream().map(PostFindResponseDto::of)
-				.toList();
+				.toList());
 		} else {
-			posts = postRepository.findByMusic_Genre(genre, sort)
+			return PostsFindResponseDto.of(postRepository.findTop10AndByMusic_GenreOrderByLikeCountDesc(genre)
 				.stream().map(PostFindResponseDto::of)
-				.toList();
+				.toList());
 		}
-
-		if (posts.size() > topLimit) {
-			return PostsFindResponseDto.of(posts.subList(0, topLimit));
-		}
-
-		return PostsFindResponseDto.of(posts);
 	}
 }
