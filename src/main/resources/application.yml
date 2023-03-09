@@ -21,8 +21,8 @@ app:
   auth:
     tokenSecret: ${TOKEN_SECRET}
     #    tokenExpirationMsec: 864000000 # 1000 * 60 * 60 * 4 = 864000000  -> 10일이 나옴 ___ 60 * 24* 10 으로 된듯 exp 계산은 분 * 시간 *일 로 가는건가?
-    #    tokenExpirationMsec: 30000 #1000 * 30 -> 30분만 나올듯 -> 30초만 나왔음
-    tokenExpirationMsec: 1800000 #1000 * 60 * 30 -> 30분 나올 듯
+    tokenExpirationMsec: 30000 #1000 * 30 -> 30분만 나올듯 -> 30초만 나왔음
+    #    tokenExpirationMsec: 1800000 #1000 * 60 * 30 -> 30분 나올 둣 -> 30분 나왔음
     refreshTokenSecret: ${REFRESH_TOKEN_SECRET}
     refreshTokenExpirationMsec: 2592000000 #1000 * 60 * 60 * 24 * 30
   cors:
