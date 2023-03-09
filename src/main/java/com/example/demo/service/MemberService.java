@@ -277,4 +277,9 @@ public class MemberService {
 			.map(Like::getPost)
 			.toList();
 	}
+
+	public Member getMember(Long memberId) {
+		return memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MEMBER.getMessage()));
+	}
 }
