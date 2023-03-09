@@ -13,4 +13,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	List<Member> findByMemberScore_RankingBetweenOrderByMemberScore_RankingAsc(int startRanking, int endRanking);
 
+	Optional<Member> findByRefreshToken(String refreshToken);
 }
