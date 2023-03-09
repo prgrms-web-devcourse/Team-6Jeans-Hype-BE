@@ -24,6 +24,7 @@ public enum ExceptionMessage {
 	CANNOT_MAKE_BATTLE_SAME_MUSIC("두 Post가 같은 음악에 대한 Post입니다."),
 	CANNOT_MAKE_BATTLE_ALREADY_EXIST_PROGRESS_BATTLE("해당 post들에 대한 진행중인 battle이 이미 존재합니다."),
 	NOT_ALLOWED_FILE_FORMAT("허용되지 않는 파일 형식입니다."),
+	NOT_PROGRESS_BATTLE("진행중인 배틀이 없습니다."),
 
 	// IllegalStateException
 	FAIL_UPLOAD_FILE_S3("저장소에 파일 업로드가 실패했습니다."),
