@@ -176,7 +176,7 @@ public class BattleService {
 	}
 
 	public BattlesResponseDto getBattles() {
-		List<Battle> allBattles = battleRepository.findAll();
+		List<Battle> allBattles = battleRepository.findAllByOrderByCreatedAtDesc();
 		return BattlesResponseDto.of(allBattles);
 	}
 
@@ -186,12 +186,12 @@ public class BattleService {
 	}
 
 	public BattlesResponseDto getBattles(Genre genre) {
-		List<Battle> battles = battleRepository.findAllByGenre(genre);
+		List<Battle> battles = battleRepository.findAllByGenreOrderByCreatedAtDesc(genre);
 		return BattlesResponseDto.of(battles);
 	}
 
 	public BattlesResponseDto getBattles(BattleStatus battleStatus, Genre genre) {
-		List<Battle> battles = battleRepository.findAllByStatusAndGenreEquals(battleStatus, genre);
+		List<Battle> battles = battleRepository.findAllByStatusAndGenreEqualsOrderByCreatedAt(battleStatus, genre);
 		return BattlesResponseDto.of(battles);
 	}
 

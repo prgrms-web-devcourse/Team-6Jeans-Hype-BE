@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.JpaAuditingConfig;
+import com.example.demo.model.BaseEntity;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
@@ -36,6 +38,25 @@ class BattleRepositoryTest {
 
 	private final BattleStatus status = BattleStatus.PROGRESS;
 	private final Genre genre = Genre.K_POP;
+
+	@Test
+	@Transactional
+	void 대결_조회시_createdAt_기준으로_내림차순으로_정렬된다() {
+		List<Battle> mocks = getBattles();
+		battleRepository.deleteAll();
+		List<Battle> battles = battleRepository.saveAll(mocks);
+		List<Battle> battlesByCreatedAtDesc = battleRepository.findAllByOrderByCreatedAtDesc();
+		battles.sort(Comparator.comparing(BaseEntity::getCreatedAt).reversed());
+		for (int i = 0; i < battlesByCreatedAtDesc.size(); i++) {
+			assertThat(battlesByCreatedAtDesc.get(i).getId()).isEqualTo(battles.get(i).getId());
+			if (i + 1 < battlesByCreatedAtDesc.size()) {
+				assertThat(
+					battlesByCreatedAtDesc.get(i).getCreatedAt()
+						.isAfter(battlesByCreatedAtDesc.get(i + 1).getCreatedAt())
+				).isTrue();
+			}
+		}
+	}
 
 	@Test
 	void 상태와_특정날짜_전의_생성날짜를_기준으로_Battle을_반환할_수_있다() {
