@@ -21,6 +21,7 @@ import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostIsLikeResponseDto;
 import com.example.demo.dto.post.PostLikeResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
@@ -432,6 +433,31 @@ class PostServiceTest {
 		assertThat(result).isEqualTo(postsFindResponseDto);
 
 		verify(postRepository).findTop10AndByMusic_GenreOrderByLikeCountDesc(genre);
+	}
+
+	@Test
+	void 성공_유저가_좋아요했는지_판단할_수_있다() {
+		// given
+		Long postId = 0L;
+		Post post = Post.create(musicId, albumCoverUrl, singer, musicName, genre, musicUrl,
+			content, isPossibleBattle, member);
+
+		// when
+		when(postRepository.findById(postId)).thenReturn(Optional.of(post));
+		when(principalService.getMemberByPrincipal(principal)).thenReturn(member);
+		when(likeRepository.existsByMemberAndPost(member, post)).thenReturn(true);
+		PostIsLikeResponseDto result = postService.getPostIsLiked(principal, postId);
+
+		// then
+		PostIsLikeResponseDto postIsLikeResponseDto = PostIsLikeResponseDto.builder()
+			.isLiked(true)
+			.build();
+
+		assertThat(result).isEqualTo(postIsLikeResponseDto);
+
+		verify(postRepository).findById(postId);
+		verify(principalService).getMemberByPrincipal(principal);
+		verify(likeRepository).existsByMemberAndPost(member, post);
 	}
 
 	private List<Post> getPosts(Member member, Genre genre) {

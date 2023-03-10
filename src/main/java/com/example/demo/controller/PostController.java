@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.demo.common.ApiResponse;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
+import com.example.demo.dto.post.PostIsLikeResponseDto;
 import com.example.demo.dto.post.PostLikeResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
@@ -98,6 +99,15 @@ public class PostController {
 		PostsFindResponseDto result = postService.findTenPostsByLikeCount(genre);
 
 		ApiResponse apiResponse = ApiResponse.success(SUCCESS_FIND_ALL_POST.getMessage(), result);
+
+		return ResponseEntity.ok(apiResponse);
+	}
+
+	@GetMapping("/{postId}/isLike")
+	public ResponseEntity<ApiResponse> getPostIsLiked(Principal principal, @PathVariable("postId") Long postId) {
+		PostIsLikeResponseDto result = postService.getPostIsLiked(principal, postId);
+
+		ApiResponse apiResponse = ApiResponse.success(SUCCESS_GET_IS_LIKE.getMessage(), result);
 
 		return ResponseEntity.ok(apiResponse);
 	}
