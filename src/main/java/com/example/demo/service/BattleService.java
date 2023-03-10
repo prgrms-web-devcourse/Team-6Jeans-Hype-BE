@@ -7,15 +7,18 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.battle.BattleDetailByIdResponseDto;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
+import com.example.demo.dto.battle.BattleDetailsResponseDto;
 import com.example.demo.dto.battle.BattlesResponseDto;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
@@ -206,6 +209,18 @@ public class BattleService {
 			//투표를 했다.
 			return BattleDetailByIdResponseDto.ofVoted(battle, selectedPostId.get());
 		}
+	}
+
+	public BattleDetailsResponseDto getRandomBattleDetail() {
+		long count = battleRepository.count();
+		long randomIndex = new Random().nextInt((int)count) + 1;
+		List<Battle> randomBattle = battleRepository.findRandomBattle(randomIndex, BattleStatus.PROGRESS,
+			PageRequest.of(0, 1));
+
+		if (randomBattle.size() < 1) {
+			throw new IllegalArgumentException(NOT_PROGRESS_BATTLE.getMessage());
+		}
+		return BattleDetailsResponseDto.of(randomBattle.get(0));
 	}
 }
 
