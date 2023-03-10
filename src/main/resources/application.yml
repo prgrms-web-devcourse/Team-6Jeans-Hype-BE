@@ -4,7 +4,7 @@ spring:
     port: 6379
   profiles:
     active:
-      - local
+      - test
   security:
     oauth2:
       client:
