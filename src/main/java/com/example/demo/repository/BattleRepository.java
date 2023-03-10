@@ -25,7 +25,7 @@ public interface BattleRepository extends JpaRepository<Battle, Long> {
 
 	List<Battle> findByStatusAndCreatedAtIsBefore(BattleStatus status, LocalDateTime endDate);
 
-	List<Battle> findAllByStatusEquals(BattleStatus progressStatus);
+	List<Battle> findAllByStatusOrderByCreatedAtDesc(BattleStatus progressStatus);
 
 	List<Battle> findByStatusAndUpdatedAtBetween(BattleStatus status, LocalDateTime startDate, LocalDateTime endDate);
 
@@ -33,7 +33,7 @@ public interface BattleRepository extends JpaRepository<Battle, Long> {
 
 	List<Battle> findAllByGenreOrderByCreatedAtDesc(Genre genre);
 
-	List<Battle> findAllByStatusAndGenreEqualsOrderByCreatedAt(BattleStatus status, Genre genre);
+	List<Battle> findAllByStatusAndGenreEqualsOrderByCreatedAtDesc(BattleStatus status, Genre genre);
 
 	boolean existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
 		Post challengedPost, Post challengingPost, BattleStatus battleStatus
