@@ -120,12 +120,15 @@ public class MemberDetailsRestDocsTest {
 	public void 성공_유저의_상세정보를_조회할_수_있다() throws Exception {
 		// given
 		Member member = createMember();
+		Member otherMember = createMember();
 
 		// when
 		when(memberRepository.findById(anyLong()))
 			.thenReturn(Optional.of(member));
 		when(principalService.getMemberByPrincipal(any()))
 			.thenReturn(member);
+		when(memberService.getMember(anyLong()))
+			.thenReturn(otherMember);
 		var actions = mockMvc.perform(get("/api/v1/members/profile")
 			.contentType(MediaType.APPLICATION_JSON)
 			.param("memberId", "2")
