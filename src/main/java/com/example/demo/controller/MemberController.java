@@ -74,10 +74,11 @@ public class MemberController {
 				);
 			}
 			case USER_PAGE -> {
+				Member otherMember = memberService.getMember(memberId.get());
 				return ResponseEntity.ok(
 					ApiResponse.success(
 						ResponseMessage.SUCCESS_USER_PAGE_PROFILE.getMessage(),
-						MemberDetailsResponseDto.of(member))
+						MemberDetailsResponseDto.of(otherMember))
 				);
 			}
 		}
