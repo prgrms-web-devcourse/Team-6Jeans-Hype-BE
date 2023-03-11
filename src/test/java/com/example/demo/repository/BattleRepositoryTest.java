@@ -235,6 +235,7 @@ class BattleRepositoryTest {
 			.challengingPost(challengingPost)
 			.build();
 	}
+
 	private List<Battle> getBattles() {
 		List<Battle> battles = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {

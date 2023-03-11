@@ -3,6 +3,7 @@ package com.example.demo.controller.battle;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import com.example.demo.common.ApiResponse;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
 import com.example.demo.dto.vote.BattleVoteRequestDto;
+import com.example.demo.model.BaseEntity;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.battle.Vote;
@@ -89,8 +91,8 @@ class BattleDetailsListIntegrationTest {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", String.format("Bearer %s", accessToken));
 		HttpEntity<BattleVoteRequestDto> requestHeader = new HttpEntity<>(headers);
+		notVotedbattleListProgress.sort(Comparator.comparing(BaseEntity::getCreatedAt).reversed());
 		BattleDetailsListResponseDto expected = BattleDetailsListResponseDto.of(notVotedbattleListProgress);
-
 		// when
 		ResponseEntity<ApiResponse> response = restTemplate.withBasicAuth("1", "password")
 			.exchange("/api/v1/battles/details", HttpMethod.GET, requestHeader, ApiResponse.class);
