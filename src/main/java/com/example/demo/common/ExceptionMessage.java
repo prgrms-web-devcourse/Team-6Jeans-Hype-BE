@@ -38,7 +38,9 @@ public enum ExceptionMessage {
 	CANNOT_NICKNAME_BLANK("닉네임은 공백만으로 이루어 질 수 없습니다."),
 
 	//NumberFormatException
-	CANNOT_ACCESS_ANONYMOUS("로그인 하지 않은 사용자는 접근할 수 없습니다.");
+	CANNOT_ACCESS_ANONYMOUS("로그인 하지 않은 사용자는 접근할 수 없습니다."),
+
+	UNAUTHORIZED_MEMBER("인증 정보가 잘못되었거나, 로그인 되지 않은 사용자 입니다.");
 
 	final String message;
 
