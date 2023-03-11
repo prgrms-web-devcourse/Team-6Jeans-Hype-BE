@@ -48,7 +48,7 @@ class AuthControllerTest {
 		resultActions.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(document("logined-user", resource(
-				ResourceSnippetParameters.builder()
+				ResourceSnippetParameters.builder().tag("auth")
 					.description("사용자가 로그인 했는지 여부를 체크합니다.")
 					.requestHeaders(
 						headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -71,8 +71,8 @@ class AuthControllerTest {
 		resultActions
 			.andExpect(status().isUnauthorized())
 			.andDo(print())
-			.andDo(document("logined-user", resource(
-				ResourceSnippetParameters.builder()
+			.andDo(document("wrong-accessToken-user", resource(
+				ResourceSnippetParameters.builder().tag("auth")
 					.description("사용자가 로그인 했는지 여부를 체크합니다.")
 					.requestHeaders(
 						headerWithName("Authorization").description("Hype 서비스 Access Token")
