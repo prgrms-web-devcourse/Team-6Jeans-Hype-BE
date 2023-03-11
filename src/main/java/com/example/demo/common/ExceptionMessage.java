@@ -41,6 +41,7 @@ public enum ExceptionMessage {
 	//NumberFormatException
 	CANNOT_ACCESS_ANONYMOUS("로그인 하지 않은 사용자는 접근할 수 없습니다."),
 
+	UNAUTHORIZED_MEMBER("인증 정보가 잘못되었거나, 로그인 되지 않은 사용자 입니다."),
 	//IOException
 	FAIL_SEARCH_MUSIC("음악 검색에 실패했습니다.");
 
