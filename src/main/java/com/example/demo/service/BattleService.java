@@ -162,7 +162,7 @@ public class BattleService {
 
 	public BattleDetailsListResponseDto getBattleDetailsListInProgress(Principal principal) {
 		Member member = principalService.getMemberByPrincipal(principal);
-		List<Battle> battleListInProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
+		List<Battle> battleListInProgress = battleRepository.findAllByStatusOrderByCreatedAtDesc(BattleStatus.PROGRESS);
 		List<Vote> votes = voteRepository.findAllByVoterId(member.getId());
 
 		List<Battle> battleListInProgressNotVotedByMember = battleListInProgress.stream()
@@ -176,22 +176,22 @@ public class BattleService {
 	}
 
 	public BattlesResponseDto getBattles() {
-		List<Battle> allBattles = battleRepository.findAll();
+		List<Battle> allBattles = battleRepository.findAllByOrderByCreatedAtDesc();
 		return BattlesResponseDto.of(allBattles);
 	}
 
 	public BattlesResponseDto getBattles(BattleStatus battleStatus) {
-		List<Battle> allByStatusEquals = battleRepository.findAllByStatusEquals(battleStatus);
+		List<Battle> allByStatusEquals = battleRepository.findAllByStatusOrderByCreatedAtDesc(battleStatus);
 		return BattlesResponseDto.of(allByStatusEquals);
 	}
 
 	public BattlesResponseDto getBattles(Genre genre) {
-		List<Battle> battles = battleRepository.findAllByGenre(genre);
+		List<Battle> battles = battleRepository.findAllByGenreOrderByCreatedAtDesc(genre);
 		return BattlesResponseDto.of(battles);
 	}
 
 	public BattlesResponseDto getBattles(BattleStatus battleStatus, Genre genre) {
-		List<Battle> battles = battleRepository.findAllByStatusAndGenreEquals(battleStatus, genre);
+		List<Battle> battles = battleRepository.findAllByStatusAndGenreEqualsOrderByCreatedAtDesc(battleStatus, genre);
 		return BattlesResponseDto.of(battles);
 	}
 
