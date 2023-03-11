@@ -1,6 +1,6 @@
 package com.example.demo.common;
 
-import static com.example.demo.util.MultipartUtil.*;
+import static com.example.demo.util.MultipartUtils.*;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.example.demo.util.MultipartUtil;
+import com.example.demo.util.MultipartUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,7 @@ public class AmazonS3ResourceStorage implements ResourceStorage {
 
 		try {
 			ObjectMetadata objectMetadata = new ObjectMetadata();
-			objectMetadata.setContentType(MultipartUtil.getFormat(savedFileUrl));
+			objectMetadata.setContentType(MultipartUtils.getFormat(savedFileUrl));
 			objectMetadata.setContentLength(multipartFile.getSize());
 			amazonS3.putObject(
 				new PutObjectRequest(

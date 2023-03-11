@@ -40,5 +40,24 @@ public class Like extends BaseEntity {
 	public Like(Post post, Member member) {
 		checkArgument(Objects.nonNull(post), "게시글이 Null일 수 없습니다.");
 		checkArgument(Objects.nonNull(member), "유저가 Null일 수 없습니다.");
+
+		setPost(post);
+		setMember(member);
+	}
+
+	public void setMember(Member member) {
+		if (Objects.nonNull(this.member)) {
+			this.member.getLikes().remove(this);
+		}
+		this.member = member;
+		this.member.getLikes().add(this);
+	}
+
+	public void setPost(Post post) {
+		if (Objects.nonNull(this.post)) {
+			this.post.getLikes().remove(this);
+		}
+		this.post = post;
+		this.post.getLikes().add(this);
 	}
 }

@@ -7,15 +7,18 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.battle.BattleDetailByIdResponseDto;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
+import com.example.demo.dto.battle.BattleDetailsResponseDto;
 import com.example.demo.dto.battle.BattlesResponseDto;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
@@ -159,7 +162,7 @@ public class BattleService {
 
 	public BattleDetailsListResponseDto getBattleDetailsListInProgress(Principal principal) {
 		Member member = principalService.getMemberByPrincipal(principal);
-		List<Battle> battleListInProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
+		List<Battle> battleListInProgress = battleRepository.findAllByStatusOrderByCreatedAtDesc(BattleStatus.PROGRESS);
 		List<Vote> votes = voteRepository.findAllByVoterId(member.getId());
 
 		List<Battle> battleListInProgressNotVotedByMember = battleListInProgress.stream()
@@ -173,22 +176,22 @@ public class BattleService {
 	}
 
 	public BattlesResponseDto getBattles() {
-		List<Battle> allBattles = battleRepository.findAll();
+		List<Battle> allBattles = battleRepository.findAllByOrderByCreatedAtDesc();
 		return BattlesResponseDto.of(allBattles);
 	}
 
 	public BattlesResponseDto getBattles(BattleStatus battleStatus) {
-		List<Battle> allByStatusEquals = battleRepository.findAllByStatusEquals(battleStatus);
+		List<Battle> allByStatusEquals = battleRepository.findAllByStatusOrderByCreatedAtDesc(battleStatus);
 		return BattlesResponseDto.of(allByStatusEquals);
 	}
 
 	public BattlesResponseDto getBattles(Genre genre) {
-		List<Battle> battles = battleRepository.findAllByGenre(genre);
+		List<Battle> battles = battleRepository.findAllByGenreOrderByCreatedAtDesc(genre);
 		return BattlesResponseDto.of(battles);
 	}
 
 	public BattlesResponseDto getBattles(BattleStatus battleStatus, Genre genre) {
-		List<Battle> battles = battleRepository.findAllByStatusAndGenreEquals(battleStatus, genre);
+		List<Battle> battles = battleRepository.findAllByStatusAndGenreEqualsOrderByCreatedAtDesc(battleStatus, genre);
 		return BattlesResponseDto.of(battles);
 	}
 
@@ -206,6 +209,18 @@ public class BattleService {
 			//투표를 했다.
 			return BattleDetailByIdResponseDto.ofVoted(battle, selectedPostId.get());
 		}
+	}
+
+	public BattleDetailsResponseDto getRandomBattleDetail() {
+		long count = battleRepository.count();
+		long randomIndex = new Random().nextInt((int)count) + 1;
+		List<Battle> randomBattle = battleRepository.findRandomBattle(randomIndex, BattleStatus.PROGRESS,
+			PageRequest.of(0, 1));
+
+		if (randomBattle.size() < 1) {
+			throw new IllegalArgumentException(NOT_PROGRESS_BATTLE.getMessage());
+		}
+		return BattleDetailsResponseDto.of(randomBattle.get(0));
 	}
 }
 

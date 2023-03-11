@@ -15,6 +15,7 @@ import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
+import com.example.demo.dto.post.PostIsLikeResponseDto;
 import com.example.demo.dto.post.PostLikeResponseDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
@@ -35,8 +36,6 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final LikeRepository likeRepository;
 	private final PrincipalService principalService;
-
-	private final int topLimit = 10;
 
 	@Transactional
 	public Long createPost(Principal principal, PostCreateRequestDto postRequestDto) {
@@ -133,24 +132,27 @@ public class PostService {
 	}
 
 	public PostsFindResponseDto findTenPostsByLikeCount(Genre genre) {
-		Sort sort = Sort.by(Sort.Direction.DESC, "likeCount");
-
-		List<PostFindResponseDto> posts;
-
 		if (genre == null) {
-			posts = postRepository.findAll(sort)
+			return PostsFindResponseDto.of(postRepository.findTop10ByOrderByLikeCountDesc()
 				.stream().map(PostFindResponseDto::of)
-				.toList();
+				.toList());
 		} else {
-			posts = postRepository.findByMusic_Genre(genre, sort)
+			return PostsFindResponseDto.of(postRepository.findTop10AndByMusic_GenreOrderByLikeCountDesc(genre)
 				.stream().map(PostFindResponseDto::of)
-				.toList();
+				.toList());
 		}
+	}
 
-		if (posts.size() > topLimit) {
-			return PostsFindResponseDto.of(posts.subList(0, topLimit));
-		}
+	public PostIsLikeResponseDto getPostIsLiked(Principal principal, Long postId) {
+		Member member = principalService.getMemberByPrincipal(principal);
 
-		return PostsFindResponseDto.of(posts);
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
+
+		boolean isLike = likeRepository.existsByMemberAndPost(member, post);
+
+		return PostIsLikeResponseDto.builder()
+			.isLiked(isLike)
+			.build();
 	}
 }

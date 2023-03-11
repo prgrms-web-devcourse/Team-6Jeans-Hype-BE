@@ -24,6 +24,8 @@ public enum ExceptionMessage {
 	CANNOT_MAKE_BATTLE_SAME_MUSIC("두 Post가 같은 음악에 대한 Post입니다."),
 	CANNOT_MAKE_BATTLE_ALREADY_EXIST_PROGRESS_BATTLE("해당 post들에 대한 진행중인 battle이 이미 존재합니다."),
 	NOT_ALLOWED_FILE_FORMAT("허용되지 않는 파일 형식입니다."),
+	NOT_PROGRESS_BATTLE("진행중인 배틀이 없습니다."),
+	NOT_VALID_TERM("검색 요청값이 올바른 형태가 아닙니다."),
 
 	// IllegalStateException
 	FAIL_UPLOAD_FILE_S3("저장소에 파일 업로드가 실패했습니다."),
@@ -37,7 +39,11 @@ public enum ExceptionMessage {
 	CANNOT_NICKNAME_BLANK("닉네임은 공백만으로 이루어 질 수 없습니다."),
 
 	//NumberFormatException
-	CANNOT_ACCESS_ANONYMOUS("로그인 하지 않은 사용자는 접근할 수 없습니다.");
+	CANNOT_ACCESS_ANONYMOUS("로그인 하지 않은 사용자는 접근할 수 없습니다."),
+
+	UNAUTHORIZED_MEMBER("인증 정보가 잘못되었거나, 로그인 되지 않은 사용자 입니다."),
+	//IOException
+	FAIL_SEARCH_MUSIC("음악 검색에 실패했습니다.");
 
 	final String message;
 

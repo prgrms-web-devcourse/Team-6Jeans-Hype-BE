@@ -23,6 +23,7 @@ import com.example.demo.common.ResponseMessage;
 import com.example.demo.dto.battle.BattleCreateRequestDto;
 import com.example.demo.dto.battle.BattleDetailByIdResponseDto;
 import com.example.demo.dto.battle.BattleDetailsListResponseDto;
+import com.example.demo.dto.battle.BattleDetailsResponseDto;
 import com.example.demo.dto.battle.BattlesResponseDto;
 import com.example.demo.dto.vote.BattleVoteRequestDto;
 import com.example.demo.dto.vote.VoteResultResponseDto;
@@ -111,6 +112,16 @@ public class BattleController {
 		return ResponseEntity.ok(
 			ApiResponse.success(
 				ResponseMessage.SUCCESS_FIND_ALL_BATTLE_DETAILS.getMessage(),
+				responseDto
+			));
+	}
+
+	@GetMapping("/random")
+	public ResponseEntity<ApiResponse> getRandomBattle() {
+		BattleDetailsResponseDto responseDto = battleService.getRandomBattleDetail();
+		return ResponseEntity.ok(
+			ApiResponse.success(
+				ResponseMessage.SUCCESS_RANDOM_BATTLE.getMessage(),
 				responseDto
 			));
 	}

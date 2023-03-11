@@ -903,7 +903,8 @@ class BattleControllerTest {
 		@Test
 		public void 성공_given_투표안하고_끝나지않은_battleId_then_배틀의_상세정보_200() throws Exception {
 			//given
-			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
+			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusOrderByCreatedAtDesc(
+				BattleStatus.PROGRESS);
 			Long targetBattleId = battlesStatusIsProgress.get(0).getId();
 			//when
 			ResultActions resultActions = mockMvc
@@ -1015,7 +1016,8 @@ class BattleControllerTest {
 		@Test
 		public void 성공_given_투표안하고_이미끝난_battleId_then_그_배틀의_상세정보_및_투표수_200() throws Exception {
 			//given
-			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusEquals(BattleStatus.END);
+			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusOrderByCreatedAtDesc(
+				BattleStatus.END);
 			Long targetBattleId = battlesStatusIsProgress.get(0).getId();
 			//when
 			ResultActions resultActions = mockMvc
@@ -1125,7 +1127,8 @@ class BattleControllerTest {
 		@Test
 		public void 성공_given_투표하고_끝나지않은_battleId_then_배틀의_상세정보_200() throws Exception {
 			//given
-			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusEquals(BattleStatus.PROGRESS);
+			List<Battle> battlesStatusIsProgress = battleRepository.findAllByStatusOrderByCreatedAtDesc(
+				BattleStatus.PROGRESS);
 			Long targetBattleId = battlesStatusIsProgress.get(0).getId();
 			Long selectPostId = battlesStatusIsProgress.get(0).getChallengedPost().getPost().getId();
 			BattleVoteRequestDto battleVoteRequestDto = new BattleVoteRequestDto(targetBattleId, selectPostId);
@@ -1243,7 +1246,7 @@ class BattleControllerTest {
 		@Test
 		public void 성공_given_투표하고_이미끝난_battleId_then_그_배틀의_상세정보_및_투표수_200() throws Exception {
 			//given
-			List<Battle> battlesStatusIsEnded = battleRepository.findAllByStatusEquals(BattleStatus.END);
+			List<Battle> battlesStatusIsEnded = battleRepository.findAllByStatusOrderByCreatedAtDesc(BattleStatus.END);
 			Long targetBattleId = battlesStatusIsEnded.get(0).getId();
 			Long selectPostId = battlesStatusIsEnded.get(0).getChallengedPost().getPost().getId();
 			BattleVoteRequestDto battleVoteRequestDto = new BattleVoteRequestDto(targetBattleId, selectPostId);

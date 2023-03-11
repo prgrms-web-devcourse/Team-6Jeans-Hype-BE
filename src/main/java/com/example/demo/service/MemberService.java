@@ -25,13 +25,15 @@ import com.example.demo.dto.member.MemberBattleResponseDto;
 import com.example.demo.dto.member.MemberBattlesResponseDto;
 import com.example.demo.dto.member.MemberUpdateResponseDto;
 import com.example.demo.dto.ranking.RankersResponseDto;
-import com.example.demo.exception.ServerNotActiveException;
+import com.example.demo.exception.ServerNotExecuteException;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
+import com.example.demo.model.post.Like;
 import com.example.demo.model.post.Post;
+import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.security.oauth2.user.OAuth2UserInfo;
@@ -53,6 +55,7 @@ public class MemberService {
 	private final PostRepository postRepository;
 	private final MemberRepository memberRepository;
 	private final ResourceStorage resourceStorage;
+	private final LikeRepository likeRepository;
 
 	@Transactional
 	public long join(OAuth2User oauth2User, String socialName) {
@@ -94,31 +97,36 @@ public class MemberService {
 
 		switch (MemberFilteringCase.getCase(memberId, member.getId())) { // 마이페이지
 			case MY_PAGE -> {
-				return genre.map(value -> limit.map(integer -> MemberAllMyPostsResponseDto.of(
-					postRepository.findAllByIdLimitAndGenreOrderByIdDesc(member.getId(), value,
-						PageRequest.of(0, integer))
-				)).orElseGet(() -> MemberAllMyPostsResponseDto.of(
-					postRepository.findAllByMemberIdAndMusic_GenreOrderByIdDesc(member.getId(), value)
-				))).orElseGet(() -> limit.map(integer -> MemberAllMyPostsResponseDto.of(
-					postRepository.findAllByIdLimitOrderByIdDesc(member.getId(), PageRequest.of(0, integer))
-				)).orElseGet(() -> MemberAllMyPostsResponseDto.of(
-					postRepository.findAllByMemberIdOrderByIdDesc(member.getId())
-				)));
+				return genre.map(value -> limit.map(integer -> MemberAllMyPostsResponseDto
+							.of(postRepository.findAllByIdLimitAndGenreOrderByIdDesc(member.getId(), value,
+								PageRequest.of(0, integer))))
+						.orElseGet(() -> MemberAllMyPostsResponseDto.of(
+							postRepository.findAllByMemberIdAndMusic_GenreOrderByIdDesc(member.getId(), value)))
+					)
+					.orElseGet(() -> limit.map(integer -> MemberAllMyPostsResponseDto
+							.of(postRepository.findAllByIdLimitOrderByIdDesc(
+								member.getId(), PageRequest.of(0, integer))))
+						.orElseGet(() -> MemberAllMyPostsResponseDto.of(
+							postRepository.findAllByMemberIdOrderByIdDesc(member.getId())))
+					);
 			}
 			case USER_PAGE -> {
-				return genre.map(value -> limit.map(integer -> MemberAllMyPostsResponseDto.of(
-					postRepository.findAllByIdLimitAndGenreOrderByIdDesc(memberId.get(), value,
-						PageRequest.of(0, integer)))).orElseGet(() -> MemberAllMyPostsResponseDto.of(
-					postRepository.findAllByMemberIdAndMusic_GenreOrderByIdDesc(memberId.get(), value)
-				))).orElseGet(() -> limit.map(integer -> MemberAllMyPostsResponseDto.of(
-					postRepository.findAllByIdLimitOrderByIdDesc(memberId.get(), PageRequest.of(0, integer))
-				)).orElseGet(() -> MemberAllMyPostsResponseDto.of(
-					postRepository.findAllByMemberIdOrderByIdDesc(memberId.get())
-				)));
+				return genre.map(value -> limit.map(integer -> MemberAllMyPostsResponseDto
+							.of(postRepository.findAllByIdLimitAndGenreOrderByIdDesc(memberId.get(), value,
+								PageRequest.of(0, integer))))
+						.orElseGet(() -> MemberAllMyPostsResponseDto.of(
+							postRepository.findAllByMemberIdAndMusic_GenreOrderByIdDesc(memberId.get(), value)))
+					)
+					.orElseGet(() -> limit.map(integer -> MemberAllMyPostsResponseDto
+							.of(postRepository.findAllByIdLimitOrderByIdDesc(
+								memberId.get(), PageRequest.of(0, integer))))
+						.orElseGet(() -> MemberAllMyPostsResponseDto.of(
+							postRepository.findAllByMemberIdOrderByIdDesc(memberId.get())))
+					);
 			}
 		}
 
-		throw new ServerNotActiveException(SERVER_ERROR.getMessage());
+		throw new ServerNotExecuteException(SERVER_ERROR.getMessage());
 	}
 
 	@Transactional
@@ -219,5 +227,59 @@ public class MemberService {
 		String updatedProfileImageUrl = resourceStorage.save(baseDirProfileImg, member.getId(), profileImage);
 		member.setProfileImageUrl(updatedProfileImageUrl);
 		return MemberUpdateResponseDto.of(member);
+	}
+
+	public MemberAllMyPostsResponseDto getLikePosts(
+		Principal principal,
+		Optional<Genre> genre,
+		Optional<Integer> limit) {
+
+		Member member = principalService.getMemberByPrincipal(principal);
+
+		List<Like> likes;
+		if (genre.isPresent()) {
+			if (limit.isPresent()) {
+				likes = likeRepository
+					.findAllByMemberAndGenreLimitOrderByIdDesc(
+						member.getId(),
+						genre.get(),
+						PageRequest.of(0, limit.get())
+					);
+			} else {
+				likes = likeRepository
+					.findAllByMemberIdAndPost_Music_GenreOrderByIdDesc(
+						member.getId(),
+						genre.get()
+					);
+			}
+		} else {
+			if (limit.isPresent()) {
+				likes = likeRepository
+					.findAllByMemberLimitOrderByIdDesc(
+						member.getId(),
+						PageRequest.of(0, limit.get())
+					);
+			} else {
+				likes = likeRepository
+					.findAllByMemberIdOrderByIdDesc(
+						member.getId()
+					);
+			}
+		}
+
+		return MemberAllMyPostsResponseDto.of(
+			convertLikeToPost(likes)
+		);
+	}
+
+	private List<Post> convertLikeToPost(List<Like> likes) {
+		return likes.stream()
+			.map(Like::getPost)
+			.toList();
+	}
+
+	public Member getMember(Long memberId) {
+		return memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MEMBER.getMessage()));
 	}
 }

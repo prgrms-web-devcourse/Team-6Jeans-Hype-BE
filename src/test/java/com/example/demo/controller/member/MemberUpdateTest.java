@@ -1,7 +1,7 @@
 package com.example.demo.controller.member;
 
 import static com.example.demo.controller.TestUtil.*;
-import static com.example.demo.util.MultipartUtil.*;
+import static com.example.demo.util.MultipartUtils.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -35,6 +35,7 @@ import com.example.demo.common.ResourceStorage;
 import com.example.demo.controller.MemberController;
 import com.example.demo.dto.member.MemberNicknameUpdateRequestDto;
 import com.example.demo.model.member.Member;
+import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.security.TokenProvider;
@@ -87,8 +88,7 @@ class MemberUpdateTest {
 		// given
 		PrincipalService principalService = new PrincipalService(memberRepository);
 		MemberService memberService = new MemberService(principalService, mock(PostRepository.class), memberRepository,
-			mock(
-				ResourceStorage.class));
+			mock(ResourceStorage.class), mock(LikeRepository.class));
 		MemberController memberController = new MemberController(principalService, memberService);
 		String newNickname = "newNickname";
 		Member member = createMember();

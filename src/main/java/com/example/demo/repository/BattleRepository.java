@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.persistence.LockModeType;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -24,15 +25,21 @@ public interface BattleRepository extends JpaRepository<Battle, Long> {
 
 	List<Battle> findByStatusAndCreatedAtIsBefore(BattleStatus status, LocalDateTime endDate);
 
-	List<Battle> findAllByStatusEquals(BattleStatus progressStatus);
+	List<Battle> findAllByStatusOrderByCreatedAtDesc(BattleStatus progressStatus);
 
 	List<Battle> findByStatusAndUpdatedAtBetween(BattleStatus status, LocalDateTime startDate, LocalDateTime endDate);
 
-	List<Battle> findAllByGenre(Genre genre);
+	List<Battle> findAllByOrderByCreatedAtDesc();
 
-	List<Battle> findAllByStatusAndGenreEquals(BattleStatus status, Genre genre);
+	List<Battle> findAllByGenreOrderByCreatedAtDesc(Genre genre);
+
+	List<Battle> findAllByStatusAndGenreEqualsOrderByCreatedAtDesc(BattleStatus status, Genre genre);
 
 	boolean existsByChallengedPost_PostAndChallengingPost_PostAndStatus(
 		Post challengedPost, Post challengingPost, BattleStatus battleStatus
 	);
+
+	@Query("SELECT b FROM Battle b WHERE b.id >= :id and b.status = :status ORDER BY b.id asc")
+	List<Battle> findRandomBattle(
+		@Param("id") Long id, @Param("status") BattleStatus status, Pageable pageable);
 }

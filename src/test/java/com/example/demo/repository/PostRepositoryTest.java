@@ -224,52 +224,61 @@ class PostRepositoryTest {
 	@Transactional
 	void 성공_추천글을_좋아요_수_상위_10개를_가져올_수_있다() {
 		// given
-		List<Post> posts = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
+		memberRepository.save(member);
+		for (int i = 0; i < 11; i++) {
 			Post post = Post.create("1234", "album", "singer", "title", genre,
 				"url", "content", isPossibleBattle, member);
 			for (int j = 0; j < i; j++) {
 				post.plusLike();
 			}
-			posts.add(post);
+			postRepository.save(post);
 		}
 
-		memberRepository.save(member);
-		postRepository.saveAll(posts);
-
-		Collections.reverse(posts);
-
 		// when
-		List<Post> result = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount"));
+		List<Post> result = postRepository.findTop10ByOrderByLikeCountDesc();
 
 		// then
-		assertThat(result).isEqualTo(posts);
+		assertThat(result.size()).isEqualTo(10);
+		for (int i = 0; i < result.size() - 1; i++) {
+			assertThat(result.get(i).getLikeCount() > result.get(i + 1).getLikeCount())
+				.isEqualTo(true);
+		}
 	}
 
 	@Test
 	@Transactional
 	void 성공_추천글을_장르별_좋아요_수_상위_10개를_가져올_수_있다() {
 		// given
-		List<Post> posts = new ArrayList<>();
+		memberRepository.save(member);
 		for (int i = 0; i < 10; i++) {
 			Post post = Post.create("1234", "album", "singer", "title", genre,
 				"url", "content", isPossibleBattle, member);
 			for (int j = 0; j < i; j++) {
 				post.plusLike();
 			}
-			posts.add(post);
+			postRepository.save(post);
+		}
+		for (int i = 0; i < 10; i++) {
+			Post post = Post.create("1234", "album", "singer", "title", Genre.JAZZ,
+				"url", "content", isPossibleBattle, member);
+			for (int j = 0; j < i; j++) {
+				post.plusLike();
+			}
+			postRepository.save(post);
 		}
 
-		memberRepository.save(member);
-		postRepository.saveAll(posts);
-
-		Collections.reverse(posts);
-
 		// when
-		List<Post> result = postRepository.findByMusic_Genre(genre, Sort.by(Sort.Direction.DESC, "likeCount"));
+		List<Post> result = postRepository.findTop10AndByMusic_GenreOrderByLikeCountDesc(genre);
 
 		// then
-		assertThat(result).isEqualTo(posts);
+		assertThat(result.size()).isEqualTo(10);
+		for (Post post : result) {
+			assertThat(post.getMusic().getGenre()).isEqualTo(genre);
+		}
+		for (int i = 0; i < result.size() - 1; i++) {
+			assertThat(result.get(i).getLikeCount() > result.get(i + 1).getLikeCount())
+				.isEqualTo(true);
+		}
 	}
 
 	private Member createMember() {
