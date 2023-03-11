@@ -14,10 +14,13 @@ import com.example.demo.common.ResponseMessage;
 import com.example.demo.dto.auth.LoginCheckDto;
 import com.example.demo.service.AuthService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthController {
-	AuthService authService;
+	private final AuthService authService;
 
 	@GetMapping("/login-check")
 	public ResponseEntity<ApiResponse> checkLogin(Principal principal) {

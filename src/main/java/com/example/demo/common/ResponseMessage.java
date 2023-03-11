@@ -27,7 +27,7 @@ public enum ResponseMessage {
 	SUCCESS_RANDOM_BATTLE("랜덤한 대결 상세 조회 성공"),
 	SUCCESS_GET_IS_LIKE("좋아요 여부 판단 성공"),
 	//Auth
-	SUCCESS_AUTHORIZED_MEMBER("인증 정보가 잘못되었거나, 로그인 되지 않은 사용자 입니다.");
+	SUCCESS_AUTHORIZED_MEMBER("인증 성공, 로그인된 사용자 입니다.");
 	final String message;
 
 	ResponseMessage(String message) {
