@@ -80,7 +80,7 @@ public class TokenProvider {
 		return false;
 	}
 
-	public boolean isExpiredToken(String authToken) {
+	public boolean isOnlyExpiredToken(String authToken) {
 
 		try {
 			Jwts.parserBuilder()
