@@ -3,6 +3,7 @@ package com.example.demo.controller.music;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,9 @@ class MusicSearchRestDocsTest {
 		actions
 			.andExpect(status().isOk())
 			.andDo(document("success-music-search",
+				requestParameters(
+					parameterWithName("term").description("음악 검색 요청문")
+				),
 				responseFields(
 					fieldWithPath("success").type(JsonFieldType.BOOLEAN)
 						.description("API 요청 성공 여부"),
