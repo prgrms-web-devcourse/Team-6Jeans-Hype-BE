@@ -25,7 +25,9 @@ public enum ResponseMessage {
 	SUCCESS_FIND_BATTLES("대결 리스트 조회 성공"),
 	SUCCESS_FIND_BATTLE_DETAIL_BY_ID("배틀 상세 조회 성공"),
 	SUCCESS_RANDOM_BATTLE("랜덤한 대결 상세 조회 성공"),
-	SUCCESS_GET_IS_LIKE("좋아요 여부 판단 성공");
+	SUCCESS_GET_IS_LIKE("좋아요 여부 판단 성공"),
+	// Music
+	SUCCESS_MUSIC_SEARCH("음악 검색 성공");
 
 	final String message;
 
