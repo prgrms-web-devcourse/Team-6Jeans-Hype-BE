@@ -30,7 +30,7 @@ public enum ResponseMessage {
 	SUCCESS_AUTHORIZED_MEMBER("인증 성공, 로그인된 사용자 입니다."),
 	// Music
 	SUCCESS_MUSIC_SEARCH("음악 검색 성공");
-  
+
 	final String message;
 
 	ResponseMessage(String message) {
