@@ -56,8 +56,8 @@ public class ItunesMusicSearchService implements MusicSearchService {
 
 			List<MusicSearchResponseVo> convertJsonToDtoNotBlankMusicUrl = convertJsonToDto.stream()
 				.filter(musicSearchResponseVo ->
-					Objects.nonNull(musicSearchResponseVo.previewUrl()) &&
-						!musicSearchResponseVo.previewUrl().isBlank()
+					Objects.nonNull(musicSearchResponseVo.previewUrl())
+						&& !musicSearchResponseVo.previewUrl().isBlank()
 				)
 				.toList();
 
