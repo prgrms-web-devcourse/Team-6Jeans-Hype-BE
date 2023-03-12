@@ -30,17 +30,31 @@
 <br/>
 
 ## 📏 Code Convention
-
+[Naver 코드 컨벤션](https://naver.github.io/hackday-conventions-java/) + CheckStyle 적용
 
 <br/>
 
 ## 🌴 Commit Convention
-
+| 태그 이름 | 설명 |
+| --- | --- |
+| [CHORE] | 로직과 상관없는 잡다한 작업 ( resource 추가, yml 추가 등 ) |
+| [FIX] | 코드 수정 |
+| [FEAT] | 새로운 기능 구현 |
+| [ADD] | 코드 추가 |
+| [HOTFIX] | 급한 사항 |
+| [DEL] | 코드 삭제 |
+| [DOCS] | README 등의 문서 개정 |
+| [REFACTOR] | 파일 이름 변경, 구조 변경 등의 전면 수정 |
+| [TEST] | 테스트 코드 |
 
 <br/>
 
 ## ✨ Branch Strategy
-
+**git 전략 - git flow 전략**
+- `main` : 초기 프로젝트 설정 브랜치
+- `develop` : 개발(작업) 브랜치: 해당 브랜치로 push 할 경우 CD
+- `이름_#이슈번호` : 이슈별 개발 브랜치
+- `이름` : 개인 작업 브랜치
 
 
 <br/>
