@@ -183,7 +183,9 @@ REDIS_HOST=
 
 ## 🏗 Architecture
 
-![image](https://user-images.githubusercontent.com/55437339/224557661-dcdd79e9-164d-4a8c-9544-6ee5b6975e54.png)
+![image](https://user-images.githubusercontent.com/55437339/224557698-7676c5f2-99aa-45b4-9cbe-2b3388ce6e8d.png)
+
+
 
 <br/>
 
