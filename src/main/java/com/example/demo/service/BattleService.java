@@ -11,7 +11,6 @@ import java.util.Random;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -212,15 +211,13 @@ public class BattleService {
 	}
 
 	public BattleDetailsResponseDto getRandomBattleDetail() {
-		long count = battleRepository.count();
-		long randomIndex = new Random().nextInt((int)count) + 1;
-		List<Battle> randomBattle = battleRepository.findRandomBattle(randomIndex, BattleStatus.PROGRESS,
-			PageRequest.of(0, 1));
-
-		if (randomBattle.size() < 1) {
+		List<Battle> progressBattles = battleRepository.findByStatus(BattleStatus.PROGRESS);
+		if (progressBattles.size() < 1) {
 			throw new IllegalArgumentException(NOT_PROGRESS_BATTLE.getMessage());
 		}
-		return BattleDetailsResponseDto.of(randomBattle.get(0));
+
+		int randomIndex = new Random().nextInt(progressBattles.size());
+		return BattleDetailsResponseDto.of(progressBattles.get(randomIndex));
 	}
 }
 
