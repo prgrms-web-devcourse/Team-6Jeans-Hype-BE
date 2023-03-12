@@ -183,6 +183,8 @@ REDIS_HOST=
 
 ## 🏗 Architecture
 
+![image](https://user-images.githubusercontent.com/55437339/224557661-dcdd79e9-164d-4a8c-9544-6ee5b6975e54.png)
+
 <br/>
 
 ### 🎼나만아는 숨듣 명곡 추천
