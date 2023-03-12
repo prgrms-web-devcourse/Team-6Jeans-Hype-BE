@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.ApiResponse;
+import com.example.demo.dto.music.MusicSearchResponseDto;
 import com.example.demo.service.MusicSearchService;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,11 +25,11 @@ public class MusicController {
 	ResponseEntity<ApiResponse> getResultByMusicSearchApi(
 		@RequestParam String term
 	) {
-		JsonNode search = musicSearchService.search(term);
+		MusicSearchResponseDto searchResult = musicSearchService.search(term);
 		return ResponseEntity.ok(
 			ApiResponse.success(
 				SUCCESS_MUSIC_SEARCH.getMessage(),
-				search
+				searchResult
 			)
 		);
 	}
