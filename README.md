@@ -11,6 +11,42 @@
 
 </div>
 
+## 프로젝트 개요
+내가 **좋아하는 음악을 추천하고자 하는 욕구가 있는 사람들**, 내가 아직 **모르는 음악들을 추천받고 싶은 사람들**을 대상으로 하는 음악 대결 서비스 입니다. 음악을 공유하는 사람들은 추천글을 쓰고 좋아요와 다른 노래와의 대결을 생성해 다른사람들의 반응을 확인할 수 있습니다. 노래를 추천받고 싶은 사람들은 다른사람이 제공하는 추천글, 이상형월드컵 형식으로 제공되는 음악 대결에 투표하는 것을 통해 게임처럼 자신이 모르던 장르의 노래를 새로 알게 될 수 있습니다.
+
+### 🎼나만아는 숨듣 명곡 추천
+음악 검색을 통해 자신이 좋아하는 노래를 검색하고 다른 사용자들에게 추천해 줄 수 있습니다.
+
+<p align="center">
+<img src="https://place-hold.it/360x740/A274DC?text=write music post example" height="450px"/>
+<img src="https://place-hold.it/360x740/A274DC?text=music post list example" height="450px"/>
+</p>
+
+### 🆚 다른사람이 추천한 노래와의 대결
+장르가 같은 다른 사람의 추천 음악, 자신의 추천 음악 간 대결 생성하고 이상형월드컵 형식을 통해 다른 사용자들의 반응을 확인할 수 있습니다.
+
+<p align="center">
+<img src="https://place-hold.it/360x740/A274DC?text=battle short" height="450px"/>
+<img src="https://place-hold.it/360x740/A274DC?text= battle list" height="450px"/>
+</p>
+
+
+### 💎 대결 결과를 바탕으로 다른 사용자들과의 경쟁
+하루동안 진행되는 대결 결과를 바탕으로 포인트가 산정되며 지난 일주일간의 포인트 산정 결과로 그날의 유저 랭킹을 확인할 수 있습니다.
+
+<p align="center">
+<img src="https://place-hold.it/360x740/A274DC?text=battle ended info" height="450px"/>
+<img src="https://place-hold.it/360x740/A274DC?text=battle after end info" height="450px"/>
+</p>
+
+### 음잘알 사용자의 추천 음악 따라 듣기
+사용자들은 유저 랭킹이 높은 사용자들의 추천 음악을 확인할 수 있습니다.
+
+<p align="center">
+<img src="https://place-hold.it/360x740/A274DC?text=ranking list" height="450px"/>
+<img src="https://place-hold.it/360x740/A274DC?text=different user info" height="450px"/>
+</p>
+
 ## 🛠 Used Stacks
 
 | <img width="80" height="80" src="https://user-images.githubusercontent.com/55437339/224531454-65f005e4-ece5-4796-81fa-d28cd75f74a7.png"> | <img width="100" height="80" src="https://user-images.githubusercontent.com/55437339/224531494-171c8e4d-3326-48c3-88f9-8205425e07ba.png"> | <code><img height="80" src="https://user-images.githubusercontent.com/25181517/183891303-41f257f8-6b3d-487c-aa56-c497b880d0fb.png" alt="Spring Boot" title="Spring Boot" /></code> | <img width="120" height="80" src="https://user-images.githubusercontent.com/55437339/224531530-d53418df-c62f-4f72-841f-3739b9a9746d.png"> | <code><img height="80" src="https://user-images.githubusercontent.com/25181517/183896128-ec99105a-ec1a-4d85-b08b-1aa1620b2046.png" alt="MySQL" title="MySQL" /></code>   |
