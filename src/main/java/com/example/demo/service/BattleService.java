@@ -213,13 +213,13 @@ public class BattleService {
 	}
 
 	public BattleDetailsResponseDto getRandomBattleDetail() {
-		List<Battle> randomBattle = battleRepository.findByStatus(BattleStatus.PROGRESS);
-		if (randomBattle.size() < 1) {
+		List<Battle> progressBattles = battleRepository.findByStatus(BattleStatus.PROGRESS);
+		if (progressBattles.size() < 1) {
 			throw new IllegalArgumentException(NOT_PROGRESS_BATTLE.getMessage());
 		}
 
-		int randomIndex = new Random().nextInt(randomBattle.size());
-		return BattleDetailsResponseDto.of(randomBattle.get(randomIndex));
+		int randomIndex = new Random().nextInt(progressBattles.size());
+		return BattleDetailsResponseDto.of(progressBattles.get(randomIndex));
 	}
 }
 
