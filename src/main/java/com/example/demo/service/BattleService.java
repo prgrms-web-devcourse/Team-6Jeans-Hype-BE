@@ -11,7 +11,6 @@ import java.util.Random;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,9 @@ import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.VoteRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -212,15 +213,13 @@ public class BattleService {
 	}
 
 	public BattleDetailsResponseDto getRandomBattleDetail() {
-		long count = battleRepository.count();
-		long randomIndex = new Random().nextInt((int)count) + 1;
-		List<Battle> randomBattle = battleRepository.findRandomBattle(randomIndex, BattleStatus.PROGRESS,
-			PageRequest.of(0, 1));
-
+		List<Battle> randomBattle = battleRepository.findByStatus(BattleStatus.PROGRESS);
 		if (randomBattle.size() < 1) {
 			throw new IllegalArgumentException(NOT_PROGRESS_BATTLE.getMessage());
 		}
-		return BattleDetailsResponseDto.of(randomBattle.get(0));
+
+		int randomIndex = new Random().nextInt(randomBattle.size());
+		return BattleDetailsResponseDto.of(randomBattle.get(randomIndex));
 	}
 }
 
