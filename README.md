@@ -193,7 +193,8 @@ dependencies {
 [BE 저장소](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-BE)
 
 ### Frontend Domain
-`https://h-y-p-e.netlify.app` 
+
+[`https://h-y-p-e.netlify.app` ](https://h-y-p-e.netlify.app/)
 
 
 ### Backend API
