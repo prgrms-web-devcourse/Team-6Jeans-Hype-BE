@@ -201,11 +201,6 @@ dependencies {
 [api 위키 페이지](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-BE/wiki/%EB%B0%B0%ED%8F%AC%EB%90%9C-api-%EB%AA%85%EC%84%B8%EC%84%9C)
 ### 느낀점
 
-**김소현** : 
-- [글 제목]()
-
-**박세준** 
-- [데브코스 최종 프로젝트 Hype 회고](https://velog.io/@sejun/데브코스-최종-프로젝트-Hype-회고)
-
-**이수영** : 
-- [글 제목]()
+- **김소현** :  [글 제목]()
+- **박세준** : [데브코스 최종 프로젝트 Hype 회고](https://velog.io/@sejun/데브코스-최종-프로젝트-Hype-회고)
+- **이수영** : [글 제목]()
