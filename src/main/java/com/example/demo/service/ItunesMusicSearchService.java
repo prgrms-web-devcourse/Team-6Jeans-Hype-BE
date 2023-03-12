@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -54,7 +55,10 @@ public class ItunesMusicSearchService implements MusicSearchService {
 					MusicSearchResponseVo[].class));
 
 			List<MusicSearchResponseVo> convertJsonToDtoNotBlankMusicUrl = convertJsonToDto.stream()
-				.filter(musicSearchResponseVo -> !musicSearchResponseVo.previewUrl().isBlank())
+				.filter(musicSearchResponseVo ->
+					Objects.nonNull(musicSearchResponseVo.previewUrl()) &&
+						!musicSearchResponseVo.previewUrl().isBlank()
+				)
 				.toList();
 
 			return MusicSearchResponseDto.of(
