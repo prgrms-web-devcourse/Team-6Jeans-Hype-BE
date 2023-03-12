@@ -186,3 +186,25 @@ dependencies {
 
 ## 🏗 Architecture
 
+## 📎 Link
+### Repository
+[FE 저장소](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-FE)
+
+[BE 저장소](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-BE)
+
+### Frontend Domain
+`https://h-y-p-e.netlify.app` 
+
+
+### Backend API
+
+### 느낀점
+
+**김소현** : 
+- [글 제목]()
+
+**박세준** 
+- [데브코스 최종 프로젝트 Hype 회고](https://velog.io/@sejun/데브코스-최종-프로젝트-Hype-회고)
+
+**이수영** : 
+- [글 제목]()
