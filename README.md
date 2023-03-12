@@ -184,6 +184,32 @@ dependencies {
 
 <br/>
 
+## ☘ environment variables
+</br>
+
+`/localTestDB/db_info.env`
+```
+MYSQL_DATABASE=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_ROOT_PASSWORD=
+```
+</br>
+
+`/sensitive.env`
+```
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+TOKEN_SECRET=
+REFRESH_TOKEN_SECRET=
+FRONT_URI=
+FRONT_REDIRECT_PATH=
+BACK_URI=
+SECRET_KEY= 
+REDIS_HOST=
+```
+</br>
+
 ## 🏗 Architecture
 
 ## 📎 Link
