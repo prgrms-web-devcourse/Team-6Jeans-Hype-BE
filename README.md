@@ -73,7 +73,9 @@
 ## 📃 API 명세서
 [API 명세서 Swagger](https://hype.n-e.kr/docs/index.html)
 
-[API 명세서 문서화](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-BE/wiki/%EB%B0%B0%ED%8F%AC%EB%90%9C-api-%EB%AA%85%EC%84%B8%EC%84%9C)
+[API 명세서 문서화 Wiki](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-BE/wiki/%EB%B0%B0%ED%8F%AC%EB%90%9C-api-%EB%AA%85%EC%84%B8%EC%84%9C)
+
+[API 명세서 초안 Nostion](https://backend-devcourse.notion.site/17fbc53b5f0147f69bae4881e5782024?v=868518776622434eb6da263d4b039ab1)
 
 <br/>
 
