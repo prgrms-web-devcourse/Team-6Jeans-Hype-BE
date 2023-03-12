@@ -7,38 +7,14 @@
 <br/>
 
 ### 🛠 Used Stacks
- ![Typescript](https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
- ![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
- ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
- ![PRISMA](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=Prisma&logoColor=white) 
- ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
-### 1. 백엔드
-| <img width="80" height="80" src=".github/readme/java.png"> | <img width="100" height="80" src=".github/readme/gradle.png"> | <code><img height="80" src="https://user-images.githubusercontent.com/25181517/183891303-41f257f8-6b3d-487c-aa56-c497b880d0fb.png" alt="Spring Boot" title="Spring Boot" /></code> | <img width="120" height="80" src=".github/readme/jpa.png"> |
-|------------------------------------------------------------|---------------------------------------------------------------|------------------------------------------|------------------------------------------------------------|
-| Java 17                                                    | Gradle                                                        | SpringBoot 2.7.7                              | Spring Data JPA                                            |
+| <img width="80" height="80" src="https://user-images.githubusercontent.com/55437339/224531454-65f005e4-ece5-4796-81fa-d28cd75f74a7.png"> | <img width="100" height="80" src="https://user-images.githubusercontent.com/55437339/224531494-171c8e4d-3326-48c3-88f9-8205425e07ba.png"> | <code><img height="80" src="https://user-images.githubusercontent.com/25181517/183891303-41f257f8-6b3d-487c-aa56-c497b880d0fb.png" alt="Spring Boot" title="Spring Boot" /></code> | <img width="120" height="80" src="https://user-images.githubusercontent.com/55437339/224531530-d53418df-c62f-4f72-841f-3739b9a9746d.png"> | test |
+|------------------------------------------------------------|---------------------------------------------------------------|------------------------------------------|------------------------------------------------------------|-----]
+| Java 17                                                    | Gradle                                                        | SpringBoot 2.7.7                              | Spring Data JPA                                            | MySQL 8.0 |
 
 | <code><img height="80" src="https://user-images.githubusercontent.com/25181517/117201470-f6d56780-adec-11eb-8f7c-e70e376cfd07.png" alt="Spring" title="Spring" /></code> | <code><img height="80" width="100" src="https://user-images.githubusercontent.com/25181517/117533873-484d4480-afef-11eb-9fad-67c8605e3592.png" alt="JUnit" title="JUnit" /></code> | <code><img height="80" width="100" src="https://user-images.githubusercontent.com/25181517/183892181-ad32b69e-3603-418c-b8e7-99e976c2a784.png" alt="mocikto" title="mocikto" /></code> | <code><img height="80" src="https://user-images.githubusercontent.com/25181517/183896128-ec99105a-ec1a-4d85-b08b-1aa1620b2046.png" alt="MySQL" title="MySQL" /></code>          | <code><img height="80" src="https://user-images.githubusercontent.com/25181517/190229463-87fa862f-ccf0-48da-8023-940d287df610.png" alt="Lombok" title="Lombok" /></code> |
 |------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|------------------------------|
-| Spring RestDocs                    | Junit 5                                                                                                                                                                            | Mockito                                                                                                                                                                     | MySQL 8.0 | Lombok                      |
-
-### 2. DevOps
-
-| <img width="120" height="80" src=".github/readme/ec2.png"> | <img width="120" height="80" src=".github/readme/s3.png"> | <img width="120" height="80" src=".github/readme/rds.png"> | <img width="120" height="80" src=".github/readme/cloudwatch.png"> |
-|------------------------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------|-------------------------------------------------------------------|
-| AWS EC2                                                    | AWS S3                                                    | AWS RDS                                                    | AWS CloudWatch                                                    |
-
-| <img width="120" height="80" src=".github/readme/gitactions.png"> | <img width="120" height="80" src=".github/readme/docker.png"> | <img width="120" height="80" src=".github/readme/jacoco.jpeg"> | <img width="80" height="80" src=".github/readme/ghcr.png"> |
-|-------------------------------------------------------------------|-------------------------------------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------|
-| Git Actions                                                       | Docker                                                        | Jacoco                                                         |github<br> container<br> repository                                   |
-
-### 3. 협업툴
-
-| <img width="80" height="80" src=".github/readme/notion.png"> | <img width="80" height="80" src=".github/readme/slack.png"> | <img width="80" height="80" src=".github/readme/github.png"> |
-|--------------------------------------------------------------|-------------------------------------------------------------|--------------------------------------------------------------|
-| Notion                                                       | Slack                                                       | Github                                                       |
-
-
+| Spring RestDocs                    | Junit 5                                                                                                                                                                            | Mockito                                                                                                                                                                     | MySQL 8.0 | Lombok                      
 <br/>
 
 ## 👥 팀원
