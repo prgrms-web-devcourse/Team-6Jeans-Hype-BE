@@ -64,10 +64,16 @@ MVC 기반
 
 📁 src
 |_ 📁 main
+|_ |_ 📁 common
+|_ |_ 📁 config
+|_ |_ 📁 constrant
 |_ |_ 📁 controller
 |_ |_ 📁 dto
+|_ |_ 📁 exception
+|_ |_ 📁 model
 |_ |_ 📁 repository
 |_ |_ 📁 services
+|_ |_ 📁 util
 |_ 📁 test
 
 ```
@@ -77,7 +83,47 @@ MVC 기반
 ## 🌴 Dependencies Module
 <b>build.gradle</b>
 ```
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter:3.1.5'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
 
+    testImplementation 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.4'
+    testImplementation "org.junit.jupiter:junit-jupiter-params"
+    testImplementation 'io.findify:s3mock_2.13:0.2.6'
+    implementation 'com.google.guava:guava:31.1-jre'
+    swaggerUI 'org.webjars:swagger-ui:4.1.3'
+
+    implementation "ca.pjer:logback-awslogs-appender:1.6.0"
+    implementation 'com.amazonaws:aws-java-sdk-bom:1.12.417'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.410'
+}
 
 ```
 
