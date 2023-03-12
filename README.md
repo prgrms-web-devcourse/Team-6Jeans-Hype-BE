@@ -7,45 +7,12 @@
 ```
 잘 알려지지 않은 숨은 명곡을 공유하고 대결과 투표를 통해 더 좋은 곡을 알아가는 서비스
 ```
-<br/>
+
+[Hype 서비스 바로가기](https://h-y-p-e.netlify.app/)
 
 </div>
 
-## 프로젝트 개요
-내가 **좋아하는 음악을 추천하고자 하는 욕구가 있는 사람들**, 내가 아직 **모르는 음악들을 추천받고 싶은 사람들**을 대상으로 하는 음악 대결 서비스 입니다. 음악을 공유하는 사람들은 추천글을 쓰고 좋아요와 다른 노래와의 대결을 생성해 다른사람들의 반응을 확인할 수 있습니다. 노래를 추천받고 싶은 사람들은 다른사람이 제공하는 추천글, 이상형월드컵 형식으로 제공되는 음악 대결에 투표하는 것을 통해 게임처럼 자신이 모르던 장르의 노래를 새로 알게 될 수 있습니다.
-
-### 🎼나만아는 숨듣 명곡 추천
-음악 검색을 통해 자신이 좋아하는 노래를 검색하고 다른 사용자들에게 추천해 줄 수 있습니다.
-
-<p align="center">
-<img src="https://place-hold.it/360x740/A274DC?text=write music post example" height="450px"/>
-<img src="https://place-hold.it/360x740/A274DC?text=music post list example" height="450px"/>
-</p>
-
-### 🆚 다른사람이 추천한 노래와의 대결
-장르가 같은 다른 사람의 추천 음악, 자신의 추천 음악 간 대결 생성하고 이상형월드컵 형식을 통해 다른 사용자들의 반응을 확인할 수 있습니다.
-
-<p align="center">
-<img src="https://place-hold.it/360x740/A274DC?text=battle short" height="450px"/>
-<img src="https://place-hold.it/360x740/A274DC?text= battle list" height="450px"/>
-</p>
-
-
-### 💎 대결 결과를 바탕으로 다른 사용자들과의 경쟁
-하루동안 진행되는 대결 결과를 바탕으로 포인트가 산정되며 지난 일주일간의 포인트 산정 결과로 그날의 유저 랭킹을 확인할 수 있습니다.
-
-<p align="center">
-<img src="https://place-hold.it/360x740/A274DC?text=battle ended info" height="450px"/>
-<img src="https://place-hold.it/360x740/A274DC?text=battle after end info" height="450px"/>
-</p>
-
-### 👀 음잘알 사용자의 추천 음악 따라 듣기
-사용자들은 유저 랭킹이 높은 사용자들의 추천 음악을 확인할 수 있습니다.
-
-<p align="center">
-<img src="https://place-hold.it/360x740/A274DC?text=ranking list" height="450px"/>
-<img src="https://place-hold.it/360x740/A274DC?text=different user info" height="450px"/>
-</p>
+<br/>
 
 ## 🛠 Used Stacks
 
@@ -100,11 +67,10 @@
 
 <br/>
 
-## 📃 API 명세서 초안
-[API 명세서 Notion](https://carnation-hearing-eb3.notion.site/API-d7387bba98474e63a5085843188e537f )
-
 ## 📃 API 명세서
 [API 명세서 Swagger](https://hype.n-e.kr/docs/index.html)
+
+[API 명세서 문서화](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-BE/wiki/%EB%B0%B0%ED%8F%AC%EB%90%9C-api-%EB%AA%85%EC%84%B8%EC%84%9C)
 
 <br/>
 
@@ -212,19 +178,47 @@ REDIS_HOST=
 
 ## 🏗 Architecture
 
-## 📎 Link
-### Repository
-[FE 저장소](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-FE)
-
-[BE 저장소](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-BE)
-
-### Frontend Domain
-
-[`https://h-y-p-e.netlify.app` ](https://h-y-p-e.netlify.app/)
+<br/>
 
 
-### Backend API
-[api 위키 페이지](https://github.com/prgrms-web-devcourse/Team-6Jeans-Hype-BE/wiki/%EB%B0%B0%ED%8F%AC%EB%90%9C-api-%EB%AA%85%EC%84%B8%EC%84%9C)
+## 프로젝트 개요
+내가 **좋아하는 음악을 추천하고자 하는 욕구가 있는 사람들**, 내가 아직 **모르는 음악들을 추천받고 싶은 사람들**을 대상으로 하는 음악 대결 서비스 입니다. 음악을 공유하는 사람들은 추천글을 쓰고 좋아요와 다른 노래와의 대결을 생성해 다른사람들의 반응을 확인할 수 있습니다. 노래를 추천받고 싶은 사람들은 다른사람이 제공하는 추천글, 이상형월드컵 형식으로 제공되는 음악 대결에 투표하는 것을 통해 게임처럼 자신이 모르던 장르의 노래를 새로 알게 될 수 있습니다.
+
+### 🎼나만아는 숨듣 명곡 추천
+음악 검색을 통해 자신이 좋아하는 노래를 검색하고 다른 사용자들에게 추천해 줄 수 있습니다.
+
+<p align="center">
+<img src="https://place-hold.it/360x740/A274DC?text=write music post example" height="450px"/>
+<img src="https://place-hold.it/360x740/A274DC?text=music post list example" height="450px"/>
+</p>
+
+### 🆚 다른사람이 추천한 노래와의 대결
+장르가 같은 다른 사람의 추천 음악, 자신의 추천 음악 간 대결 생성하고 이상형월드컵 형식을 통해 다른 사용자들의 반응을 확인할 수 있습니다.
+
+<p align="center">
+<img src="https://place-hold.it/360x740/A274DC?text=battle short" height="450px"/>
+<img src="https://place-hold.it/360x740/A274DC?text= battle list" height="450px"/>
+</p>
+
+
+### 💎 대결 결과를 바탕으로 다른 사용자들과의 경쟁
+하루동안 진행되는 대결 결과를 바탕으로 포인트가 산정되며 지난 일주일간의 포인트 산정 결과로 그날의 유저 랭킹을 확인할 수 있습니다.
+
+<p align="center">
+<img src="https://place-hold.it/360x740/A274DC?text=battle ended info" height="450px"/>
+<img src="https://place-hold.it/360x740/A274DC?text=battle after end info" height="450px"/>
+</p>
+
+### 👀 음잘알 사용자의 추천 음악 따라 듣기
+사용자들은 유저 랭킹이 높은 사용자들의 추천 음악을 확인할 수 있습니다.
+
+<p align="center">
+<img src="https://place-hold.it/360x740/A274DC?text=ranking list" height="450px"/>
+<img src="https://place-hold.it/360x740/A274DC?text=different user info" height="450px"/>
+</p>
+
+
+
 ### 느낀점
 
 - **김소현** :  [글 제목]()
