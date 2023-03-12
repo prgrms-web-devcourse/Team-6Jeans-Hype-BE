@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.example.demo.dto.music.MusicSearchResponseDto;
 
 public interface MusicSearchService {
-	JsonNode search(String term);
+	MusicSearchResponseDto search(String term);
 }
