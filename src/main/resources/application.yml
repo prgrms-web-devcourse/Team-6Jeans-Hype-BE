@@ -24,7 +24,7 @@ app:
     refreshTokenSecret: ${REFRESH_TOKEN_SECRET}
     refreshTokenExpirationMsec: 2592000000 #1000 * 60 * 60 * 24 * 30
   cors:
-    allowedOrigins: http://localhost:3000, http://localhost:8080, ${FRONT_URI}, ${BACK_URI}
+    allowedOrigins: http://hype.r-e.kr, http://localhost:3000, http://localhost:8080, ${FRONT_URI}, ${BACK_URI}
   oauth2:
     # After successfully authenticating with the OAuth2 Provider,
     # we'll be generating an auth token for the user and sending the token to the
