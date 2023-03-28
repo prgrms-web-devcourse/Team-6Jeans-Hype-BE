@@ -14,7 +14,7 @@ jobs:
       - name: make secret envfiles for prod
         run: |
           echo "${{secrets.PROD_DB_ENV}}" > ./prod_db_info.env
-          echo "${{secrets.SENSITIVE_RELEASE_ENV}}" > ./sensitive_release.env
+          echo "${{secrets.SENSITIVE_RELEASE_ENV}}" > ./sensitive.env
 
 
       - name: Set up JDK 17
