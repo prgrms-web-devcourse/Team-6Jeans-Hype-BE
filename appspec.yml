@@ -13,7 +13,10 @@ permissions:
     group: ubuntu
 
 hooks:
-  AfterInstall:
-    - location: scripts/deploy.sh
-      timeout: 1000
+  ApplicationStart:
+    - location: scripts/deploy_no_stop.sh
+      timeout: 180
       runas: ubuntu
+      enviroments:
+        WAS_IP: ${{ secrets.WAS_IP }}
+        NGINX_IP: ${{ secrets.NGINX_IP }}
