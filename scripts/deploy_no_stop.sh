@@ -1,11 +1,12 @@
 REPOSITORY=/home/ubuntu/build/build/libs
 JAR_NAME=$(ls ${REPOSITORY} | grep '.jar' | tail -n 1)
+SUCCESS_HEALTH=테스트 health
 cd ${REPOSITORY}
 
-RESPONSE=$(curl -s http://127.0.0.1:8080/profile)
+RESPONSE=$(curl -s http://127.0.0.1:8080/health)
 
 CURRENT_PORT=0
-if [ ${RESPONSE} -eq prod ]
+if [ ${RESPONSE} -eq ${SUCCESS_HEALTH} ]
 then
   CURRENT_PORT=8080
 else
@@ -36,7 +37,6 @@ fi
 echo "> New WAS runs at ${TARGET_PORT}"
 nohup java -Dspring.profiles.active=${TARGET_PROFILE} -Dspring.config.import=optional:file:/home/ubuntu/build/prod_info.env[.properties] ${REPOSITORY}/${JAR_NAME} > /dev/null 2> /dev/null < /dev/null &
 
-SUCCESS_HEALTH=테스트 health
 for RETRY in {1..10}
 do
   HEALTH=$(curl -s http://127.0.0.1:${TARGET_PORT}/health)
