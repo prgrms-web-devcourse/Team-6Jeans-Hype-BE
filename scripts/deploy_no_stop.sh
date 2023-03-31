@@ -1,30 +1,26 @@
 REPOSITORY=/home/ubuntu/build/build/libs
 JAR_NAME=$(ls ${REPOSITORY} | grep '.jar' | tail -n 1)
 SUCCESS_HEALTH=테스트 health
+WAS_IP=$(cat ./was_ip.env)
+NGINX_IP=$(cat ./nginx_ip.env)
 cd ${REPOSITORY}
 
-RESPONSE=$(curl -s http://127.0.0.1:8080/health)
-
-CURRENT_PORT=0
-if [ ${RESPONSE} -eq ${SUCCESS_HEALTH} ]
-then
-  CURRENT_PORT=8080
-else
+CURRENT_PORT=8080
+RESPONSE=$(lsof -ti tcp:${CURRENT_PORT})
+if [ -z ${RESPONSE} ]; then
   CURRENT_PORT=8081
+else
+  CURRENT_PORT=8080
 fi
 
-TARGET_PORT=0
-TARGET_PROFILE=prod
-if [ ${CURRENT_PORT} -eq 8080 ]
-then
-  TARGET_PROFILE=prod2
+TARGET_PORT=8081
+if [ ${CURRENT_PORT} -eq 8080 ]; then
   TARGET_PORT=8081
-elif [ ${CURRENT_PORT} -eq 8081]
-then
-  TARGET_PROFILE=prod
+elif [ ${CURRENT_PORT} -eq 8081]; then
   TARGET_PORT=8080
 else
   echo "> No WAS is connected to nginx"
+  exit 1
 fi
 
 TARGET_PID=$(lsof -ti tcp:${TARGET_PORT})
@@ -35,7 +31,7 @@ then
 fi
 
 echo "> New WAS runs at ${TARGET_PORT}"
-nohup java -Dspring.profiles.active=${TARGET_PROFILE} -Dspring.config.import=optional:file:/home/ubuntu/build/prod_info.env[.properties] ${REPOSITORY}/${JAR_NAME} > /dev/null 2> /dev/null < /dev/null &
+nohup java -jar -Dserver.port=${TARGET_PORT} -Dspring.profiles.active=prod -Dspring.config.import=optional:file:/home/ubuntu/build/prod_info.env[.properties] ${REPOSITORY}/${JAR_NAME} > /dev/null 2> /dev/null < /dev/null &
 
 for RETRY in {1..10}
 do
