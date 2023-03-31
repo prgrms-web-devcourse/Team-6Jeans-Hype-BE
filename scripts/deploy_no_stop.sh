@@ -1,8 +1,8 @@
 REPOSITORY=/home/ubuntu/build/build/libs
 JAR_NAME=$(ls ${REPOSITORY} | grep '.jar' | tail -n 1)
 SUCCESS_HEALTH=테스트 health
-WAS_IP=$(cat ./was_ip.env)
-NGINX_IP=$(cat ./nginx_ip.env)
+WAS_IP=$(cat /home/ubuntu/build/was_ip.env)
+NGINX_IP=$(cat /home/ubuntu/build/nginx_ip.env)
 cd ${REPOSITORY}
 
 CURRENT_PORT=8080
