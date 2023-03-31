@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.Arrays;
 
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,8 +15,8 @@ public class ProfileController {
 	private final Environment env;
 
 	@GetMapping("/profile")
-	public String profile() {
+	public ResponseEntity<Object> profile() {
 		//현재 동작중인 프로파일의 이름을 반환
-		return Arrays.stream(env.getActiveProfiles()).findFirst().orElse("");
+		return ResponseEntity.ok(Arrays.stream(env.getActiveProfiles()).findFirst().orElse(""));
 	}
 }
