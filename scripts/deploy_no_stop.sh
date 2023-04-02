@@ -1,15 +1,14 @@
-REPOSITORY=/home/ubuntu/build/build/libs
-JAR_NAME=$(ls ${REPOSITORY} | grep '.jar' | tail -n 1)
-SUCCESS_HEALTH=테스트 health
+SUCCESS_HEALTH=health
 WAS_IP=$(cat /home/ubuntu/build/was_ip.env)
 NGINX_IP=$(cat /home/ubuntu/build/nginx_ip.env)
-cd ${REPOSITORY}
 
-CURRENT_PORT=$(sudo ssh -i ${REPOSITORY}/hype-ec2-key.pem ubuntu@${NGINX_IP} sudo cat /etc/nginx/conf.d/service_url.inc | grep -Po '[0-9]+' | tail -1)
+CURRENT_PORT=$(sudo ssh -i /home/ubuntu/build/build/libs/hype-ec2-key.pem ubuntu@${NGINX_IP} sudo cat /etc/nginx/conf.d/service_url.inc | grep -Po '[0-9]+' | tail -1)
 TARGET_PORT=0
-if [ ${CURRENT_PORT} -eq 8080 ]; then
+if [ ${CURRENT_PORT} -eq 8080 ]
+then
   TARGET_PORT=8081
-elif [ ${CURRENT_PORT} -eq 8081 ]; then
+elif [ ${CURRENT_PORT} -eq 8081 ]
+then
   TARGET_PORT=8080
 else
   echo "> No WAS is connected to nginx"
@@ -17,22 +16,23 @@ else
 fi
 
 TARGET_PID=$(sudo lsof -ti tcp:${TARGET_PORT})
-if [ ! -z ${TARGET_PID} ]; then
+if [ ! -z ${TARGET_PID} ]
+then
   echo "> Kill WAS running at ${TARGET_PORT}"
   sudo kill ${TARGET_PID}
 fi
 
 echo "> New WAS runs at ${TARGET_PORT}"
-nohup java -jar -Dserver.port=${TARGET_PORT} -Dspring.profiles.active=prod -Dspring.config.import=optional:file:/home/ubuntu/build/prod_info.env[.properties] ${REPOSITORY}/${JAR_NAME} &
+sudo nohup java -jar -Dserver.port=${TARGET_PORT} -Dspring.profiles.active=prod -Dspring.config.import=optional:file:/home/ubuntu/build/prod_info.env[.properties] /home/ubuntu/build/build/libs/pearls-1.0.jar &
 
 for RETRY in {1..10}
 do
-  HEALTH=$(curl -s http://127.0.0.1:${TARGET_PORT}/health)
-  if [ ${HEALTH} -eq ${SUCCESS_HEALTH} ]
+  HEALTH_COUNT=$(curl -s http://${WAS_IP}:${TARGET_PORT}/health | grep ${SUCCESS_HEALTH} | wc -l)
+  if [ ${HEALTH_COUNT} -ge 1  ]
   then
     echo "> Health Check Success"
-    echo "set \$service_url http://${WAS_IP}:${TARGET_PORT};" | sudo ssh -i ${REPOSITORY}/hype-ec2-key.pem ubuntu@${NGINX_IP} sudo tee /etc/nginx/conf.d/service_url.inc
-    sudo ssh -i ${REPOSITORY}/hype-ec2-key.pem ubuntu@${NGINX_IP} sudo service nginx reload
+    echo "set \$service_url http://${WAS_IP}:${TARGET_PORT};" | sudo ssh -i /home/ubuntu/build/build/libs/hype-ec2-key.pem ubuntu@${NGINX_IP} sudo tee /etc/nginx/conf.d/service_url.inc
+    sudo ssh -i /home/ubuntu/build/build/libs/hype-ec2-key.pem ubuntu@${NGINX_IP} sudo service nginx reload
     break
   elif [ ${RETRY} -eq 10 ]
   then
