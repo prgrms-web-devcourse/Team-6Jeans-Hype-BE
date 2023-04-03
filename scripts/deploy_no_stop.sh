@@ -27,6 +27,7 @@ sudo nohup java -jar -Dserver.port=${TARGET_PORT} -Dspring.profiles.active=prod 
 
 for RETRY in {1..10}
 do
+  echo "> Health Check Try!!!"
   HEALTH_COUNT=$(curl -s http://${WAS_IP}:${TARGET_PORT}/health | grep ${SUCCESS_HEALTH} | wc -l)
   if [ ${HEALTH_COUNT} -ge 1  ]
   then
