@@ -26,6 +26,8 @@ public enum ExceptionMessage {
 	NOT_ALLOWED_FILE_FORMAT("허용되지 않는 파일 형식입니다."),
 	NOT_PROGRESS_BATTLE("진행중인 배틀이 없습니다."),
 	NOT_VALID_TERM("검색 요청값이 올바른 형태가 아닙니다."),
+	NOT_POST_OWNER("해당 게시글의 작성자가 아닙니다."),
+	NOT_EXIST_UPDATE_DATA("request body에 담긴 수정할 데이터가 없습니다."),
 
 	// IllegalStateException
 	FAIL_UPLOAD_FILE_S3("저장소에 파일 업로드가 실패했습니다."),

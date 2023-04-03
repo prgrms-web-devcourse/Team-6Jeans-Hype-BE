@@ -17,6 +17,7 @@ public enum ResponseMessage {
 	SUCCESS_FIND_POST("음악 추천 게시글 상세 조회 성공"),
 	SUCCESS_LIKE_POST("추천글 좋아요 성공"),
 	SUCCESS_UNLIKE_POST("추천글 좋아요 해제 성공"),
+	SUCCESS_UPDATE_POST("음악 추천 게시글 수정 성공"),
 	// Battle
 	SUCCESS_FIND_ALL_CANDIDATE_POST("대결곡 후보 게시글 리스트 조회 성공"),
 	SUCCESS_FIND_ALL_BATTLE_DETAILS("대결 상세 정보 리스트 조회 성공"),

@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
+import com.example.demo.model.post.Music;
+import com.example.demo.model.post.Post;
 
 import lombok.AllArgsConstructor;
 
@@ -29,6 +31,16 @@ public class TestUtil {
 			"refreshToken",
 			Social.GOOGLE,
 			"socialId");
+	}
+
+	public static Post createPost(Member member, Music music) {
+		return Post.builder()
+			.music(music)
+			.content("content")
+			.isPossibleBattle(true)
+			.likeCount(0)
+			.member(member)
+			.build();
 	}
 
 	public static class TestAuthentication implements Authentication {

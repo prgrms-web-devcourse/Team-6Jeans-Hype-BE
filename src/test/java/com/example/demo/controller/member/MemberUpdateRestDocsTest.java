@@ -51,7 +51,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 		classes = TokenAuthenticationFilter.class
 	)
 )
-@ExtendWith(MockitoExtension.class)
 class MemberUpdateRestDocsTest {
 
 	@Autowired

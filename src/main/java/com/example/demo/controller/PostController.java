@@ -5,8 +5,12 @@ import static com.example.demo.common.ResponseMessage.*;
 import java.net.URI;
 import java.security.Principal;
 
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +24,7 @@ import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostIsLikeResponseDto;
 import com.example.demo.dto.post.PostLikeResponseDto;
+import com.example.demo.dto.post.PostUpdateRequestDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.post.Genre;
@@ -38,7 +43,7 @@ public class PostController {
 
 	@PostMapping
 	public ResponseEntity<ApiResponse> createPost(
-		Principal principal, @RequestBody PostCreateRequestDto postRequestDto) {
+		Principal principal, @Valid @RequestBody PostCreateRequestDto postRequestDto) {
 		Long postId = postService.createPost(principal, postRequestDto);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -104,7 +109,9 @@ public class PostController {
 	}
 
 	@GetMapping("/{postId}/isLike")
-	public ResponseEntity<ApiResponse> getPostIsLiked(Principal principal, @PathVariable("postId") Long postId) {
+	public ResponseEntity<ApiResponse> getPostIsLiked(
+		Principal principal,
+		@PathVariable("postId") Long postId) {
 		PostIsLikeResponseDto result = postService.getPostIsLiked(principal, postId);
 
 		ApiResponse apiResponse = ApiResponse.success(SUCCESS_GET_IS_LIKE.getMessage(), result);
@@ -112,4 +119,15 @@ public class PostController {
 		return ResponseEntity.ok(apiResponse);
 	}
 
+	@PatchMapping("/{postId}")
+	public ResponseEntity<Void> updatePost(
+		Principal principal,
+		@PathVariable Long postId,
+		@RequestBody PostUpdateRequestDto request
+	) {
+
+		postService.update(principal, postId, request);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 }
