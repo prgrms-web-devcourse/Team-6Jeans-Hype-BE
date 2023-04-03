@@ -23,7 +23,7 @@ then
 fi
 
 echo "> New WAS runs at ${TARGET_PORT}"
-sudo nohup java -jar -Dserver.port=${TARGET_PORT} -Dspring.profiles.active=prod -Dspring.config.import=optional:file:/home/ubuntu/build/sensitive.env[.properties],optional:file:/home/ubuntu/build/prod_db_info.env[.properties] /home/ubuntu/build/build/libs/pearls-1.0.jar &
+sudo nohup java -jar -Dserver.port=${TARGET_PORT} -Dspring.profiles.active=prod -Dspring.config.import=optional:file:/home/ubuntu/build/sensitive.env[.properties],optional:file:/home/ubuntu/build/prod_db_info.env[.properties] /home/ubuntu/build/build/libs/pearls-1.0.jar /dev/null 2> /dev/null < /dev/null &
 
 for RETRY in {1..10}
 do
