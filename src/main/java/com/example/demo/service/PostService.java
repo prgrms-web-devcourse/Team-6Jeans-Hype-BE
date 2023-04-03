@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
 import static com.example.demo.common.ExceptionMessage.*;
+import static com.google.common.base.Preconditions.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -17,6 +19,7 @@ import com.example.demo.dto.post.PostDetailFindResponseDto;
 import com.example.demo.dto.post.PostFindResponseDto;
 import com.example.demo.dto.post.PostIsLikeResponseDto;
 import com.example.demo.dto.post.PostLikeResponseDto;
+import com.example.demo.dto.post.PostUpdateRequestDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.member.Member;
@@ -154,5 +157,18 @@ public class PostService {
 		return PostIsLikeResponseDto.builder()
 			.isLiked(isLike)
 			.build();
+	}
+
+	@Transactional
+	public void update(Principal principal, Long postId, PostUpdateRequestDto requestDto) {
+		checkArgument(!requestDto.isAllDataNull(), NOT_EXIST_UPDATE_DATA);
+
+		Member member = principalService.getMemberByPrincipal(principal);
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
+
+		checkArgument(Objects.equals(member.getId(), post.getMember().getId()), NOT_POST_OWNER);
+
+		post.update(requestDto);
 	}
 }
