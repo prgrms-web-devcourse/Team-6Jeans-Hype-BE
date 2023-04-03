@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 
+import com.example.demo.dto.post.PostUpdateRequestDto;
 import com.example.demo.model.BaseEntity;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.member.Member;
@@ -60,7 +61,7 @@ public class Post extends BaseEntity {
 	@OneToMany(mappedBy = "challengingPost.post")
 	private final List<Battle> challengingBattles = new ArrayList<>();
 
-	@Builder(access = AccessLevel.PRIVATE)
+	@Builder
 	public Post(Music music, String content, boolean isPossibleBattle, int likeCount, Member member) {
 		checkArgument(likeCount >= 0, "좋아요 개수가 음수일 수 없습니다.", likeCount);
 		this.music = music;
@@ -70,12 +71,24 @@ public class Post extends BaseEntity {
 		this.member = member;
 	}
 
-	private void setMember(Member member) {
+	public void setMember(Member member) {
 		if (Objects.nonNull(this.member)) {
 			this.member.getPosts().remove(this);
 		}
 		this.member = member;
 		member.getPosts().add(this);
+	}
+
+	private void setMusic(Music music) {
+		this.music = music;
+	}
+
+	private void setBattlePossible(boolean isPossibleBattle) {
+		this.isPossibleBattle = isPossibleBattle;
+	}
+
+	private void setContent(String content) {
+		this.content = content;
 	}
 
 	public static Post create(String musicId, String albumCoverUrl, String singer, String title, Genre genre,
@@ -103,5 +116,24 @@ public class Post extends BaseEntity {
 		}
 	}
 
-	// TODO: 2023-02-23 포스트가 특정 battle을 가지고 있는지 검증하는 메소드
+	public void update(PostUpdateRequestDto requestDto) {
+		if (!requestDto.isMusicDataNull()) {
+			setMusic(new Music(
+				requestDto.musicId(),
+				requestDto.albumCoverUrl(),
+				requestDto.singer(),
+				requestDto.title(),
+				requestDto.genre(),
+				requestDto.musicUrl())
+			);
+		}
+
+		if (requestDto.battlePossible() != null) {
+			setBattlePossible(requestDto.battlePossible());
+		}
+
+		if (requestDto.content() != null) {
+			setContent(requestDto.content());
+		}
+	}
 }
