@@ -15,5 +15,5 @@ permissions:
 hooks:
   ApplicationStart:
     - location: scripts/deploy_no_stop.sh
-      timeout: 1000
+      timeout: 600
       runas: ubuntu
