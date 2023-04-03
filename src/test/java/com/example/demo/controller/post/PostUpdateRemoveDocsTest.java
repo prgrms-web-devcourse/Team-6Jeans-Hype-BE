@@ -51,6 +51,8 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 )
 public class PostUpdateRemoveDocsTest {
 
+	private static final String POST_API_NAME = "Posts";
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -83,7 +85,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isNoContent())
 			.andDo(document("게시물 수정 성공 - 게시글 한마디 내용 수정",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -134,7 +136,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isNoContent())
 			.andDo(document("게시물 수정 성공 - 게시글 음악 정보 수정",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -180,7 +182,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isNoContent())
 			.andDo(document("게시물 수정 성공 - 게시글",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -233,7 +235,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isNoContent())
 			.andDo(document("게시물 수정 성공 - 게시글 대결 가능 유무 수정",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -287,7 +289,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isNotFound())
 			.andDo(document("게시물 수정 실패 - 게시글이 존재하지 않는 경우",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -346,7 +348,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isNotFound())
 			.andDo(document("게시물 수정 실패 - 수정하려는 유저가 존재하지 않는 경우",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -405,7 +407,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isBadRequest())
 			.andDo(document("게시물 수정 실패 - 게시글의 게시자가 아닌 경우",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -462,7 +464,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isBadRequest())
 			.andDo(document("게시물 수정 실패 - 수정할 음악 정보가 하나라도 null인 경우 (전부 null은 상관없음)",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")
@@ -513,7 +515,7 @@ public class PostUpdateRemoveDocsTest {
 			.andExpect(status().isBadRequest())
 			.andDo(document("게시물 수정 실패 - 모든 수정 요청 정보가 null인 경우",
 				resource(
-					ResourceSnippetParameters.builder().tag("Post")
+					ResourceSnippetParameters.builder().tag(POST_API_NAME)
 						.description("게시물 수정 API")
 						.requestHeaders(
 							headerWithName("Authorization").description("Hype 서비스 Access Token")

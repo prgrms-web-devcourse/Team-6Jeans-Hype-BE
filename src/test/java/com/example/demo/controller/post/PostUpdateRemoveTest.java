@@ -37,8 +37,6 @@ class PostUpdateRemoveTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	// private ObjectMapper mapper = new ObjectMapper();
-
 	@BeforeEach
 	void setup() {
 		Member member = createMember();
