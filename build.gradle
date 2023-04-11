@@ -7,6 +7,7 @@ plugins {
     id 'jacoco'
     id 'com.epages.restdocs-api-spec' version '0.16.4'
     id 'org.hidetake.swagger.generator' version '2.19.2'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 jacoco {
@@ -22,6 +23,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    querydsl.extendsFrom compileClasspath
 }
 
 repositories {
@@ -73,7 +75,12 @@ dependencies {
     implementation "ca.pjer:logback-awslogs-appender:1.6.0"
     implementation 'com.amazonaws:aws-java-sdk-bom:1.12.417'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.410'
+
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    implementation 'com.querydsl:querydsl-apt:5.0.0'
+    implementation 'com.querydsl:querydsl-core:5.0.0'
 }
+
 openapi3 {
     server = 'https://localhost:8080'
     title = 'API 명세서'
@@ -197,4 +204,19 @@ jacocoTestCoverageVerification {
 
         }
     }
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
