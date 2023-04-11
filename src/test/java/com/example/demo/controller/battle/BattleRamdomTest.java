@@ -23,6 +23,7 @@ import com.example.demo.repository.BattleRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.VoteRepository;
+import com.example.demo.repository.custom.BattleRepositoryCustom;
 import com.example.demo.service.BattleService;
 import com.example.demo.service.PrincipalService;
 import com.example.demo.service.VoteService;
@@ -45,7 +46,7 @@ class BattleRamdomTest {
 	@BeforeEach
 	void setup() {
 		battleService = new BattleService(mock(PrincipalService.class), battleRepository, mock(VoteRepository.class),
-			postRepository);
+			postRepository, mock(BattleRepositoryCustom.class));
 		battleController = new BattleController(mock(PrincipalService.class), mock(VoteService.class), battleService);
 	}
 
