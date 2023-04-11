@@ -104,8 +104,8 @@ public class Member extends BaseEntity {
 		memberScore.update(ranking, victoryPoint, victoryCount);
 	}
 
-	public void plusCount() {
-		this.memberScore.plusCount();
+	public void plusVictoryCount() {
+		this.memberScore.plusVictoryCount();
 	}
 
 	public void resetRankingAndPoint() {
