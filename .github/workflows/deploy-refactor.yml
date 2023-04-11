@@ -2,7 +2,7 @@ name: deploy-release
 
 on:
   push:
-    branches: [ release ]
+    branches: [ refactor ]
 jobs:
   build:
     runs-on: ubuntu-22.04
