@@ -92,8 +92,12 @@ public class Battle extends BaseEntity {
 		battleInfo.plusVoteCount(voteCount);
 	}
 
-	public void quitBattle() {
+	public void endBattle() {
 		this.status = BattleStatus.END;
+	}
+
+	public void quitBattle() {
+		endBattle();
 		updateCountOfWinner();
 	}
 
@@ -107,7 +111,7 @@ public class Battle extends BaseEntity {
 
 	private void updateCountOfWinner() {
 		Optional<Member> winner = getWinner();
-		winner.ifPresent(Member::plusCount);
+		winner.ifPresent(Member::plusVictoryCount);
 	}
 
 	public Optional<Member> getWinner() {
@@ -157,5 +161,4 @@ public class Battle extends BaseEntity {
 		};
 	}
 
-	// TODO: 2023-02-23 battle이 특정 Post를 가지고 있는지 검증하는 메소드
 }
