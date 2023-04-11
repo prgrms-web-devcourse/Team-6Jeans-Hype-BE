@@ -60,7 +60,7 @@ class MemberLikePostsTest {
 
 	MemberService memberService;
 
-	private ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	@BeforeEach
 	void setUp() {
