@@ -18,14 +18,6 @@ group = 'com.prgrms'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    querydsl.extendsFrom compileClasspath
-}
-
 repositories {
     mavenCentral()
 }
@@ -99,12 +91,25 @@ editorconfig {
 }
 //check.dependsOn editorconfigCheck
 
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
 checkstyle {
     maxWarnings = 0
     configFile = file("${rootProject.projectDir}/config/checkstyle/naver-checkstyle-rules.xml")
     configProperties = ["suppressionFile": "${rootProject.projectDir}/config/checkstyle/naver-checkstyle-suppressions.xml"]
     toolVersion = "10.7.0"  // checkstyle
+    sourceSets = [sourceSets.main]
 }
+
+checkstyleMain.source = fileTree('src/main/java')
 
 dependencyManagement {
     imports {
@@ -207,16 +212,21 @@ jacocoTestCoverageVerification {
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
-
 querydsl {
     jpa = true
     querydslSourcesDir = querydslDir
 }
-
 sourceSets {
     main.java.srcDir querydslDir
 }
-
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
+
