@@ -19,6 +19,7 @@ import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 import com.example.demo.repository.BattleRepository;
+import com.example.demo.repository.custom.BattleRepositoryCustom;
 
 @ExtendWith(MockitoExtension.class)
 class BattleServiceTest {
@@ -27,6 +28,9 @@ class BattleServiceTest {
 	private BattleService battleService;
 	@Mock
 	private BattleRepository battleRepository;
+
+	@Mock
+	private BattleRepositoryCustom battleRepositoryCustom;
 
 	private final Genre genre = Genre.K_POP;
 	private final BattleStatus progressStatus = BattleStatus.PROGRESS;
@@ -39,7 +43,7 @@ class BattleServiceTest {
 		List<Battle> battles = getBattles();
 
 		// when
-		when(battleRepository.findByStatusAndCreatedAtIsBefore(any(), any())).thenReturn(battles);
+		when(battleRepositoryCustom.findByStatusAndCreatedAtIsBefore(any(), any())).thenReturn(battles);
 
 		battleService.quitBattles();
 
@@ -48,7 +52,7 @@ class BattleServiceTest {
 			assertThat(battle.getStatus()).isEqualTo(BattleStatus.END);
 		}
 
-		verify(battleRepository).findByStatusAndCreatedAtIsBefore(any(), any());
+		verify(battleRepositoryCustom).findByStatusAndCreatedAtIsBefore(any(), any());
 	}
 
 	@Test
@@ -60,7 +64,7 @@ class BattleServiceTest {
 		}
 
 		// when
-		when(battleRepository.findByStatusAndUpdatedAtBetween(any(), any(), any())).thenReturn(battles);
+		when(battleRepositoryCustom.findByStatusAndUpdatedAtBetween(any(), any(), any())).thenReturn(battles);
 
 		battleService.updateWinnerPoint(7);
 
@@ -70,7 +74,7 @@ class BattleServiceTest {
 				.isEqualTo(10 * battles.size());
 		}
 
-		verify(battleRepository).findByStatusAndUpdatedAtBetween(any(), any(), any());
+		verify(battleRepositoryCustom).findByStatusAndUpdatedAtBetween(any(), any(), any());
 	}
 
 	private List<Battle> getBattles() {

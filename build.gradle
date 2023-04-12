@@ -7,6 +7,7 @@ plugins {
     id 'jacoco'
     id 'com.epages.restdocs-api-spec' version '0.16.4'
     id 'org.hidetake.swagger.generator' version '2.19.2'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 jacoco {
@@ -16,13 +17,6 @@ jacoco {
 group = 'com.prgrms'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
-
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
 
 repositories {
     mavenCentral()
@@ -73,7 +67,12 @@ dependencies {
     implementation "ca.pjer:logback-awslogs-appender:1.6.0"
     implementation 'com.amazonaws:aws-java-sdk-bom:1.12.417'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.410'
+
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    implementation 'com.querydsl:querydsl-apt:5.0.0'
+    implementation 'com.querydsl:querydsl-core:5.0.0'
 }
+
 openapi3 {
     server = 'https://localhost:8080'
     title = 'API 명세서'
@@ -92,12 +91,25 @@ editorconfig {
 }
 //check.dependsOn editorconfigCheck
 
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
 checkstyle {
     maxWarnings = 0
     configFile = file("${rootProject.projectDir}/config/checkstyle/naver-checkstyle-rules.xml")
     configProperties = ["suppressionFile": "${rootProject.projectDir}/config/checkstyle/naver-checkstyle-suppressions.xml"]
     toolVersion = "10.7.0"  // checkstyle
+    sourceSets = [sourceSets.main]
 }
+
+checkstyleMain.source = fileTree('src/main/java')
 
 dependencyManagement {
     imports {
@@ -198,3 +210,23 @@ jacocoTestCoverageVerification {
         }
     }
 }
+
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
+

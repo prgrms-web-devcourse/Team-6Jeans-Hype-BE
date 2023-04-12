@@ -28,6 +28,7 @@ import com.example.demo.model.post.Post;
 import com.example.demo.repository.BattleRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.VoteRepository;
+import com.example.demo.repository.custom.BattleRepositoryCustom;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +41,7 @@ public class BattleService {
 	private final BattleRepository battleRepository;
 	private final VoteRepository voteRepository;
 	private final PostRepository postRepository;
+	private final BattleRepositoryCustom battleRepositoryCustom;
 
 	@Transactional
 	public Long createBattle(Principal principal, BattleCreateRequestDto battleCreateRequestDto) {
@@ -150,13 +152,13 @@ public class BattleService {
 
 	private List<Battle> findBattleProgress() {
 		LocalDateTime now = LocalDateTime.now();
-		return battleRepository.findByStatusAndCreatedAtIsBefore(BattleStatus.PROGRESS, now);
+		return battleRepositoryCustom.findByStatusAndCreatedAtIsBefore(BattleStatus.PROGRESS, now);
 	}
 
 	private List<Battle> findBattlesEndWithinPerm(int term) {
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime lastBattleDay = now.minusDays(term);
-		return battleRepository.findByStatusAndUpdatedAtBetween(BattleStatus.END, lastBattleDay, now);
+		return battleRepositoryCustom.findByStatusAndUpdatedAtBetween(BattleStatus.END, lastBattleDay, now);
 	}
 
 	public BattleDetailsListResponseDto getBattleDetailsListInProgress(Principal principal) {

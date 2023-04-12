@@ -36,7 +36,7 @@ public class MemberScore {
 		checkArgument(victoryCount >= 0, "승리 횟수가 음수일 수 없습니다.", victoryCount);
 	}
 
-	void plusCount() {
+	void plusVictoryCount() {
 		this.victoryCount += 1;
 	}
 

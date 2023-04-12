@@ -129,7 +129,7 @@ class MemberTest {
 	@Test
 	void 성공_유저의_성공_수를_1만큼_더할_수_있다() {
 		Member member = createMember(profileImageUrl, nickname, refreshToken, socialType, socialId);
-		member.plusCount();
+		member.plusVictoryCount();
 		assertThat(member.getVictoryCount()).isEqualTo(1);
 	}
 
