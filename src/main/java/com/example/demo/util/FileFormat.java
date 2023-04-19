@@ -18,8 +18,9 @@ public enum FileFormat {
 	}
 
 	public static FileFormat of(String format) {
+		String smallLetterFormat = format.toLowerCase();
 		return Arrays.stream(FileFormat.values())
-			.filter(v -> v.formats.contains(format))
+			.filter(v -> v.formats.contains(smallLetterFormat))
 			.findAny()
 			.orElseThrow(() -> new IllegalArgumentException(ExceptionMessage.NOT_ALLOWED_FILE_FORMAT.getMessage()));
 	}
