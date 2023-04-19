@@ -1,13 +1,11 @@
 package com.example.demo.controller.member;
 
 import static com.example.demo.controller.TestUtil.*;
-import static com.example.demo.util.MultipartUtils.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -16,21 +14,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.example.demo.common.AmazonS3ResourceStorage;
 import com.example.demo.common.ApiResponse;
-import com.example.demo.common.ExceptionMessage;
 import com.example.demo.common.ResourceStorage;
 import com.example.demo.controller.MemberController;
 import com.example.demo.dto.member.MemberNicknameUpdateRequestDto;
@@ -41,12 +36,11 @@ import com.example.demo.repository.PostRepository;
 import com.example.demo.security.TokenProvider;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.PrincipalService;
+import com.example.demo.util.FileUtils;
 
 @Import(TokenProvider.class)
 @ExtendWith(MockitoExtension.class)
 class MemberUpdateTest {
-
-	TestRestTemplate restTemplate = new TestRestTemplate();
 
 	@Autowired
 	TokenProvider provider;
@@ -68,7 +62,7 @@ class MemberUpdateTest {
 		String fileName = "test";
 		String format = "jpeg";
 		MockMultipartFile file = createFile(String.format("%s.%s", fileName, format));
-		String expectedUrl = createSavedFileUrl(path, entityId, file);
+		String expectedUrl = FileUtils.getSavedFilePath(path, entityId, file);
 
 		// when
 		when(amazonS3.putObject(any(PutObjectRequest.class)))
@@ -81,6 +75,19 @@ class MemberUpdateTest {
 		assertThat(savedFileUrl.substring(savedFileUrl.lastIndexOf('.') + 1))
 			.isEqualTo(format);
 		assertThat(savedFileUrl).doesNotContain(fileName);
+	}
+
+	@Test
+	void 실패_허용하는_파일_형식이_아니라면_프로필_이미지를_수정할_수_없다() throws MalformedURLException {
+		// given
+		Long entityId = 1L;
+		String fileName = "test";
+		String format = "pdf";
+		MockMultipartFile file = createFile(String.format("%s.%s", fileName, format));
+
+		// then
+		assertThatThrownBy(() -> resourceStorage.save("members/profile/", entityId, file))
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -110,14 +117,5 @@ class MemberUpdateTest {
 	private MockMultipartFile createFile(String fileName) {
 		byte[] fileContent = "test content".getBytes();
 		return new MockMultipartFile("file", fileName, MediaType.IMAGE_JPEG_VALUE, fileContent);
-	}
-
-	private String createSavedFileUrl(String path, Long entityId, MultipartFile multipartFile) {
-		if (Objects.isNull(multipartFile.getOriginalFilename())) {
-			throw new IllegalArgumentException(ExceptionMessage.NOT_EXIST_FILE_NAME.getMessage());
-		}
-
-		return String.format("%s%s/%s.%s", path, entityId, createUniqueFilename(),
-			getFormat(multipartFile.getOriginalFilename()));
 	}
 }
