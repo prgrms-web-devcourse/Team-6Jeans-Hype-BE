@@ -1,9 +1,8 @@
 package com.example.demo.common;
 
-import static com.example.demo.util.MultipartUtils.*;
+import static com.example.demo.util.FileUtils.*;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.example.demo.util.MultipartUtils;
+import com.example.demo.util.FileUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,16 +26,16 @@ public class AmazonS3ResourceStorage implements ResourceStorage {
 
 	@Override
 	public String save(String path, Long entityId, MultipartFile multipartFile) {
-		String savedFileUrl = createSavedFileUrl(path, entityId, multipartFile);
+		String savedFilePath = getSavedFilePath(path, entityId, multipartFile);
 
 		try {
 			ObjectMetadata objectMetadata = new ObjectMetadata();
-			objectMetadata.setContentType(MultipartUtils.getFormat(savedFileUrl));
+			objectMetadata.setContentType(FileUtils.getSmallLetterFormat(savedFilePath));
 			objectMetadata.setContentLength(multipartFile.getSize());
 			amazonS3.putObject(
 				new PutObjectRequest(
 					bucketName,
-					savedFileUrl,
+					savedFilePath,
 					multipartFile.getInputStream(),
 					objectMetadata
 				)
@@ -45,15 +44,6 @@ public class AmazonS3ResourceStorage implements ResourceStorage {
 			throw new IllegalStateException(ExceptionMessage.FAIL_UPLOAD_FILE_S3.getMessage());
 		}
 
-		return amazonS3.getUrl(bucketName, savedFileUrl).toString();
-	}
-
-	private String createSavedFileUrl(String path, Long entityId, MultipartFile multipartFile) {
-		if (Objects.isNull(multipartFile.getOriginalFilename())) {
-			throw new IllegalArgumentException(ExceptionMessage.NOT_EXIST_FILE_NAME.getMessage());
-		}
-
-		return String.format("%s%s/%s.%s", path, entityId, createUniqueFilename(),
-			getFormat(multipartFile.getOriginalFilename()));
+		return amazonS3.getUrl(bucketName, savedFilePath).toString();
 	}
 }
