@@ -145,7 +145,7 @@ class BattleControllerTest {
 		@WithMockUser(username = "1")
 		public void 성공_배틀생성_정상적으로_배틀생성_201() throws Exception {
 			//given
-			battleRepository.deleteAll();
+			// battleRepository.deleteAll();
 			Member member = memberRepository.findById(firstMember.getId()).get();
 			int startCountOfChallengedTicket = member.getCountOfChallengeTicket();
 			BattleCreateRequestDto battleCreateRequestDto = BattleCreateRequestDto
