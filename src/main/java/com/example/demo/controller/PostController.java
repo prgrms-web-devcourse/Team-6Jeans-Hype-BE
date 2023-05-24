@@ -28,7 +28,6 @@ import com.example.demo.dto.post.PostUpdateRequestDto;
 import com.example.demo.dto.post.PostsBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostsFindResponseDto;
 import com.example.demo.model.post.Genre;
-import com.example.demo.service.PostLockFacade;
 import com.example.demo.service.PostService;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,6 @@ import lombok.RequiredArgsConstructor;
 public class PostController {
 
 	private final PostService postService;
-	private final PostLockFacade postLockFacade;
 
 	@PostMapping
 	public ResponseEntity<ApiResponse> createPost(
@@ -85,7 +83,7 @@ public class PostController {
 
 	@PostMapping("/{postId}/like")
 	public ResponseEntity<ApiResponse> likePost(Principal principal, @PathVariable("postId") Long postId) {
-		PostLikeResponseDto result = postLockFacade.likePost(principal, postId);
+		PostLikeResponseDto result = postService.likePost(principal, postId);
 
 		ApiResponse apiResponse;
 

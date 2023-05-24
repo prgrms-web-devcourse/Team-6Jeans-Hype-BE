@@ -51,7 +51,6 @@ import com.example.demo.model.member.Social;
 import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Post;
 import com.example.demo.security.TokenAuthenticationFilter;
-import com.example.demo.service.PostLockFacade;
 import com.example.demo.service.PostService;
 import com.example.demo.service.PrincipalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,8 +77,6 @@ class PostControllerTest {
 
 	@MockBean
 	private PostService postService;
-	@MockBean
-	private PostLockFacade postLockFacade;
 	@MockBean
 	private PrincipalService principalService;
 	@MockBean
@@ -404,7 +401,7 @@ class PostControllerTest {
 	void 성공_추천글을_좋아요_할_수_있다() throws Exception {
 		// given
 		PostLikeResponseDto postLikeResponseDto = PostLikeResponseDto.of(true);
-		when(postLockFacade.likePost((Principal)any(), any())).thenReturn(postLikeResponseDto);
+		when(postService.likePost(any(), any())).thenReturn(postLikeResponseDto);
 
 		Long postId = 0L;
 
@@ -432,7 +429,7 @@ class PostControllerTest {
 				)
 			));
 
-		verify(postLockFacade).likePost((Principal)any(), anyLong());
+		verify(postService).likePost(any(), anyLong());
 	}
 
 	@Test

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.common.aop.DistributedLock;
 import com.example.demo.dto.post.PostBattleCandidateResponseDto;
 import com.example.demo.dto.post.PostCreateRequestDto;
 import com.example.demo.dto.post.PostDetailFindResponseDto;
@@ -33,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PostService {
 
 	private final PostRepository postRepository;
@@ -116,8 +116,9 @@ public class PostService {
 		return PostsBattleCandidateResponseDto.of(posts);
 	}
 
-	@Transactional
-	public PostLikeResponseDto likePost(Member member, Long postId) {
+	@DistributedLock
+	public PostLikeResponseDto likePost(Principal principal, Long postId) {
+		Member member = principalService.getMemberByPrincipal(principal);
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_POST.getMessage()));
 

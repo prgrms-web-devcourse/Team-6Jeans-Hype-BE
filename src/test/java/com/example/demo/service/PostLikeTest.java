@@ -1,14 +1,20 @@
 package com.example.demo.service;
 
+import static com.example.demo.controller.TestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,6 +26,7 @@ import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class PostLikeTest {
 
 	@Autowired
@@ -27,28 +34,34 @@ public class PostLikeTest {
 	@Autowired
 	PostRepository postRepository;
 	@Autowired
-	PostLockFacade postLockFacade;
+	PostService postService;
+	Member member;
+	Post post;
+
+	@BeforeEach
+	void setUp() {
+		member = memberRepository.save(createMember());
+		post = postRepository.save(createPost(member));
+	}
 
 	@Test
-	void 성공_추천글_동시_좋아요_등록() throws InterruptedException {
+	void 게시글_동시_좋아요100개_수행시_횟수만큼_증가한다() throws InterruptedException {
 		// given
-		List<Member> members = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			members.add(memberRepository.save(createMember()));
-		}
-
-		Member member = memberRepository.save(createMember());
-		Long postId = postRepository.save(createPost(member)).getId();
+		int numberOfThreads = 100;
+		List<Principal> principalList = new ArrayList<>();
+		IntStream.rangeClosed(1, numberOfThreads)
+			.forEach(i -> principalList.add(new TestAuthentication(
+				new MemberDetails(String.valueOf(memberRepository.save(createMember()).getId())))));
+		ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+		CountDownLatch countDownLatch = new CountDownLatch(numberOfThreads);
 
 		// when
-		ExecutorService executorService = Executors.newFixedThreadPool(10);
-		CountDownLatch countDownLatch = new CountDownLatch(10);
-
-		for (int i = 0; i < 10; i++) {
-			int finalI = i;
+		for (int i = 0; i < numberOfThreads; i++) {
+			final int I = i;
+			// postService.likePost(principalList.get(I), post.getId());
 			executorService.submit(() -> {
 				try {
-					postLockFacade.likePost(members.get(finalI), postId);
+					postService.likePost(principalList.get(I), post.getId());
 				} finally {
 					countDownLatch.countDown();
 				}
@@ -57,10 +70,10 @@ public class PostLikeTest {
 
 		// then
 		countDownLatch.await();
-		Post post = postRepository.findById(postId)
+		Post findPost = postRepository.findById(post.getId())
 			.orElseThrow();
 
-		assertThat(post.getLikeCount()).isEqualTo(10);
+		assertThat(findPost.getLikeCount()).isEqualTo(numberOfThreads);
 	}
 
 	private Post createPost(Member member) {
