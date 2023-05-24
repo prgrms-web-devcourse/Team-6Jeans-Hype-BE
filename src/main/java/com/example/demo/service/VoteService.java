@@ -3,9 +3,9 @@ package com.example.demo.service;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.common.ExceptionMessage;
+import com.example.demo.common.aop.DistributedLock;
 import com.example.demo.dto.vote.VoteResultResponseDto;
 import com.example.demo.model.battle.Battle;
 import com.example.demo.model.battle.BattleVotedResult;
@@ -26,9 +26,9 @@ public class VoteService {
 	private final PostRepository postRepository;
 	private final VoteRepository voteRepository;
 
-	@Transactional
+	@DistributedLock
 	public VoteResultResponseDto voteBattle(Member member, Long battleId, Long postId) {
-		Battle battle = battleRepository.findByIdPessimisticLock(battleId)
+		Battle battle = battleRepository.findById(battleId)
 			.orElseThrow(() -> new EntityNotFoundException(ExceptionMessage.NOT_FOUND_BATTLE.getMessage()));
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ExceptionMessage.NOT_FOUND_POST.getMessage()));
@@ -37,8 +37,14 @@ public class VoteService {
 			throw new IllegalStateException(ExceptionMessage.DUPLICATED_USER_VOTE.getMessage());
 		}
 
-		BattleVotedResult battleVotedResult = battle.vote(post.getId());
-		saveVote(battle, post, member);
+		Vote vote = Vote.builder()
+			.battle(battle)
+			.selectedPost(post)
+			.voter(member)
+			.build();
+
+		voteRepository.save(vote);
+		BattleVotedResult battleVotedResult = battle.vote(postId);
 
 		return new VoteResultResponseDto(
 			post.getMusic().getTitle(),
@@ -46,14 +52,5 @@ public class VoteService {
 			battleVotedResult.selectedPostVoteCnt(),
 			battleVotedResult.oppositePostVoteCnt()
 		);
-	}
-
-	private void saveVote(Battle battle, Post post, Member member) {
-		Vote vote = Vote.builder()
-			.battle(battle)
-			.selectedPost(post)
-			.voter(member)
-			.build();
-		voteRepository.save(vote);
 	}
 }
