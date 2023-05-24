@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest
 class VoteServiceTest {
 	@Autowired
-	private BattleRepository battleRepository;
+	BattleRepository battleRepository;
 	@Autowired
-	private VoteRepository voteRepository;
+	VoteRepository voteRepository;
 	@Autowired
 	MemberRepository memberRepository;
 	@Autowired
@@ -55,8 +56,16 @@ class VoteServiceTest {
 
 	}
 
+	@AfterEach
+	void finish() {
+		voteRepository.deleteAll();
+		battleRepository.deleteAll();
+		postRepository.deleteAll();
+		memberRepository.deleteAll();
+	}
+
 	@Test
-	void 게시글_동시_좋아요100개_수행시_횟수만큼_증가한다() throws InterruptedException {
+	void 대결_동시_투표100개_수행시_횟수만큼_증가한다() throws InterruptedException {
 		// given
 		int numberOfThreads = 100;
 		List<Member> memberList = new ArrayList<>();

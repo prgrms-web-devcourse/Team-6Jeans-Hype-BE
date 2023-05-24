@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.demo.model.member.Member;
 import com.example.demo.model.post.Post;
+import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.PostRepository;
 
@@ -29,6 +31,8 @@ public class PostLikeTest {
 	@Autowired
 	PostRepository postRepository;
 	@Autowired
+	LikeRepository likeRepository;
+	@Autowired
 	PostService postService;
 	Member member;
 	Post post;
@@ -37,6 +41,13 @@ public class PostLikeTest {
 	void setUp() {
 		member = memberRepository.save(createMember());
 		post = postRepository.save(createPost(member, createMusic()));
+	}
+
+	@AfterEach
+	void finish() {
+		likeRepository.deleteAll();
+		postRepository.deleteAll();
+		memberRepository.deleteAll();
 	}
 
 	@Test
