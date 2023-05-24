@@ -34,7 +34,6 @@ import com.example.demo.controller.PostController;
 import com.example.demo.dto.post.PostUpdateRequestDto;
 import com.example.demo.model.post.Genre;
 import com.example.demo.security.TokenAuthenticationFilter;
-import com.example.demo.service.PostLockFacade;
 import com.example.demo.service.PostService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -42,7 +41,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 @WithMockUser
 @AutoConfigureRestDocs
 @ExtendWith(MockitoExtension.class)
-@Import({PostService.class, PostLockFacade.class})
+@Import({PostService.class})
 @WebMvcTest(value = PostController.class,
 	excludeFilters = @ComponentScan.Filter(
 		type = FilterType.ASSIGNABLE_TYPE,
@@ -58,9 +57,6 @@ public class PostUpdateRemoveDocsTest {
 
 	@MockBean
 	PostService postService;
-
-	@MockBean
-	PostLockFacade postLockFacade;
 
 	private final ObjectMapper mapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD,
 		JsonAutoDetect.Visibility.ANY);

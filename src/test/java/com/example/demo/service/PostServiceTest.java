@@ -347,10 +347,11 @@ class PostServiceTest {
 		Post post = getPosts().get(0);
 
 		// when
+		when(principalService.getMemberByPrincipal(principal)).thenReturn(member);
 		when(postRepository.findById(0L)).thenReturn(Optional.of(post));
 		when(likeRepository.existsByMemberAndPost(member, post)).thenReturn(false);
 
-		PostLikeResponseDto result = postService.likePost(member, 0L);
+		PostLikeResponseDto result = postService.likePost(principal, 0L);
 
 		// then
 		assertThat(result.hasLike()).isEqualTo(true);
@@ -367,10 +368,11 @@ class PostServiceTest {
 		post.plusLike();
 
 		// when
+		when(principalService.getMemberByPrincipal(principal)).thenReturn(member);
 		when(postRepository.findById(0L)).thenReturn(Optional.of(post));
 		when(likeRepository.existsByMemberAndPost(member, post)).thenReturn(true);
 
-		PostLikeResponseDto result = postService.likePost(member, 0L);
+		PostLikeResponseDto result = postService.likePost(principal, 0L);
 
 		// then
 		assertThat(result.hasLike()).isEqualTo(false);
