@@ -8,8 +8,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.demo.model.battle.Battle;
+import com.example.demo.model.battle.BattleStatus;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.member.Social;
+import com.example.demo.model.post.Genre;
 import com.example.demo.model.post.Music;
 import com.example.demo.model.post.Post;
 
@@ -33,6 +36,17 @@ public class TestUtil {
 			"socialId");
 	}
 
+	public static Music createMusic() {
+		return new Music(
+			"musicId",
+			"albumCoverUrl",
+			"singer",
+			"title",
+			Genre.BALLAD,
+			"musicUrl"
+		);
+	}
+
 	public static Post createPost(Member member, Music music) {
 		return Post.builder()
 			.music(music)
@@ -41,6 +55,14 @@ public class TestUtil {
 			.likeCount(0)
 			.member(member)
 			.build();
+	}
+
+	public static Battle createProgressBattle(Post post1, Post post2) {
+		return new Battle(
+			post1.getMusic().getGenre(),
+			BattleStatus.PROGRESS,
+			post1,
+			post2);
 	}
 
 	public static class TestAuthentication implements Authentication {
